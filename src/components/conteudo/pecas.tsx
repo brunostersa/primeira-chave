@@ -35,9 +35,18 @@ export function Termo({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
-export function Secao({ titulo, children }: { titulo: string; children: ReactNode }) {
+/** Âncora estável de uma seção a partir do título ("O que olhar" → "o-que-olhar"). */
+export const slugSecao = (titulo: string) =>
+  titulo
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+export function Secao({ titulo, children, id }: { titulo: string; children: ReactNode; id?: string }) {
   return (
-    <section className="flex flex-col gap-4">
+    <section id={id} className="flex scroll-mt-24 flex-col gap-4">
       <h2 className="font-display text-[clamp(26px,3.4vw,34px)] font-light leading-tight">{titulo}</h2>
       <div className="flex flex-col gap-4 text-[17px] leading-relaxed text-ink-2 [&_b]:font-semibold [&_b]:text-ink [&_strong]:text-ink">{children}</div>
     </section>
@@ -79,7 +88,7 @@ export type Pergunta = { q: string; a: string };
 /** "Perguntas que todo mundo faz": FAQ em sanfona, a mesma em todo molde. */
 export function Perguntas({ faq }: { faq: Pergunta[] }) {
   return (
-    <section className="flex flex-col gap-3">
+    <section id="perguntas" className="flex scroll-mt-24 flex-col gap-3">
       <h2 className="font-display text-[clamp(26px,3.4vw,34px)] font-light">Perguntas que todo mundo faz</h2>
       <div className="flex flex-col divide-y divide-line border-y border-line">
         {faq.map((f) => (

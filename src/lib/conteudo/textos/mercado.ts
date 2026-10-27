@@ -27,7 +27,7 @@ const periodoSp = `${mesAno(ITBI_SP.periodo.de)} a ${mesAno(ITBI_SP.periodo.ate)
 export const TEXTOS_MERCADO: Record<string, Texto> = {
   "quanto-minha-renda-compra": {
     tituloSeo: "Quanto a sua renda compra: valor do imóvel e m² nas capitais",
-    descricao: `Até quanto o banco financia para a sua renda, pelas regras da Caixa, e quanto isso compra em ${caps.length} capitais: pelo preço real do ITBI onde existe e pelo anúncio médio (FipeZAP).`,
+    descricao: `Até quanto o banco financia para a sua renda, pelas regras da Caixa, e quanto isso compra em ${caps.length} capitais: pelo preço real do ITBI e pelo anúncio.`,
     resposta: `Com **${brl(6000)} de renda**, o banco financia um imóvel de até **${brl(exemplo.valor)}**. Em São Paulo, pelo preço que as pessoas **pagaram de verdade**, isso dá uns **${Math.floor(exemplo.valor / spReal.m2)} m²**; pelo anúncio médio de apartamento, só ${Math.floor(exemplo.valor / spAnuncio.m2)} m². Mexa na renda e escolha a sua capital.`,
     secoes: [
       { titulo: "O mapa", blocos: [{ calculo: "mapa-capitais" }] },

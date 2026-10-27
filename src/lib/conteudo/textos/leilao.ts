@@ -35,14 +35,48 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
           { p: "Antes de dar lance, faça [a conta da reforma](#reforma-leilao) e veja [se dá para financiar](#financiar-leilao)." },
         ],
       },
+      {
+        titulo: "Venda direta, licitação ou leilão: qual escolher",
+        blocos: [
+          {
+            figura: {
+              id: "tres-modalidades",
+              alt: "As três modalidades de venda dos imóveis da Caixa: venda direta online com preço fixo, licitação aberta com propostas e leilão com lances",
+              etiqueta: "Imóveis da Caixa à venda",
+              titulo: "Três jeitos",
+              destaque: "de comprar da Caixa.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Venda direta", tom: "mark", itens: ["Preço fixo", "Quem propõe primeiro leva", "Sem disputa de lance"] },
+                  { titulo: "Licitação", tom: "planta", itens: ["Propostas num prazo", "Vence a maior", "Data de abertura no edital"] },
+                  { titulo: "Leilão", tom: "ink", itens: ["Lances com leiloeiro", "Pode ter comissão", "Data e hora marcadas"] },
+                ],
+              },
+            },
+          },
+          { p: "Na **venda direta**, o preço já está posto: vale ser rápido, mas sem pular a leitura da [matrícula](#certidao-matricula). Na **licitação** e no **[leilão](#leilao-caixa)**, você disputa: defina o teto antes, com a [conta da reforma](#reforma-leilao)." },
+        ],
+      },
+      {
+        titulo: "O desconto é sobre o quê?",
+        blocos: [
+          { p: "O anúncio mostra o **desconto sobre o valor de avaliação da Caixa**. Essa avaliação pode estar desatualizada ou não refletir o estado real do imóvel, principalmente se ele estiver ocupado. Compare com o preço de imóveis parecidos na região e com o [preço do m²](#quanto-minha-renda-compra) antes de decidir." },
+          { aviso: { titulo: "Financiamento sobre o menor valor", texto: "Quando o imóvel aceita financiamento, a Caixa empresta sobre o **menor** entre o preço e a avaliação. A regra da avaliação acima do preço não zera a entrada aqui. Veja [financiar imóvel de leilão](#financiar-leilao).", tom: "mark" } },
+        ],
+      },
     ],
-    faq: [{ q: "Qualquer pessoa pode comprar?", a: "Sim, pessoa física ou jurídica, seguindo as regras do edital de cada imóvel." }],
+    faq: [{ q: "Qualquer pessoa pode comprar?", a: "Sim, pessoa física ou jurídica, seguindo as regras do edital de cada imóvel." },
+      { q: "Onde vejo os imóveis da Caixa à venda?", a: "No site oficial de venda de imóveis da Caixa, com filtro por estado, cidade e modalidade. Desconfie de sites e perfis que vendem 'imóveis da Caixa' por fora." },
+      { q: "Dá para usar o FGTS?", a: "Em parte dos imóveis, sim: o anúncio diz se aceita FGTS e financiamento." },
+      { q: "O imóvel pode estar ocupado?", a: "Pode, e o anúncio informa. A desocupação costuma ficar por conta de quem compra." },
+    ],
   },
 
   "como-comprar-leilao": {
     tituloSeo: "Como comprar imóvel de leilão sem cair em armadilha",
     descricao: "O passo a passo para comprar imóvel de leilão: edital, matrícula, ocupação, dívidas, lance, pagamento e registro.",
-    resposta: "Leia o **edital** inteiro, confira a **[matrícula](g:matricula)**, descubra se o imóvel está **ocupado** e quanto há de **dívidas**, defina um **teto de lance** que já inclua reforma e custos — e só então dê o lance.",
+    resposta: "Para comprar imóvel de leilão com segurança, leia o **edital** inteiro, confira a **[matrícula](g:matricula)**, descubra se o imóvel está **ocupado** e quanto há de **dívidas**, defina um **teto de lance** que já inclua reforma e custos — e só então dê o lance.",
     secoes: [
       {
         titulo: "O passo a passo",

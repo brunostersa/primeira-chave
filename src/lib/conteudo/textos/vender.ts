@@ -70,8 +70,8 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
 
   "documentos-vender": {
     tituloSeo: "Documentos para vender um imóvel: checklist",
-    descricao: "Os documentos que o vendedor precisa entregar ao comprador e ao banco dele: pessoais, do imóvel e certidões.",
-    resposta: "Três grupos: **seus documentos** (identidade e estado civil), **os do imóvel** ([matrícula](g:matricula) atualizada, IPTU, condomínio) e **certidões** que mostram que não há dívidas ou ações que travem a venda.",
+    descricao: "Os documentos para vender um imóvel: os pessoais, os do imóvel e as certidões que o comprador e o banco dele vão pedir, com checklist.",
+    resposta: "Os documentos para vender um imóvel formam três grupos: **seus documentos** (identidade e estado civil), **os do imóvel** ([matrícula](g:matricula) atualizada, IPTU, condomínio) e **certidões** que mostram que não há dívidas ou ações que travem a venda.",
     secoes: [
       {
         titulo: "O checklist",
@@ -94,7 +94,8 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
 
   "imposto-venda": {
     tituloSeo: "Imposto na venda de imóvel: ganho de capital e isenções",
-    descricao: "Quando você paga imposto ao vender um imóvel, quanto (15% sobre o lucro), as isenções e como calcular.",
+    h1: "Imposto na venda de imóvel: ganho de capital e isenções",
+    descricao: "Imposto na venda de imóvel: quando o ganho de capital paga 15% sobre o lucro, as isenções mais comuns e como calcular antes de vender.",
     resposta: "Se você vende **por mais do que pagou**, o lucro é [ganho de capital](g:ganho-de-capital) e paga **15% de imposto** — salvo isenções, como **único imóvel vendido por até R$ 440 mil** ou **comprar outro residencial em até 180 dias** com o dinheiro.",
     secoes: [
       { titulo: "Calcule", blocos: [{ calculo: "calculadora-ganho-capital" }] },
@@ -118,8 +119,8 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
 
   "quanto-vale": {
     tituloSeo: "Quanto vale meu imóvel? Preço, venda e avaliação do banco",
-    descricao: "A diferença entre preço de anúncio, preço de venda e avaliação do banco, e como chegar a um preço que vende.",
-    resposta: "Seu imóvel tem três valores: o **de anúncio** (o que você pede), o **de venda** (o que alguém paga) e a **[avaliação](g:avaliacao) do banco** (o que o banco do comprador acha que vale). O que vende rápido é o preço que **cabe na avaliação**.",
+    descricao: "Quanto vale meu imóvel? A diferença entre preço de anúncio, preço de venda e avaliação do banco, e como chegar a um preço que vende.",
+    resposta: "Quanto vale meu imóvel? Ele tem três valores: o **de anúncio** (o que você pede), o **de venda** (o que alguém paga) e a **[avaliação](g:avaliacao) do banco** (o que o banco do comprador acha que vale). O que vende rápido é o preço que **cabe na avaliação**.",
     secoes: [
       {
         titulo: "Como chegar ao preço",
@@ -140,8 +141,33 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
   "contrato-compra-venda": {
     tituloSeo: "Contrato de compra e venda de imóvel: o que não pode faltar",
     descricao: "O que um contrato de compra e venda de imóvel precisa ter: partes, imóvel, preço, forma de pagamento, prazos, multa e condição do financiamento.",
-    resposta: "O contrato precisa amarrar **quem**, **qual imóvel** (com a [matrícula](g:matricula)), **quanto e como paga**, **prazos**, **multa** e — se houver financiamento — o que acontece **se o banco não aprovar**.",
+    resposta: "O contrato de compra e venda de imóvel precisa amarrar **quem**, **qual imóvel** (com a [matrícula](g:matricula)), **quanto e como paga**, **prazos**, **multa** e — se houver financiamento — o que acontece **se o banco não aprovar**.",
     secoes: [
+      {
+        titulo: "O checklist do contrato",
+        blocos: [
+          {
+            figura: {
+              id: "checklist",
+              alt: "Checklist do contrato de compra e venda de imóvel: as partes, o imóvel com a matrícula, o preço e o pagamento, os prazos e a multa, e a cláusula do financiamento",
+              etiqueta: "Contrato de compra e venda",
+              titulo: "Cinco coisas",
+              destaque: "que não podem faltar.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Quem", texto: "Comprador, vendedor e cônjuges, com documentos." },
+                  { titulo: "Qual imóvel", texto: "Endereço e número da matrícula." },
+                  { titulo: "Quanto e como", texto: "Preço, sinal, FGTS e parte financiada." },
+                  { titulo: "Prazos e multa", texto: "Datas de pagamento e entrega, e a multa." },
+                  { titulo: "Se o banco negar", texto: "O que acontece com o sinal se o crédito não sair." },
+                ],
+              },
+            },
+          },
+          { p: "Comprando financiado, o contrato do banco **vale como escritura**: o contrato particular entre vocês é o compromisso até lá. Por isso a cláusula do financiamento negado é a que mais protege o comprador." },
+        ],
+      },
       {
         titulo: "O que não pode faltar",
         blocos: [
@@ -162,6 +188,9 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
       },
       { titulo: "E a escritura?", blocos: [{ p: "No financiamento, o contrato do banco faz o papel da [escritura](g:escritura). O contrato particular vem antes, para amarrar o negócio até lá." }] },
     ],
-    faq: [{ q: "Preciso de advogado?", a: "Para negócios de valor alto ou com pendências, sim. Um contrato bem feito custa menos que um problema." }],
+    faq: [{ q: "Preciso de advogado?", a: "Para negócios de valor alto ou com pendências, sim. Um contrato bem feito custa menos que um problema." },
+      { q: "Preciso de advogado para fazer o contrato?", a: "Não é obrigatório, mas é recomendável numa compra desse tamanho, principalmente se houver sinal alto ou prazos longos." },
+      { q: "O sinal é devolvido se o financiamento for negado?", a: "Depende do que o contrato diz. Por isso vale escrever, antes de pagar o sinal, o que acontece se o banco negar." },
+    ],
   },
 };

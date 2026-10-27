@@ -98,8 +98,9 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
 
   "documentos-financiamento": {
     tituloSeo: "Documentos para financiar imóvel na Caixa: checklist completo",
+    h1: "Documentos para financiamento na Caixa: o checklist",
     descricao: "O checklist dos documentos do comprador, do vendedor e do imóvel para o financiamento na Caixa, com dica de como entregar tudo de uma vez.",
-    resposta: "São três grupos: **seus documentos** (identidade, renda e imposto de renda), **os do vendedor** (identidade e estado civil) e **os do imóvel** (a [matrícula](g:matricula) atualizada). Entregue tudo de uma vez.",
+    resposta: "Os documentos para financiamento na Caixa formam três grupos: **seus documentos** (identidade, renda e imposto de renda), **os do vendedor** (identidade e estado civil) e **os do imóvel** (a [matrícula](g:matricula) atualizada). Entregue tudo de uma vez.",
     secoes: [
       {
         titulo: "Do comprador",
@@ -146,9 +147,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
   },
 
   score: {
-    tituloSeo: "Score para financiamento imobiliário: quanto precisa?",
-    descricao: "Não existe score mínimo público para financiar imóvel. Veja o que o banco olha de verdade e como melhorar antes de pedir.",
-    resposta: "Não existe um [score](g:score) mínimo divulgado. O banco olha a nota, mas pesa mais **nome sem restrição**, **parcelas atuais** e o seu **histórico no Banco Central**.",
+    tituloSeo: "Score para financiamento de casa: quanto precisa?",
+    h1: "Score para financiamento de casa: quanto precisa?",
+    descricao: "Score para financiamento de casa: não existe nota mínima pública. Veja o que o banco olha de verdade e como melhorar antes de pedir o crédito.",
+    resposta: "Não existe um [score](g:score) mínimo divulgado para financiamento de casa. O banco olha a nota, mas pesa mais **nome sem restrição**, **parcelas atuais** e o seu **histórico no Banco Central**.",
     secoes: [
       {
         titulo: "O que o banco realmente olha",
@@ -183,9 +185,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
   },
 
   "financiamento-negado": {
-    tituloSeo: "Financiamento negado: por quê, o que fazer e quando tentar de novo",
-    descricao: "Os motivos mais comuns de recusa do financiamento imobiliário, o que fazer em cada caso e quando faz sentido tentar novamente.",
-    resposta: "Quase sempre é um destes: **restrição no nome**, **renda comprometida demais**, **renda difícil de comprovar** ou **problema no imóvel**. Descubra qual foi, resolva e tente de novo — não há prazo fixo de espera.",
+    tituloSeo: "Financiamento negado: quando posso tentar novamente?",
+    h1: "Financiamento negado: quando posso tentar novamente?",
+    descricao: "Financiamento negado? Os motivos mais comuns, o que fazer em cada caso e quando posso tentar novamente, sem perder tempo nem a próxima análise.",
+    resposta: "Financiamento negado quase sempre é por um destes motivos: **restrição no nome**, **renda comprometida demais**, **renda difícil de comprovar** ou **problema no imóvel**. Quando posso tentar novamente? **Assim que resolver o motivo** — não há prazo fixo de espera.",
     secoes: [
       {
         titulo: "Os motivos e o que fazer",
@@ -220,8 +223,9 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
 
   "quanto-tempo-demora": {
     tituloSeo: "Quanto tempo demora o financiamento da Caixa?",
-    descricao: "Os prazos de cada etapa do financiamento imobiliário, da aprovação de crédito ao registro, e o que atrasa (ou acelera) o processo.",
-    resposta: "Do pedido à chave, **de 30 a 90 dias** em média. O que mais atrasa é documento que chega aos poucos e pendência na [matrícula](g:matricula) do imóvel.",
+    h1: "Quanto tempo demora o financiamento da Caixa?",
+    descricao: "Quanto tempo demora o financiamento da Caixa, etapa por etapa: da aprovação do crédito ao registro, e o que atrasa (ou acelera) o processo.",
+    resposta: "Quanto tempo demora o financiamento da Caixa? Do pedido à chave, **de 30 a 90 dias** em média. O que mais atrasa é documento que chega aos poucos e pendência na [matrícula](g:matricula) do imóvel.",
     secoes: [
       { titulo: "O prazo de cada etapa", blocos: [{ calculo: "prazos" }] },
       {
@@ -243,8 +247,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
 
   "sem-entrada-apartamento": {
     tituloSeo: "Dá pra financiar apartamento sem entrada? A regra da avaliação",
-    descricao: "A regra é a mesma da casa: se o banco avaliar o apartamento 25% acima do preço, ele financia o valor inteiro. Veja a conta e os cuidados.",
-    resposta: "Dá, pela mesma regra da casa: o banco empresta até 80% da [avaliação](g:avaliacao), sem passar do preço. Se a avaliação vier **25% acima do preço**, a [entrada](g:entrada) zera — mas ITBI e cartório continuam.",
+    descricao: "Dá pra financiar apartamento sem entrada? Sim, se o banco avaliar o imóvel 25% acima do preço. Veja a regra, a conta e os cuidados.",
+    resposta: "Dá para financiar apartamento sem entrada pela mesma regra da casa: o banco empresta até 80% da [avaliação](g:avaliacao), sem passar do preço. Se a avaliação vier **25% acima do preço**, a [entrada](g:entrada) zera — mas ITBI e cartório continuam.",
     secoes: [
       {
         titulo: "A conta",
@@ -281,8 +285,9 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
 
   "avaliacao-do-imovel": {
     tituloSeo: "Avaliação do imóvel pela Caixa: quem faz, quem paga e o que muda",
-    descricao: "Como funciona a avaliação do imóvel no financiamento: quem faz, quem paga, quanto demora e o que acontece se vier abaixo ou acima do preço.",
-    resposta: "Um engenheiro do banco vistoria o imóvel e dá o valor de [avaliação](g:avaliacao). **Quem compra paga a tarifa.** O banco empresta até 80% desse valor: abaixo do preço, você cobre a diferença; acima, a entrada diminui.",
+    h1: "Avaliação do imóvel pela Caixa: quem faz, quem paga e o que muda",
+    descricao: "Como funciona a avaliação do imóvel pela Caixa no financiamento: quem faz, quem paga, quanto demora e o que muda se vier abaixo ou acima do preço.",
+    resposta: "Na avaliação do imóvel pela Caixa, um engenheiro vistoria o imóvel e define o valor de [avaliação](g:avaliacao). **Quem compra paga a tarifa.** O banco empresta até 80% desse valor: abaixo do preço, você cobre a diferença; acima, a entrada diminui.",
     secoes: [
       {
         titulo: "Como funciona",
@@ -324,7 +329,7 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
   },
 
   "registro-do-imovel": {
-    tituloSeo: "Registro do imóvel, ITBI e chaves: o que acontece depois da assinatura",
+    tituloSeo: "Registro do imóvel, ITBI e chaves: o que vem depois",
     descricao: "Depois de assinar o contrato: pagar o ITBI, registrar no cartório em até 30 dias e receber as chaves. O passo a passo e os custos.",
     resposta: "Depois da assinatura você paga o [ITBI](g:itbi), leva o contrato ao Cartório de Registro de Imóveis (prazo de **30 dias**) e, com o [registro](g:registro) feito, o banco paga o vendedor e a chave é sua.",
     secoes: [
@@ -353,9 +358,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
   },
 
   "primeiro-imovel-desconto": {
-    tituloSeo: "Primeiro imóvel tem desconto no registro e no ITBI?",
-    descricao: "Quem compra o primeiro imóvel financiado tem 50% de desconto nos emolumentos de cartório. O ITBI depende da cidade. Veja as regras.",
-    resposta: "**No cartório, sim:** a primeira aquisição residencial financiada pelo Sistema Financeiro da Habitação tem **50% de desconto** nos emolumentos (Lei 6.015/73, art. 290). **No ITBI, depende da cidade.**",
+    tituloSeo: "Primeiro imóvel paga ITBI? E o desconto no cartório",
+    h1: "Primeiro imóvel paga ITBI? E o desconto no cartório",
+    descricao: "Primeiro imóvel paga ITBI? Depende da cidade. No cartório, o primeiro financiado pelo SFH tem 50% de desconto nos emolumentos. Veja as regras.",
+    resposta: "**Primeiro imóvel paga ITBI, sim — o desconto depende da cidade.** **No cartório, a regra é nacional:** a primeira aquisição residencial financiada pelo Sistema Financeiro da Habitação tem **50% de desconto** nos emolumentos (Lei 6.015/73, art. 290).",
     secoes: [
       {
         titulo: "O desconto do cartório",
@@ -376,9 +382,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
   },
 
   "amortizar-fgts": {
-    tituloSeo: "Como usar o FGTS para abater o financiamento",
-    descricao: "Depois da compra, o FGTS pode abater ou quitar o financiamento, ou pagar parte das parcelas. Veja quando vale a pena e como pedir.",
-    resposta: "Dá para usar o [FGTS](g:fgts) de três jeitos: **abater** parte do saldo, **quitar** tudo ou **pagar até 80% da parcela por 12 meses**. Abater no começo do contrato é o que mais economiza juros.",
+    tituloSeo: "Usar o FGTS para amortizar o financiamento: como e quando",
+    h1: "Como usar o FGTS para amortizar o financiamento",
+    descricao: "Como usar o FGTS para amortizar o financiamento: abater o saldo, quitar ou pagar parte das parcelas. Veja as regras, quando vale e como pedir.",
+    resposta: "Dá para usar o [FGTS](g:fgts) para amortizar o financiamento de três jeitos: **abater** parte do saldo, **quitar** tudo ou **pagar até 80% da parcela por 12 meses**. Abater no começo do contrato é o que mais economiza juros.",
     secoes: [
       {
         titulo: "Prazo menor ou parcela menor?",

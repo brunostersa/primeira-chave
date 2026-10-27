@@ -8,6 +8,8 @@ import { Calculo } from "@/components/conteudo/calculos";
 import { Rico } from "@/components/conteudo/Rico";
 import { ARVORE } from "@/lib/conteudo/arvore";
 import { HUBS_TEXTOS, naRotaUnica, TEXTOS } from "@/lib/conteudo/textos";
+import { capaDe } from "@/lib/conteudo/figuras";
+import { metadadosPagina } from "@/lib/seo";
 
 /**
  * Rota única do conteúdo: monta qualquer página publicada da árvore com o molde
@@ -31,12 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const n = porCaminho(caminho);
   if (!n) return {};
   const texto = TEXTOS[n.id];
-  const descricao = texto?.descricao ?? HUBS_TEXTOS[n.id]?.descricao ?? n.resumo;
-  return {
-    title: texto?.tituloSeo ?? (n.tipo === "glossario" ? `${n.titulo}: o que é` : n.titulo),
-    description: descricao,
-    alternates: { canonical: n.slug },
-  };
+  const hub = HUBS_TEXTOS[n.id];
+  return metadadosPagina({
+    titulo: texto?.tituloSeo ?? hub?.tituloSeo ?? (n.tipo === "glossario" ? `${n.titulo}: o que é` : n.titulo),
+    descricao: texto?.descricao ?? hub?.descricao ?? n.resumo,
+    slug: n.slug,
+    capa: capaDe(n.id),
+  });
 }
 
 export default async function PaginaConteudo({ params }: Props) {
@@ -48,12 +51,12 @@ export default async function PaginaConteudo({ params }: Props) {
   if (n.tipo === "glossario") return <TermoPagina id={n.id} />;
   if (n.tipo === "hub") {
     const h = HUBS_TEXTOS[n.id];
-    return <HubPagina id={n.id} intro={h.intro} extra={h.calculo && <Calculo nome={h.calculo} />} />;
+    return <HubPagina id={n.id} texto={h} extra={h.calculo && <Calculo nome={h.calculo} />} />;
   }
   const t = TEXTOS[n.id];
   return (
-    <Guia id={n.id} faq={t.faq} resposta={<Rico texto={t.resposta} />}>
-      <Secoes secoes={t.secoes} />
+    <Guia id={n.id} h1={t.h1} faq={t.faq} indice={t.secoes.map((s) => s.titulo)} resposta={<Rico texto={t.resposta} />}>
+      <Secoes secoes={t.secoes} pagina={n.id} />
     </Guia>
   );
 }

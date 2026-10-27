@@ -38,17 +38,49 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
           },
         ],
       },
+      {
+        titulo: "Quanto tempo leva, etapa por etapa",
+        blocos: [
+          {
+            figura: {
+              id: "linha-do-tempo",
+              alt: "Linha do tempo de como financiar uma casa pela Caixa: aprovação de crédito, avaliação do imóvel, contrato e registro até a entrega das chaves",
+              etiqueta: "Financiamento pela Caixa",
+              titulo: "Do pedido à chave,",
+              destaque: "de 30 a 90 dias.",
+              esquema: {
+                tipo: "linha",
+                marcos: [
+                  { rotulo: "Pedido", detalhe: "documentos na agência ou correspondente" },
+                  { rotulo: "Crédito aprovado", detalhe: "você já sabe o seu teto" },
+                  { rotulo: "Avaliação", detalhe: "o engenheiro dá o valor" },
+                  { rotulo: "Chave", detalhe: "contrato registrado" },
+                ],
+                trechos: [
+                  { rotulo: "5 a 15 dias", tom: "planta" },
+                  { rotulo: "7 a 15 dias", tom: "planta" },
+                  { rotulo: "contrato + até 30 dias", tom: "mark" },
+                ],
+              },
+              legenda: "Prazos médios. O que mais atrasa: documento que chega aos poucos e pendência na matrícula.",
+            },
+          },
+          { p: "Os prazos de cada etapa e o que acelera estão em [quanto tempo demora o financiamento](#quanto-tempo-demora)." },
+        ],
+      },
     ],
     faq: [
       { q: "Preciso ter conta na Caixa?", a: "Não é obrigatório para pedir, mas ter conta e salário no banco pode ajudar nas condições." },
       { q: "Correspondente Caixa Aqui cobra?", a: "O correspondente é remunerado pelo banco. Desconfie de cobrança antecipada para aprovar crédito." },
+      { q: "Dá para financiar casa usada pela Caixa?", a: "Dá. As regras são as mesmas; o que muda é a documentação do imóvel e do vendedor. Veja como financiar imóvel usado." },
+      { q: "Posso juntar a renda com outra pessoa?", a: "Pode. Quem compra junto soma as rendas, e a parcela tem de caber em 30% da soma." },
     ],
   },
 
   "como-financiar-apartamento": {
     tituloSeo: "Como financiar um apartamento: regras e números",
     descricao: "As regras para financiar apartamento novo ou usado: quanto o banco empresta, renda necessária, condomínio e documentos do prédio.",
-    resposta: "As regras são as mesmas da casa: até 80% da [avaliação](g:avaliacao), parcela de até 30% da renda e prazo de até 35 anos. A diferença está no **condomínio** e na **documentação do prédio**.",
+    resposta: "Para financiar apartamento, as regras são as mesmas da casa: até 80% da [avaliação](g:avaliacao), parcela de até 30% da renda e prazo de até 35 anos. A diferença está no **condomínio** e na **documentação do prédio**.",
     secoes: [
       { titulo: "Renda para cada valor de apartamento", blocos: [{ calculo: "renda-por-valor" }] },
       {
@@ -71,6 +103,7 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
 
   "imovel-usado": {
     tituloSeo: "Como financiar imóvel usado pela Caixa",
+    h1: "Como financiar imóvel usado pela Caixa",
     descricao: "Regras para financiar imóvel usado na Caixa: cota, avaliação, documentação do vendedor e os cuidados que evitam surpresa.",
     resposta: "A Caixa financia até **80% da avaliação** de imóvel usado, no [Minha Casa Minha Vida](#minha-casa-minha-vida) ou na [SBPE](g:sbpe). O segredo do usado está em dois documentos: a [avaliação](g:avaliacao) e a [matrícula](g:matricula).",
     secoes: [
@@ -99,9 +132,10 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
   },
 
   "quanto-custa-financiar": {
-    tituloSeo: "Quanto custa financiar um imóvel: juros, seguros e taxas",
-    descricao: "O custo total de financiar um imóvel: juros, seguros obrigatórios, taxa de administração, TR, ITBI e cartório, com exemplo calculado.",
-    resposta: "Além do preço, você paga **juros**, **seguros** ([MIP e DFI](g:mip-dfi)), **taxa de administração** e a correção pela [TR](g:tr) durante o contrato — e, na compra, **ITBI e cartório** (perto de 5%).",
+    tituloSeo: "Quanto custa financiar um apartamento: juros, seguros e taxas",
+    h1: "Quanto custa financiar um apartamento (ou uma casa)",
+    descricao: "Quanto custa financiar um apartamento, além do preço: juros, seguros obrigatórios, taxa de administração, TR, ITBI e cartório, com exemplo.",
+    resposta: "Para saber quanto custa financiar um apartamento, some ao preço os **juros**, os **seguros** ([MIP e DFI](g:mip-dfi)), a **taxa de administração** e a correção pela [TR](g:tr) durante o contrato — e, na compra, **ITBI e cartório** (perto de 5%).",
     secoes: [
       {
         titulo: "Na compra",
@@ -120,8 +154,8 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
 
   "sac-ou-price": {
     tituloSeo: "SAC ou PRICE: qual escolher no financiamento?",
-    descricao: "A diferença entre SAC e PRICE no financiamento imobiliário, com exemplo calculado: parcela inicial, última parcela e total pago.",
-    resposta: "No [SAC](g:sac), a parcela **começa mais alta e vai caindo**, e você paga **menos juros no total**. Na [PRICE](g:price), a parcela **fica igual**, começa menor, mas o total é maior. Se a primeira parcela do SAC cabe na renda, ele costuma valer mais.",
+    descricao: "SAC ou PRICE: qual escolher no financiamento imobiliário? O exemplo calculado mostra a parcela inicial, a última parcela e o total pago.",
+    resposta: "SAC ou PRICE? No [SAC](g:sac), a parcela **começa mais alta e vai caindo**, e você paga **menos juros no total**. Na [PRICE](g:price), a parcela **fica igual**, começa menor, mas o total é maior. Se a primeira parcela do SAC cabe na renda, ele costuma valer mais.",
     secoes: [
       { titulo: "Lado a lado", blocos: [{ calculo: "sac-x-price" }] },
       {
@@ -146,9 +180,10 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
   },
 
   "consorcio-ou-financiamento": {
-    tituloSeo: "Consórcio ou financiamento de imóvel: qual vale mais?",
-    descricao: "Consórcio imobiliário x financiamento: como cada um funciona, custos, prazos e para quem cada caminho faz sentido.",
-    resposta: "**Financiamento**: a chave vem agora, mas você paga juros. **Consórcio**: sem juros (tem taxa de administração), mas você só recebe a [carta de crédito](g:carta-de-credito) quando for sorteado ou der um lance. Quem precisa morar logo, financia; quem pode esperar, pode considerar o consórcio.",
+    tituloSeo: "Como funciona o consórcio de imóvel e quando vale mais",
+    h1: "Como funciona o consórcio de imóvel (e quando vale mais que financiar)",
+    descricao: "Como funciona um consórcio de imóvel: taxa de administração, sorteio, lance e carta de crédito, comparados ao financiamento, com custos e prazos.",
+    resposta: "Como funciona um consórcio de imóvel: o grupo junta dinheiro todo mês e, a cada assembleia, alguém recebe a [carta de crédito](g:carta-de-credito) por **sorteio** ou **lance**. Não tem juros, mas tem taxa de administração. **Financiamento**: a chave vem agora, com juros. Quem precisa morar logo financia; quem pode esperar pode considerar o consórcio.",
     secoes: [
       {
         titulo: "Lado a lado",
@@ -173,8 +208,8 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
 
   "alugar-ou-financiar": {
     tituloSeo: "Alugar ou financiar um imóvel? A conta honesta",
-    descricao: "Quando vale alugar e quando vale financiar: a comparação entre aluguel, parcela, entrada e o que você constrói em cada caminho.",
-    resposta: "Não existe resposta única: compare **a parcela com o aluguel**, o **custo da entrada parada** e **quanto tempo você vai morar** ali. Se a parcela fica perto do aluguel e você pretende ficar anos, financiar costuma fazer sentido.",
+    descricao: "Alugar ou financiar um imóvel? Compare aluguel, parcela, entrada parada e tempo de moradia para ver o que você constrói em cada caminho.",
+    resposta: "Alugar ou financiar não tem resposta única: compare **a parcela com o aluguel**, o **custo da entrada parada** e **quanto tempo você vai morar** ali. Se a parcela fica perto do aluguel e você pretende ficar anos, financiar costuma fazer sentido.",
     secoes: [
       {
         titulo: "As perguntas que decidem",

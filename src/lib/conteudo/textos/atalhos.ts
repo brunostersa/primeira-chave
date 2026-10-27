@@ -31,17 +31,93 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
           { p: "Depois, refaça a conta no [simulador](#simulador)." },
         ],
       },
+      {
+        titulo: "Os relatórios do Registrato",
+        blocos: [
+          {
+            figura: {
+              id: "como-acessar",
+              alt: "Como acessar o Registrato do Banco Central em quatro passos: conta gov.br prata ou ouro, site do BC, relatório de empréstimos e soma das parcelas",
+              etiqueta: "Registrato, passo a passo",
+              titulo: "Seu CPF no Banco Central",
+              destaque: "em 4 passos.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Conta gov.br", texto: "Nível prata ou ouro. É o mesmo login dos serviços do governo." },
+                  { titulo: "Site do BC", texto: "Entre no Registrato pelo site oficial do Banco Central." },
+                  { titulo: "Empréstimos", texto: "Peça o relatório de empréstimos e financiamentos." },
+                  { titulo: "Some as parcelas", texto: "Elas entram no limite de 30% da renda do financiamento." },
+                ],
+              },
+              legenda: "O Registrato é gratuito. Ninguém precisa cobrar para tirar o relatório para você.",
+            },
+          },
+          {
+            lista: [
+              "**Empréstimos e financiamentos**: o que você deve em cada banco, mês a mês, separado em a vencer, vencido e prejuízo.",
+              "**Contas e relacionamentos**: os bancos e instituições em que você tem conta.",
+              "**Chaves Pix**: todas as chaves cadastradas no seu CPF.",
+              "**Cheques sem fundos**: se o seu CPF está no cadastro de emitentes.",
+              "**Câmbio**: operações e transferências internacionais.",
+            ],
+          },
+        ],
+      },
+      {
+        titulo: "Como ler o relatório de empréstimos",
+        blocos: [
+          {
+            tabela: {
+              cabecalho: ["O que aparece", "O que significa para o financiamento"],
+              linhas: [
+                ["A vencer", "Dívida em dia. Não barra o crédito, mas a parcela conta nos 30% da renda."],
+                ["Vencido", "Parcela em atraso. É o que mais barra: negocie antes de pedir o financiamento."],
+                ["Prejuízo", "O banco já deu a dívida como perdida. Pesa muito: regularize e guarde o comprovante."],
+                ["Limite de crédito", "Cheque especial e cartão disponíveis. Não é dívida, mas o banco enxerga."],
+              ],
+            },
+          },
+          { p: "Quer saber quanto essas parcelas tiram do seu financiamento? Coloque o valor no [simulador](#simulador): ele desconta das 30% da renda." },
+        ],
+      },
+      {
+        titulo: "Registrato, score e Serasa: qual a diferença",
+        blocos: [
+          {
+            figura: {
+              id: "registrato-x-score",
+              alt: "Diferença entre o Registrato do Banco Central e o score de crédito: o que cada um mostra antes de pedir o financiamento",
+              etiqueta: "O que o banco enxerga",
+              titulo: "Registrato",
+              destaque: "× score.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Registrato", tom: "planta", itens: ["Do Banco Central, gratuito", "Mostra cada dívida, banco a banco", "É o mesmo sistema que o banco consulta"] },
+                  { titulo: "Score", tom: "mark", itens: ["De empresas privadas (birôs)", "Uma nota de 0 a 1.000", "Não mostra o detalhe das dívidas"] },
+                ],
+              },
+            },
+          },
+          { p: "Na análise do financiamento, o banco consulta o mesmo sistema do Registrato (o SCR), com a sua autorização. A nota de [score](g:score) ajuda, mas o que mais pesa é **não ter atraso** e **ter parcelas que cabem na renda**. Veja [score para financiamento](#score)." },
+          { aviso: { titulo: "Cuidado com sites que cobram", texto: "O Registrato é gratuito e fica no site do Banco Central, com login gov.br. Não informe senha em links recebidos por mensagem.", tom: "bad" } },
+        ],
+      },
     ],
     faq: [
       { q: "O Registrato mostra meu score?", a: "Não. Mostra dívidas e contas registradas pelos bancos no Banco Central. O score é dos birôs de crédito." },
       { q: "É pago?", a: "Não. É gratuito e oficial." },
+      { q: "Precisa ter conta gov.br prata ou ouro?", a: "Sim. O Registrato aceita login gov.br de nível prata ou ouro. Dá para subir de nível no próprio app gov.br, com validação facial ou pelo banco." },
+      { q: "O relatório sai na hora?", a: "Sai: o pedido é online e o relatório fica disponível para baixar em PDF." },
+      { q: "O banco olha o Registrato para aprovar o financiamento?", a: "O banco consulta o mesmo sistema (SCR) com a sua autorização. Por isso vale ver antes o que ele vai ver." },
     ],
   },
 
   "consultar-fgts": {
     tituloSeo: "Como consultar o saldo do FGTS pelo CPF",
-    descricao: "Como ver o saldo do FGTS no aplicativo oficial, entender o extrato e usar o dinheiro na compra do imóvel.",
-    resposta: "Baixe o **aplicativo FGTS** (oficial da Caixa), entre com o **CPF** e a conta gov.br e veja o saldo de cada emprego. O que estiver lá pode virar parte da [entrada](g:entrada).",
+    descricao: "Como consultar o FGTS pelo CPF no aplicativo oficial: ver o saldo de cada emprego, entender o extrato e usar o dinheiro na compra do imóvel.",
+    resposta: "Para consultar o FGTS pelo CPF, baixe o **aplicativo FGTS** (oficial da Caixa), entre com o **CPF** e a conta gov.br e veja o saldo de cada emprego. O que estiver lá pode virar parte da [entrada](g:entrada).",
     secoes: [
       {
         titulo: "Passo a passo",
@@ -57,14 +133,41 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
         ],
       },
       { titulo: "E agora?", blocos: [{ p: "Veja [as regras para usar o FGTS na compra](#usar-fgts-comprar) e coloque o saldo no [simulador](#simulador)." }] },
+      {
+        titulo: "Quando o FGTS pode entrar na compra",
+        blocos: [
+          {
+            figura: {
+              id: "fgts-na-compra",
+              alt: "Regras para usar o saldo do FGTS na compra do imóvel: 3 anos de carteira assinada, sem imóvel na cidade e imóvel residencial dentro do teto",
+              etiqueta: "FGTS na compra do imóvel",
+              titulo: "Três regras",
+              destaque: "para o FGTS entrar.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "3 anos de FGTS", texto: "Somando todos os empregos com carteira assinada." },
+                  { titulo: "Sem imóvel na cidade", texto: "Não ter imóvel residencial onde mora ou trabalha." },
+                  { titulo: "Imóvel residencial", texto: "Para morar, dentro do teto do Sistema Financeiro da Habitação." },
+                ],
+              },
+              legenda: "Com as três regras cumpridas, o saldo pode virar parte da entrada.",
+            },
+          },
+          { p: "Os detalhes e as exceções estão em [como usar o FGTS para comprar imóvel](#usar-fgts-comprar). Para conferir os 3 anos, veja o [tempo de carteira](#carteira-trabalho)." },
+        ],
+      },
     ],
-    faq: [{ q: "Saldo bloqueado pode ser usado?", a: "Saldo comprometido com antecipação do saque-aniversário fica indisponível até a quitação da antecipação." }],
+    faq: [{ q: "Saldo bloqueado pode ser usado?", a: "Saldo comprometido com antecipação do saque-aniversário fica indisponível até a quitação da antecipação." },
+      { q: "Dá para consultar o FGTS sem o aplicativo?", a: "Dá: pelo site da Caixa ou numa agência, com documento. O aplicativo FGTS é o caminho mais rápido." },
+      { q: "O FGTS paga o ITBI e o cartório?", a: "Não. Na compra, o FGTS entra só na entrada (ou no valor financiado). ITBI e cartório saem do seu bolso." },
+    ],
   },
 
   "boleto-habitacao": {
     tituloSeo: "2ª via do boleto da Habitação Caixa",
-    descricao: "Onde tirar a segunda via do boleto do financiamento da Caixa, ver o saldo devedor e antecipar parcelas.",
-    resposta: "Pelo **app Habitação CAIXA** ou no site [Habitação Digital](https://www.habitacaodigital.caixa.gov.br/acesso-cliente), em *Meu financiamento*. Lá também dá para ver o saldo e **antecipar parcelas**.",
+    descricao: "Onde tirar a 2ª via do boleto da Habitação Caixa: app, site e WhatsApp oficiais, como ver o saldo devedor e como antecipar parcelas.",
+    resposta: "A 2ª via do boleto da Habitação Caixa sai pelo **app Habitação CAIXA** ou no site [Habitação Digital](https://www.habitacaodigital.caixa.gov.br/acesso-cliente), em *Meu financiamento*. Lá também dá para ver o saldo e **antecipar parcelas**.",
     secoes: [
       {
         titulo: "Onde tirar",
@@ -93,7 +196,7 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
   "certidao-matricula": {
     tituloSeo: "Certidão de matrícula do imóvel online: como pedir e ler",
     descricao: "Como pedir a certidão de matrícula do imóvel online, a diferença entre matrícula, ônus e inteiro teor, e o que olhar antes de comprar.",
-    resposta: "Peça online no **[Registro de Imóveis do Brasil (ONR)](https://registradores.onr.org.br/)**, o serviço oficial dos cartórios. Para compra financiada, peça a **certidão de inteiro teor com [ônus](g:onus) e ações** — é a que o banco aceita.",
+    resposta: "Para pedir a certidão de matrícula de imóvel online, use o **[Registro de Imóveis do Brasil (ONR)](https://registradores.onr.org.br/)**, o serviço oficial dos cartórios. Para compra financiada, peça a **certidão de inteiro teor com [ônus](g:onus) e ações** — é a que o banco aceita.",
     secoes: [
       {
         titulo: "Matrícula, ônus ou inteiro teor?",

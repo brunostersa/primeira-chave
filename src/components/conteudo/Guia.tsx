@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/badge";
 import { ETAPAS } from "@/lib/conteudo/arvore";
-import { CartaoPagina, faqJsonLd, Perguntas, type Pergunta } from "./pecas";
+import { CartaoPagina, faqJsonLd, Perguntas, slugSecao, type Pergunta } from "./pecas";
+import { capaDe } from "@/lib/conteudo/figuras";
 import { ferramenta, hubDe, no, proximoPasso, relacionados } from "@/lib/conteudo/links";
 import { PARAMS_ATUALIZADOS_EM } from "@/lib/financiamento/params";
 import { SITE } from "@/lib/site-config";
@@ -26,9 +27,15 @@ export function Guia({
   id,
   resposta,
   faq,
+  indice = [],
+  h1,
   children,
 }: {
   id: string;
+  /** H1 com a palavra-chave, quando o título da árvore é curto demais. */
+  h1?: string;
+  /** Títulos das seções: viram o índice "Nesta página" (a partir de 3). */
+  indice?: string[];
   /** A resposta curta, logo abaixo do título: número primeiro. */
   resposta: ReactNode;
   faq: Pergunta[];
@@ -41,17 +48,20 @@ export function Guia({
   const tool = ferramenta(n);
   const rel = relacionados(n, 3);
   const termos = n.glossario.map((g) => no(`g-${g}`));
+  const capa = capaDe(id);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Article",
-        headline: n.titulo,
+        headline: h1 ?? n.titulo,
         description: n.resumo,
         inLanguage: "pt-BR",
         dateModified: `${PARAMS_ATUALIZADOS_EM}-01`,
         mainEntityOfPage: `${SITE.url}${n.slug}`,
+        ...(capa && { image: `${SITE.url}${capa.url}` }),
+        author: { "@id": `${SITE.url}/#org` },
         publisher: { "@id": `${SITE.url}/#org` },
         about: n.termos.slice(0, 3).map(([t]) => t),
       },
@@ -70,7 +80,7 @@ export function Guia({
               {hub?.titulo}
               {etapa && ` · etapa ${ETAPAS.indexOf(etapa) + 1}: ${etapa.nome}`}
             </Eyebrow>
-            <h1 className="font-display text-[clamp(34px,5.4vw,58px)] font-light leading-[1.02]">{n.titulo}</h1>
+            <h1 className="font-display text-[clamp(34px,5.4vw,58px)] font-light leading-[1.02]">{h1 ?? n.titulo}</h1>
             <p className="text-lg text-ink-2">{n.resumo}</p>
             {n.tipo !== "atalho" && (
               <p className="font-mono text-xs text-muted">Regras de {mes(PARAMS_ATUALIZADOS_EM)} · conferidas no simulador da Caixa</p>
@@ -85,6 +95,22 @@ export function Guia({
               <Eyebrow>Resposta curta</Eyebrow>
               <div className="text-[19px] leading-relaxed [&_b]:font-semibold">{resposta}</div>
             </Card>
+
+            {indice.length >= 3 && (
+              <nav aria-label="Nesta página" className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-line p-5">
+                <Eyebrow>Nesta página</Eyebrow>
+                <ol className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
+                  {[...indice, "Perguntas que todo mundo faz"].map((t, i) => (
+                    <li key={t}>
+                      <a href={`#${i === indice.length ? "perguntas" : slugSecao(t)}`} className="flex min-h-10 items-baseline gap-3 py-1 underline-offset-4 hover:underline">
+                        <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="font-semibold">{t}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
 
             {children}
 

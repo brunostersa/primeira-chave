@@ -11,7 +11,8 @@ import { Resultado } from "./Resultado";
 
 type Tela = "inicio" | "pergunta" | "resultado";
 
-export function Simulador() {
+/** `titulo`: o H1 da página (com a palavra-chave), discreto em cima da manchete. */
+export function Simulador({ titulo }: { titulo?: string }) {
   const [tela, setTela] = useState<Tela>("inicio");
   const [perfil, setPerfil] = useState<Perfil>(PERFIL_VAZIO);
   const [passo, setPasso] = useState(0);
@@ -43,10 +44,14 @@ export function Simulador() {
   if (tela === "inicio") {
     return (
       <section className="mx-auto flex max-w-3xl flex-col gap-7 px-4 py-14 sm:px-6 sm:py-20">
-        <Eyebrow>Primeiro imóvel · financiamento</Eyebrow>
-        <h1 className="font-display text-[clamp(36px,6vw,60px)] font-light leading-[1.02]">
+        {titulo ? (
+          <h1 className="font-mono text-xs uppercase tracking-[0.07em] text-ink-2">{titulo}</h1>
+        ) : (
+          <Eyebrow>Primeiro imóvel · financiamento</Eyebrow>
+        )}
+        <p className="font-display text-[clamp(36px,6vw,60px)] font-light leading-[1.02]">
           Descubra quanto você pode comprar, <span className="marca-texto font-semibold">em palavras que dá pra entender.</span>
-        </h1>
+        </p>
         <p className="max-w-xl text-lg text-ink-2">
           Umas 10 perguntas simples. No fim você recebe um número, o que ele significa e o seu próximo passo.
         </p>
