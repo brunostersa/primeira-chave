@@ -49,6 +49,27 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
       "Pode usar quem tem **3 anos de carteira somados** e **não tem imóvel residencial** na cidade onde mora ou trabalha. Na compra, o FGTS entra **só na entrada**: não paga [ITBI](g:itbi) nem cartório.",
     secoes: [
       {
+        titulo: "Onde o FGTS entra (e onde não entra)",
+        blocos: [
+          {
+            figura: {
+              id: "pode-e-nao-pode",
+              alt: "Usar FGTS para comprar imóvel: pode na entrada, para abater ou quitar e para pagar parte das parcelas; não pode no ITBI, no cartório nem em imóvel para alugar",
+              etiqueta: "Usar FGTS para comprar imóvel",
+              titulo: "Onde o FGTS",
+              destaque: "entra.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Pode", tom: "mark", itens: ["Entrada", "Abater ou quitar a dívida", "Até 80% da parcela por 12 meses"] },
+                  { titulo: "Não pode", tom: "bad", itens: ["ITBI e cartório", "Imóvel comercial ou para alugar", "Quem já tem imóvel na cidade"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "Quem pode",
         blocos: [
           {
@@ -93,6 +114,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "Posso usar o FGTS de duas pessoas?", a: "Sim. Se os dois compram juntos e cumprem as regras, os dois saldos podem entrar." },
       { q: "Autônomo pode usar FGTS?", a: "Só se tiver saldo de empregos anteriores com carteira e cumprir os 3 anos somados." },
+      { q: "O FGTS bloqueado pelo saque-aniversário pode ser usado?", a: "A parte comprometida com a antecipação fica bloqueada até a quitação. O saldo livre pode ser usado." },
+      { q: "Posso usar o FGTS em imóvel na planta?", a: "Pode, nas condições do FGTS, para pagar parte do valor na contratação do financiamento." },
     ],
   },
 
@@ -415,6 +438,27 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     resposta: "**Primeiro imóvel paga ITBI, sim — o desconto depende da cidade.** **No cartório, a regra é nacional:** a primeira aquisição residencial financiada pelo Sistema Financeiro da Habitação tem **50% de desconto** nos emolumentos (Lei 6.015/73, art. 290).",
     secoes: [
       {
+        titulo: "Cartório e ITBI: regras diferentes",
+        blocos: [
+          {
+            figura: {
+              id: "cartorio-x-itbi",
+              alt: "Primeiro imóvel paga ITBI? O desconto de 50% no cartório é regra nacional para o primeiro imóvel financiado pelo SFH; o ITBI depende da lei de cada cidade",
+              etiqueta: "Primeiro imóvel",
+              titulo: "Cartório tem desconto;",
+              destaque: "ITBI depende da cidade.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Cartório", tom: "mark", itens: ["50% nos emolumentos", "Regra nacional (Lei 6.015)", "1º imóvel residencial financiado pelo SFH"] },
+                  { titulo: "ITBI", tom: "planta", itens: ["Imposto da prefeitura", "Cada cidade tem sua lei", "Algumas dão desconto ao MCMV"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "O desconto do cartório",
         blocos: [
           { p: "A Lei de Registros Públicos garante redução de 50% nos emolumentos de escritura e [registro](g:registro) para a primeira aquisição de imóvel residencial financiada pelo SFH." },
@@ -429,7 +473,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Como provo que é meu primeiro imóvel?", a: "Com declaração no próprio contrato. O cartório pode consultar registros; declarar falsamente é crime." }],
+    faq: [{ q: "Como provo que é meu primeiro imóvel?", a: "Com declaração no próprio contrato. O cartório pode consultar registros; declarar falsamente é crime." },
+      { q: "O desconto do cartório é automático?", a: "Nem sempre. Peça no cartório e declare no contrato que é o seu primeiro imóvel residencial." },
+      { q: "Comprou à vista, tem desconto no cartório?", a: "O desconto da Lei 6.015 vale para a primeira aquisição financiada pelo Sistema Financeiro da Habitação." },
+    ],
   },
 
   "amortizar-fgts": {

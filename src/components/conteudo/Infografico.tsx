@@ -155,7 +155,7 @@ function Numeros({ itens }: Extract<Esquema, { tipo: "numeros" }>) {
     <div className="grid w-full gap-6" style={{ gridTemplateColumns: `repeat(${itens.length}, minmax(0, 1fr))` }}>
       {itens.map((n, i) => (
         <div key={i} className="flex flex-col gap-2 border-l-[3px] border-ink pl-5">
-          <span className={cn("self-start font-display text-[60px] font-semibold leading-none tabular-nums", n.tom === "mark" && "marca-texto")}>{n.valor}</span>
+          <span className={cn("self-start whitespace-nowrap font-display text-[50px] font-semibold leading-none tabular-nums", n.tom === "mark" && "marca-texto")}>{n.valor}</span>
           <span className="text-[21px] leading-snug text-ink-2">{n.rotulo}</span>
         </div>
       ))}

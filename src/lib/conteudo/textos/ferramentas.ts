@@ -216,7 +216,42 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
     secoes: [
       { titulo: "Calcule", blocos: [{ calculo: "calculadora-ganho-capital" }] },
       { titulo: "Entenda as regras", blocos: [{ p: "As isenções e como pagar estão em [imposto na venda](#imposto-venda)." }] },
+      {
+        titulo: "Como o ganho de capital do imóvel é calculado",
+        blocos: [
+          {
+            figura: {
+              id: "lucro-da-venda",
+              alt: "Como calcular o ganho de capital na venda de imóvel: do valor de venda tire o custo de compra e as reformas com nota; sobre o lucro incidem 15%",
+              etiqueta: "Ganho de capital do imóvel",
+              titulo: "O imposto é sobre o lucro,",
+              destaque: "não sobre a venda.",
+              esquema: {
+                tipo: "divisao",
+                total: "exemplo: venda por R$ 400 mil",
+                partes: [
+                  { rotulo: "custo de compra", valor: 250000, texto: "R$ 250 mil", tom: "planta" },
+                  { rotulo: "reformas com nota fiscal", valor: 30000, texto: "R$ 30 mil", tom: "ink" },
+                  { rotulo: "lucro: paga 15% (R$ 18 mil)", valor: 120000, texto: "R$ 120 mil", tom: "mark" },
+                ],
+              },
+              legenda: "Exemplo simplificado, sem os fatores de redução por tempo de posse, que diminuem o imposto de quem tem o imóvel há anos.",
+            },
+          },
+          {
+            lista: [
+              "**Custo de compra**: o valor pago na aquisição, como está na declaração do imposto de renda.",
+              "**Reformas e ampliações** entram no custo **só com nota fiscal** ou recibo e declaradas.",
+              "**Corretagem** paga pelo vendedor reduz o valor de venda considerado.",
+              "Até R$ 5 milhões de lucro, a alíquota é de **15%**.",
+            ],
+          },
+        ],
+      },
     ],
-    faq: [{ q: "A calculadora substitui o contador?", a: "Não. É uma estimativa simplificada, sem os fatores de redução por tempo de posse." }],
+    faq: [{ q: "A calculadora substitui o contador?", a: "Não. É uma estimativa simplificada, sem os fatores de redução por tempo de posse." },
+      { q: "Reforma sem nota fiscal entra no custo?", a: "Não. Só entram gastos comprovados com nota ou recibo e informados na declaração." },
+      { q: "Quando pago o imposto?", a: "Até o último dia útil do mês seguinte à venda, por DARF, gerado no programa de ganho de capital da Receita." },
+    ],
   },
 };

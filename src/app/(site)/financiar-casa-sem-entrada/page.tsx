@@ -4,16 +4,19 @@ import { calcular, PERFIL_VAZIO, rendaMinimaPara, type Resultado } from "@/lib/f
 import { PARAMS } from "@/lib/financiamento/params";
 import { no } from "@/lib/conteudo/links";
 import { brl } from "@/lib/format";
+import { FiguraPagina } from "@/components/conteudo/Blocos";
+import { capaDe, figuraPropria } from "@/lib/conteudo/figuras";
+import { metadadosPagina } from "@/lib/seo";
 
 const ID = "sem-entrada-casa";
 const n = no(ID);
 
-export const metadata: Metadata = {
-  title: "Dá pra financiar uma casa sem entrada? (a regra da avaliação)",
-  description:
-    "Dá, em um caso: quando o banco avalia o imóvel 25% acima do preço. Veja a conta com números da Caixa, os cuidados e o passo a passo.",
-  alternates: { canonical: n.slug },
-};
+export const metadata: Metadata = metadadosPagina({
+  titulo: "Dá pra financiar casa sem entrada? A regra da avaliação",
+  descricao: "Dá pra financiar casa sem entrada quando o banco avalia o imóvel 25% acima do preço. Veja a conta com números da Caixa, os cuidados e o passo a passo.",
+  slug: n.slug,
+  capa: capaDe(ID),
+});
 
 // Exemplo calculado pelo motor (o mesmo que bate com o simulador da Caixa).
 const PRECO = 200_000;
@@ -52,6 +55,7 @@ export default function Page() {
     <Guia
       id={ID}
       faq={FAQ}
+      indice={["A conta, com números da Caixa", "Por que funciona", "Quando isso acontece na vida real", "Os 4 cuidados", "O passo a passo"]}
       resposta={
         <>
           Dá, em um caso: quando o <b>banco avalia o imóvel 25% ou mais acima do preço</b>. Ele empresta até {PARAMS.mcmvLtv}% da{" "}
@@ -96,6 +100,7 @@ export default function Page() {
           A diferença de <b>{brl(comum.entrada + comum.custos - (segredo.entrada + segredo.custos))}</b> no seu bolso vem de um único número: quanto o engenheiro do banco
           acha que o imóvel vale. A parcela sobe um pouco porque você financia mais — por isso a renda precisa aguentar o valor inteiro.
         </p>
+        <FiguraPagina figura={figuraPropria(ID, "avaliacao-muda-tudo")} pagina={ID} />
       </Secao>
 
       <Secao titulo="Por que funciona">
@@ -108,6 +113,7 @@ export default function Page() {
           Na prática, os bancos também limitam o empréstimo ao preço de venda: ninguém financia mais do que você vai pagar. Então, quando a avaliação passa de{" "}
           <b>preço ÷ 0,8</b> (ou seja, 25% acima), o empréstimo bate no preço e a entrada some.
         </p>
+        <FiguraPagina figura={figuraPropria(ID, "regra-dos-125")} pagina={ID} />
         <div className="overflow-x-auto rounded-[var(--radius-card)] border border-line bg-surface">
           <table className="w-full min-w-[420px] text-left text-[15px] tabular-nums">
             <thead className="text-sm text-muted">

@@ -77,7 +77,7 @@ export function BlocoConteudo({ bloco, pagina }: { bloco: Bloco; pagina: string 
 }
 
 /** O infográfico na página: imagem com texto alternativo e legenda (o arquivo vem do script). */
-function FiguraPagina({ figura, pagina }: { figura: Figura; pagina: string }) {
+export function FiguraPagina({ figura, pagina }: { figura: Figura; pagina: string }) {
   return (
     <figure className="flex flex-col gap-2">
       <Image

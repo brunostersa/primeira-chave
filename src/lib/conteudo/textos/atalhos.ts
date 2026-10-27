@@ -257,8 +257,34 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
           { p: "Comprador: veja [documentos para financiar](#documentos-financiamento). Vendedor: [documentos para vender](#documentos-vender)." },
         ],
       },
+      {
+        titulo: "O que conferir na certidão",
+        blocos: [
+          {
+            figura: {
+              id: "o-que-olhar",
+              alt: "O que conferir na certidão de matrícula do imóvel antes de comprar: dono e cônjuge, ônus e ações, área construída averbada e data de emissão",
+              etiqueta: "Certidão de matrícula",
+              titulo: "Quatro coisas",
+              destaque: "antes do sinal.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Quem é o dono", texto: "O vendedor (e o cônjuge) está na matrícula?" },
+                  { titulo: "Ônus e ações", texto: "Hipoteca, penhora, alienação ou ação na Justiça." },
+                  { titulo: "Área averbada", texto: "A construção está registrada, com habite-se?" },
+                  { titulo: "Data", texto: "Emitida há até 30 dias para o banco." },
+                ],
+              },
+            },
+          },
+        ],
+      },
     ],
-    faq: [{ q: "Ônus e matrícula são a mesma coisa?", a: "Não. A matrícula é o registro do imóvel; a certidão de ônus mostra só o que pesa sobre ele. Para financiar, peça as duas juntas (inteiro teor com ônus)." }],
+    faq: [{ q: "Ônus e matrícula são a mesma coisa?", a: "Não. A matrícula é o registro do imóvel; a certidão de ônus mostra só o que pesa sobre ele. Para financiar, peça as duas juntas (inteiro teor com ônus)." },
+      { q: "Quanto custa a certidão de matrícula?", a: "O valor é tabelado por estado e aparece no pedido, antes de pagar." },
+      { q: "Matrícula com alienação fiduciária pode ser vendida?", a: "Pode, se a dívida for quitada na venda ou o banco aprovar a transferência. Veja vender imóvel financiado." },
+    ],
   },
 
   "carteira-trabalho": {

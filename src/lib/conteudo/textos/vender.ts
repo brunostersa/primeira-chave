@@ -45,6 +45,29 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
     resposta: "Dá para vender. O caminho mais comum é o **comprador financiar e o dinheiro quitar o seu saldo** no próprio processo. O imóvel está em [alienação fiduciária](g:alienacao-fiduciaria): o banco precisa participar.",
     secoes: [
       {
+        titulo: "Para onde vai o dinheiro da venda",
+        blocos: [
+          {
+            figura: {
+              id: "dinheiro-da-venda",
+              alt: "Como vender imóvel financiado: o banco do comprador paga, parte quita o saldo devedor do vendedor e o restante vai para quem vende",
+              etiqueta: "Vender imóvel financiado",
+              titulo: "A venda quita a dívida;",
+              destaque: "o resto é seu.",
+              esquema: {
+                tipo: "divisao",
+                total: "exemplo: venda por R$ 400 mil",
+                partes: [
+                  { rotulo: "quita o seu saldo devedor", valor: 180000, texto: "R$ 180 mil", tom: "planta" },
+                  { rotulo: "vai para você", valor: 220000, texto: "R$ 220 mil", tom: "mark" },
+                ],
+              },
+              legenda: "Valores ilustrativos. O saldo devedor atualizado vem do seu banco.",
+            },
+          },
+        ],
+      },
+      {
         titulo: "Os caminhos",
         blocos: [
           {
@@ -65,7 +88,10 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
         blocos: [{ p: "Peça o **saldo devedor atualizado** ao seu banco (no app ou na agência; na Caixa, veja o [atalho do Habitação](#boleto-habitacao)). É ele que define quanto sobra para você." }],
       },
     ],
-    faq: [{ q: "Pago imposto na venda?", a: "Pode haver imposto sobre o lucro; o guia de imposto na venda explica as isenções." }],
+    faq: [{ q: "Pago imposto na venda?", a: "Pode haver imposto sobre o lucro; o guia de imposto na venda explica as isenções." },
+      { q: "Preciso quitar antes de vender?", a: "Não. O caminho mais comum é quitar com o dinheiro da própria venda, no mesmo processo." },
+      { q: "O comprador pode usar FGTS?", a: "Pode, se ele cumprir as regras do FGTS: o dinheiro entra na compra como em qualquer outra." },
+    ],
   },
 
   "documentos-vender": {
@@ -98,6 +124,30 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
     descricao: "Imposto na venda de imóvel: quando o ganho de capital paga 15% sobre o lucro, as isenções mais comuns e como calcular antes de vender.",
     resposta: "Se você vende **por mais do que pagou**, o lucro é [ganho de capital](g:ganho-de-capital) e paga **15% de imposto** — salvo isenções, como **único imóvel vendido por até R$ 440 mil** ou **comprar outro residencial em até 180 dias** com o dinheiro.",
     secoes: [
+      {
+        titulo: "As isenções em uma imagem",
+        blocos: [
+          {
+            figura: {
+              id: "isencoes",
+              alt: "Isenções do imposto de ganho de capital na venda de imóvel: único imóvel até R$ 440 mil, compra de outro residencial em 180 dias e imóvel adquirido antes de 1969",
+              etiqueta: "Imposto na venda de imóvel",
+              titulo: "Quando o ganho de capital",
+              destaque: "não paga imposto.",
+              esquema: {
+                tipo: "numeros",
+                itens: [
+                  { valor: "R$ 440 mil", rotulo: "único imóvel, sem outra venda em 5 anos", tom: "mark" },
+                  { valor: "180 dias", rotulo: "para comprar outro residencial com o dinheiro" },
+                  { valor: "1969", rotulo: "imóvel comprado antes disso é isento" },
+                  { valor: "15%", rotulo: "sobre o lucro, fora das isenções" },
+                ],
+              },
+              legenda: "Cada isenção tem condições. Confirme a sua com um contador antes de vender.",
+            },
+          },
+        ],
+      },
       { titulo: "Calcule", blocos: [{ calculo: "calculadora-ganho-capital" }] },
       {
         titulo: "As isenções mais usadas",
@@ -114,7 +164,10 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Quem paga o imposto, comprador ou vendedor?", a: "O vendedor, sobre o próprio lucro. O comprador paga o ITBI." }],
+    faq: [{ q: "Quem paga o imposto, comprador ou vendedor?", a: "O vendedor, sobre o próprio lucro. O comprador paga o ITBI." },
+      { q: "A isenção dos 180 dias vale se eu financiar o novo imóvel?", a: "Vale: o dinheiro da venda precisa ir para a compra do novo imóvel residencial, mesmo que o resto seja financiado." },
+      { q: "Vendi com prejuízo. Pago imposto?", a: "Não há ganho de capital quando a venda sai por menos que o custo. Mesmo assim, informe a venda na declaração." },
+    ],
   },
 
   "quanto-vale": {
@@ -122,6 +175,30 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
     descricao: "Quanto vale meu imóvel? A diferença entre preço de anúncio, preço de venda e avaliação do banco, e como chegar a um preço que vende.",
     resposta: "Quanto vale meu imóvel? Ele tem três valores: o **de anúncio** (o que você pede), o **de venda** (o que alguém paga) e a **[avaliação](g:avaliacao) do banco** (o que o banco do comprador acha que vale). O que vende rápido é o preço que **cabe na avaliação**.",
     secoes: [
+      {
+        titulo: "Um imóvel, três valores",
+        blocos: [
+          {
+            figura: {
+              id: "tres-valores",
+              alt: "Quanto vale meu imóvel: a diferença entre o preço de anúncio, o preço de venda e a avaliação do banco do comprador, com valores ilustrativos",
+              etiqueta: "Quanto vale meu imóvel?",
+              titulo: "Um imóvel,",
+              destaque: "três valores.",
+              esquema: {
+                tipo: "barras",
+                itens: [
+                  { rotulo: "Anúncio", valor: 400, texto: "R$ 400 mil · o que você pede", tom: "ink" },
+                  { rotulo: "Venda", valor: 370, texto: "R$ 370 mil · o que alguém paga", tom: "mark" },
+                  { rotulo: "Avaliação do banco", valor: 360, texto: "R$ 360 mil · base do empréstimo", tom: "planta" },
+                ],
+              },
+              legenda: "Valores ilustrativos. O comprador financiado só consegue pagar o que a avaliação e a entrada dele cobrem.",
+            },
+          },
+          { p: "Para ter uma referência real, veja quanto as pessoas pagaram por m² em [São Paulo, distrito por distrito](#metro-quadrado-sao-paulo), e o preço de anúncio [nas capitais](#quanto-minha-renda-compra)." },
+        ],
+      },
       {
         titulo: "Como chegar ao preço",
         blocos: [
@@ -135,7 +212,10 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Vale pagar uma avaliação particular?", a: "Para imóveis de valor alto ou muito diferentes da vizinhança, um laudo de corretor ou engenheiro ajuda a defender o preço." }],
+    faq: [{ q: "Vale pagar uma avaliação particular?", a: "Para imóveis de valor alto ou muito diferentes da vizinhança, um laudo de corretor ou engenheiro ajuda a defender o preço." },
+      { q: "O valor venal do IPTU é o valor do imóvel?", a: "Não. O valor venal é uma base de imposto da prefeitura e costuma ficar abaixo do mercado." },
+      { q: "Como saber se o banco vai avaliar no meu preço?", a: "Compare com vendas reais parecidas na região: é o que o engenheiro do banco faz. Imóvel muito acima disso tende a ser avaliado abaixo do preço." },
+    ],
   },
 
   "contrato-compra-venda": {

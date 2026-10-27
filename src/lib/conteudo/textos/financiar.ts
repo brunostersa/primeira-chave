@@ -1,4 +1,11 @@
+import { mipRate, tabela } from "../../financiamento/engine";
+import { PARAMS } from "../../financiamento/params";
 import type { Texto } from "../tipos";
+
+// Quanto custa financiar: R$ 240 mil (imóvel de R$ 300 mil) na faixa 3, em 35 anos, pelo motor validado.
+const F3 = PARAMS.faixas[2];
+const custo = tabela(240000, F3.juros / 100 / 12, PARAMS.prazoMax, 300000, "price", mipRate(30), PARAMS.dfi / 100, PARAMS.taxaAdm);
+const milR = (v: number) => `R$ ${Math.round(v / 1000)} mil`;
 
 export const TEXTOS_FINANCIAR: Record<string, Texto> = {
   "como-financiar-casa-caixa": {
@@ -216,6 +223,30 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
     resposta: "Para saber quanto custa financiar um apartamento, some ao preço os **juros**, os **seguros** ([MIP e DFI](g:mip-dfi)), a **taxa de administração** e a correção pela [TR](g:tr) durante o contrato — e, na compra, **ITBI e cartório** (perto de 5%).",
     secoes: [
       {
+        titulo: "Quanto você paga no total",
+        blocos: [
+          {
+            figura: {
+              id: "total-pago",
+              alt: "Quanto custa financiar um apartamento: R$ 240 mil financiados em 35 anos na faixa 3 do Minha Casa Minha Vida e o total pago com juros, seguros e taxas",
+              etiqueta: "Quanto custa financiar",
+              titulo: "Em 35 anos,",
+              destaque: "o total passa do dobro.",
+              esquema: {
+                tipo: "divisao",
+                total: `total pago em 35 anos: ${milR(custo.total)}`,
+                partes: [
+                  { rotulo: "o que você pegou emprestado", valor: 240000, texto: "R$ 240 mil", tom: "planta" },
+                  { rotulo: "juros, seguros e taxas", valor: custo.total - 240000, texto: milR(custo.total - 240000), tom: "bad" },
+                ],
+              },
+              legenda: `Imóvel de R$ 300 mil, R$ 240 mil financiados na faixa 3 (PRICE, sem TR). Calculado com as regras da Caixa conferidas no simulador.`,
+            },
+          },
+          { p: "O que mais reduz essa conta é **amortizar cedo**: cada real abatido nos primeiros anos deixa de pagar juros por décadas. Veja [como usar o FGTS para amortizar](#amortizar-fgts)." },
+        ],
+      },
+      {
         titulo: "Na compra",
         blocos: [{ calculo: "custos-da-compra" }],
       },
@@ -227,7 +258,10 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "O que é CET?", a: "Custo Efetivo Total: a taxa que soma juros, seguros e tarifas. O banco é obrigado a informar antes de você assinar." }],
+    faq: [{ q: "O que é CET?", a: "Custo Efetivo Total: a taxa que soma juros, seguros e tarifas. O banco é obrigado a informar antes de você assinar." },
+      { q: "Quanto custa financiar um apartamento de R$ 300 mil?", a: "Na faixa 3, com R$ 240 mil financiados em 35 anos, o total de parcelas passa do dobro do valor emprestado. A conta exata depende da sua faixa, do prazo e do sistema (SAC ou PRICE)." },
+      { q: "Os seguros são obrigatórios?", a: "Sim: o MIP (morte e invalidez) e o DFI (danos ao imóvel) vêm na parcela de todo financiamento habitacional." },
+    ],
   },
 
   "sac-ou-price": {
@@ -349,6 +383,27 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
     resposta: "Alugar ou financiar não tem resposta única: compare **a parcela com o aluguel**, o **custo da entrada parada** e **quanto tempo você vai morar** ali. Se a parcela fica perto do aluguel e você pretende ficar anos, financiar costuma fazer sentido.",
     secoes: [
       {
+        titulo: "Os dois caminhos lado a lado",
+        blocos: [
+          {
+            figura: {
+              id: "alugar-x-financiar",
+              alt: "Alugar ou financiar um imóvel: o aluguel dá flexibilidade e não exige entrada; o financiamento pede entrada e custos, mas a parcela vira patrimônio",
+              etiqueta: "Alugar ou financiar?",
+              titulo: "Flexibilidade",
+              destaque: "× patrimônio.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Alugar", tom: "planta", itens: ["Muda quando quiser", "Sem entrada nem ITBI", "Reajuste todo ano"] },
+                  { titulo: "Financiar", tom: "mark", itens: ["Parcela vira patrimônio", "Entrada e ~5% de custos", "Juros, mas o imóvel é seu"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "As perguntas que decidem",
         blocos: [
           {
@@ -363,6 +418,9 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Aluguel é dinheiro jogado fora?", a: "Não: paga flexibilidade. A parcela também tem juros. A conta certa compara os dois, não só o valor do mês." }],
+    faq: [{ q: "Aluguel é dinheiro jogado fora?", a: "Não: paga flexibilidade. A parcela também tem juros. A conta certa compara os dois, não só o valor do mês." },
+      { q: "Compensa financiar se a parcela for maior que o aluguel?", a: "Pode compensar se você vai ficar muitos anos e a parcela cabe com folga. Se aperta o mês, o risco é maior que o ganho." },
+      { q: "E se eu guardar a diferença e comprar à vista depois?", a: "Funciona para quem tem disciplina e renda estável, mas os preços sobem no caminho: as avaliações dos bancos subiram perto de 5% no último ano." },
+    ],
   },
 };

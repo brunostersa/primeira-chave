@@ -17,6 +17,7 @@ const ORG_JSON_LD = {
       url: SITE.url,
       description: SITE.descricao,
       sameAs: [SITE.instagram],
+      parentOrganization: { "@type": "Organization", name: "CustomerHub", url: "https://customerhub.com.br" },
     },
     {
       "@type": "WebSite",

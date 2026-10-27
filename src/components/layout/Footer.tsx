@@ -62,6 +62,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/sobre/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+                Sobre
+              </Link>
+            </li>
+            <li>
               <a href={SITE.instagram} rel="noopener" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                 Instagram
               </a>

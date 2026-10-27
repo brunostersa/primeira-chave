@@ -46,7 +46,7 @@ export const slugSecao = (titulo: string) =>
 
 export function Secao({ titulo, children, id }: { titulo: string; children: ReactNode; id?: string }) {
   return (
-    <section id={id} className="flex scroll-mt-24 flex-col gap-4">
+    <section id={id ?? slugSecao(titulo)} className="flex scroll-mt-24 flex-col gap-4">
       <h2 className="font-display text-[clamp(26px,3.4vw,34px)] font-light leading-tight">{titulo}</h2>
       <div className="flex flex-col gap-4 text-[17px] leading-relaxed text-ink-2 [&_b]:font-semibold [&_b]:text-ink [&_strong]:text-ink">{children}</div>
     </section>

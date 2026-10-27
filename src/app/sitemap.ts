@@ -47,7 +47,10 @@ const prioridade = (n: Pick<No, "tipo" | "prioridade">) => (n.tipo === "inicio" 
  * própria ou conteúdo montado pela rota única (nunca uma URL 404 no sitemap).
  */
 /** Páginas que existem fora da árvore e devem ser indexadas. */
-const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] = [{ slug: "/mapa/", tipo: "hub", prioridade: 3 }];
+const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] = [
+  { slug: "/mapa/", tipo: "hub", prioridade: 3 },
+  { slug: "/sobre/", tipo: "hub", prioridade: 3 },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [...ARVORE.filter((n) => n.status === "publicado"), ...FIXAS].filter((n) => existsSync(arquivo(n.slug)) || ("id" in n && naRotaUnica(n as No))).map((n) => ({

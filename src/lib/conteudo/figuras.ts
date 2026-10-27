@@ -1,4 +1,5 @@
 import { HUBS_TEXTOS, TEXTOS } from "./textos";
+import { FIGURAS_PROPRIAS } from "./textos/proprias";
 import type { Bloco, Figura } from "./tipos";
 
 /**
@@ -13,11 +14,17 @@ const blocosDe = (pagina: string): Bloco[] => {
   return t?.secoes?.flatMap((s) => s.blocos) ?? [];
 };
 
-export const figurasDe = (pagina: string): Figura[] => blocosDe(pagina).flatMap((b) => ("figura" in b ? [b.figura] : []));
+export const figurasDe = (pagina: string): Figura[] => [
+  ...blocosDe(pagina).flatMap((b) => ("figura" in b ? [b.figura] : [])),
+  ...(FIGURAS_PROPRIAS[pagina] ?? []),
+];
+
+/** A figura de uma página escrita à mão, pelo id. */
+export const figuraPropria = (pagina: string, id: string) => FIGURAS_PROPRIAS[pagina].find((f) => f.id === id)!;
 
 /** Todas, para a rota de exportação e o teste (arquivo existe, texto alternativo bom). */
 export const todasAsFiguras = () =>
-  [...Object.keys(TEXTOS), ...Object.keys(HUBS_TEXTOS)].flatMap((pagina) => figurasDe(pagina).map((figura) => ({ pagina, figura })));
+  [...new Set([...Object.keys(TEXTOS), ...Object.keys(HUBS_TEXTOS), ...Object.keys(FIGURAS_PROPRIAS)])].flatMap((pagina) => figurasDe(pagina).map((figura) => ({ pagina, figura })));
 
 /** A capa da página nas redes: a primeira figura dela, se houver. */
 export const capaDe = (pagina: string) => {

@@ -57,6 +57,7 @@ const paginasDoHub = (hub: HubId) => doHub(hub).filter((n) => n.tipo !== "hub" &
 const linkDe = (id: string) => (publicado(no(id)) ? no(id).slug : null);
 
 const MAPA: ItemNav = { id: "mapa", titulo: "Mapa do site", resumo: "Todas as páginas, conectadas.", href: "/mapa/" };
+const SOBRE: ItemNav = { id: "sobre", titulo: "Sobre a Primeira Chave", resumo: "Quem faz, por quê e como trabalhamos.", href: "/sobre/" };
 
 export function secoesMenu(): SecaoNav[] {
   const ferramentas = ARVORE.filter((n) => ["nucleo", "ferramenta", "programatica"].includes(n.tipo)).sort(porRelevancia);
@@ -86,7 +87,7 @@ export function secoesMenu(): SecaoNav[] {
       resumo: "Os links difíceis de achar, os termos do banco e o mapa de tudo.",
       href: linkDe("atalhos"),
       itens: paginasDoHub("atalhos").slice(0, MAX_ITENS).map(item),
-      extras: [atalho("glossario", "Glossário"), atalho("guias", "Todos os guias"), MAPA],
+      extras: [atalho("glossario", "Glossário"), atalho("guias", "Todos os guias"), MAPA, SOBRE],
     },
   ];
 }
