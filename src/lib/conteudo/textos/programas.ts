@@ -34,6 +34,32 @@ export const TEXTOS_PROGRAMAS: Record<string, Texto> = {
     resposta: "O **Casa Verde e Amarela acabou em 2023**: o programa voltou a se chamar [Minha Casa Minha Vida](#minha-casa-minha-vida), com novas faixas de renda e juros. Quem procura o nome antigo deve olhar as regras do MCMV.",
     secoes: [
       {
+        titulo: "A linha do tempo do programa",
+        blocos: [
+          {
+            figura: {
+              id: "linha-do-tempo",
+              alt: "Linha do tempo do programa habitacional: Minha Casa Minha Vida em 2009, Casa Verde e Amarela em 2021 e a volta do Minha Casa Minha Vida em 2023",
+              etiqueta: "Casa Verde e Amarela",
+              titulo: "O nome mudou duas vezes;",
+              destaque: "hoje é Minha Casa Minha Vida.",
+              esquema: {
+                tipo: "linha",
+                marcos: [
+                  { rotulo: "2009", detalhe: "nasce o Minha Casa Minha Vida" },
+                  { rotulo: "2021", detalhe: "vira Casa Verde e Amarela" },
+                  { rotulo: "2023", detalhe: "volta o Minha Casa Minha Vida" },
+                ],
+                trechos: [
+                  { rotulo: "Minha Casa Minha Vida", tom: "mark" },
+                  { rotulo: "Casa Verde e Amarela", tom: "planta" },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "O que mudou",
         blocos: [
           {
@@ -48,6 +74,9 @@ export const TEXTOS_PROGRAMAS: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Meu contrato do Casa Verde e Amarela muda?", a: "Não: contratos assinados seguem as condições que você assinou." }],
+    faq: [{ q: "Meu contrato do Casa Verde e Amarela muda?", a: "Não: contratos assinados seguem as condições que você assinou." },
+      { q: "Ainda dá para se inscrever no Casa Verde e Amarela?", a: "Não. Quem procura o programa hoje entra pelo Minha Casa Minha Vida, com as faixas de renda atuais." },
+      { q: "O que acontece com quem comprou pelo Casa Verde e Amarela?", a: "Nada muda no contrato: ele segue com as condições assinadas." },
+    ],
   },
 };

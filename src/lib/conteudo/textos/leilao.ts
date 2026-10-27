@@ -94,8 +94,37 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
           { aviso: { titulo: "O maior risco", texto: "Comprar pelo preço sem somar ocupação, dívidas e reforma. O \"barato\" some rápido se a conta não estiver completa.", tom: "bad" } },
         ],
       },
+      {
+        titulo: "O teto do lance, de trás para frente",
+        blocos: [
+          {
+            figura: {
+              id: "teto-do-lance",
+              alt: "Como calcular o teto do lance no leilão de imóvel: do valor de mercado tire a reforma, os custos da compra e a margem de segurança",
+              etiqueta: "Comprar imóvel de leilão",
+              titulo: "O teto do lance",
+              destaque: "se calcula de trás para frente.",
+              esquema: {
+                tipo: "divisao",
+                total: "exemplo: imóvel que vale R$ 300 mil pronto",
+                partes: [
+                  { rotulo: "teto do lance", valor: 210000, texto: "R$ 210 mil", tom: "mark" },
+                  { rotulo: "reforma e desocupação", valor: 30000, texto: "R$ 30 mil", tom: "bad" },
+                  { rotulo: "ITBI, registro e comissão", valor: 20000, texto: "R$ 20 mil", tom: "ink" },
+                  { rotulo: "margem de segurança", valor: 40000, texto: "R$ 40 mil", tom: "planta" },
+                ],
+              },
+              legenda: "Valores ilustrativos. Comece pelo valor de venda do imóvel pronto, não pelo desconto do anúncio.",
+            },
+          },
+          { p: "Quem começa pelo **desconto** do anúncio costuma pagar caro. Comece pelo **valor de mercado do imóvel pronto** (compare vendas parecidas na região) e desconte reforma, custos e uma margem: o que sobra é o seu teto. Acima dele, deixe o lance passar." },
+        ],
+      },
     ],
-    faq: [{ q: "Posso desistir depois do lance?", a: "Desistir costuma gerar multa e perda de valores, conforme o edital. Decida antes." }],
+    faq: [{ q: "Posso desistir depois do lance?", a: "Desistir costuma gerar multa e perda de valores, conforme o edital. Decida antes." },
+      { q: "Dá para financiar imóvel de leilão?", a: "Em parte dos leilões, sim, conforme o edital. Veja as regras em financiar imóvel de leilão." },
+      { q: "Quem paga a comissão do leiloeiro?", a: "Quem arremata, quando o edital prevê. Some ao teto do lance." },
+    ],
   },
 
   "financiar-leilao": {

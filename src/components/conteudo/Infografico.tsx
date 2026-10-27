@@ -127,7 +127,7 @@ function Passos({ itens }: Extract<Esquema, { tipo: "passos" }>) {
   );
 }
 
-function Comparar({ colunas }: Extract<Esquema, { tipo: "comparar" }>) {
+function Comparar({ colunas, sinal = "×" }: Extract<Esquema, { tipo: "comparar" }>) {
   return (
     <div className="grid w-full items-stretch gap-6" style={{ gridTemplateColumns: colunas.map(() => "minmax(0,1fr)").join(" auto ") }}>
       {colunas.flatMap((c, i) => {
@@ -144,7 +144,7 @@ function Comparar({ colunas }: Extract<Esquema, { tipo: "comparar" }>) {
             </ul>
           </div>
         );
-        return i === 0 ? [coluna] : [<span key={`x${i}`} className="self-center font-display text-[40px] font-light text-ink-2">×</span>, coluna];
+        return i === 0 ? [coluna] : [<span key={`x${i}`} className="self-center font-display text-[40px] font-light text-ink-2">{sinal}</span>, coluna];
       })}
     </div>
   );

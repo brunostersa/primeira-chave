@@ -103,6 +103,29 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     resposta: "Os documentos para financiamento na Caixa formam três grupos: **seus documentos** (identidade, renda e imposto de renda), **os do vendedor** (identidade e estado civil) e **os do imóvel** (a [matrícula](g:matricula) atualizada). Entregue tudo de uma vez.",
     secoes: [
       {
+        titulo: "Os três grupos de documentos",
+        blocos: [
+          {
+            figura: {
+              id: "tres-grupos",
+              alt: "Documentos para financiamento na Caixa em três grupos: do comprador, do vendedor e do imóvel, com a matrícula atualizada",
+              etiqueta: "Documentos para financiamento",
+              titulo: "Três pastas,",
+              destaque: "entregues de uma vez.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Seus", tom: "mark", itens: ["Identidade e CPF", "Estado civil", "Renda e imposto de renda"] },
+                  { titulo: "Do vendedor", tom: "planta", itens: ["Identidade e CPF", "Estado civil", "Empresa: contrato social"] },
+                  { titulo: "Do imóvel", tom: "ink", itens: ["Matrícula atualizada", "Com ônus e ações", "IPTU e condomínio"] },
+                ],
+                sinal: "+",
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "Do comprador",
         blocos: [
           {
@@ -143,6 +166,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "Precisa de certidões negativas do vendedor?", a: "Depende do banco e do caso. É comum pedirem certidões de ações e de débitos para avaliar o risco do negócio." },
       { q: "Quanto tempo vale a certidão da matrícula?", a: "Em geral, os bancos aceitam certidões emitidas há até 30 dias." },
+      { q: "Autônomo consegue financiar?", a: "Consegue, comprovando renda com extratos bancários, declaração do imposto de renda e, às vezes, pró-labore ou declaração do contador." },
+      { q: "Quanto tempo vale a certidão de matrícula?", a: "Em geral, o banco pede certidão emitida há até 30 dias. Peça perto da data de entregar os documentos." },
     ],
   },
 
@@ -251,6 +276,29 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     resposta: "Dá para financiar apartamento sem entrada pela mesma regra da casa: o banco empresta até 80% da [avaliação](g:avaliacao), sem passar do preço. Se a avaliação vier **25% acima do preço**, a [entrada](g:entrada) zera — mas ITBI e cartório continuam.",
     secoes: [
       {
+        titulo: "A conta em uma imagem",
+        blocos: [
+          {
+            figura: {
+              id: "avaliado-acima",
+              alt: "Como financiar apartamento sem entrada: apartamento de R$ 240 mil avaliado em R$ 300 mil, o banco financia o preço inteiro e você paga só ITBI e cartório",
+              etiqueta: "Apartamento sem entrada",
+              titulo: "Avaliado 25% acima,",
+              destaque: "entrada zero.",
+              esquema: {
+                tipo: "divisao",
+                total: "preço R$ 240 mil · avaliação R$ 300 mil",
+                partes: [
+                  { rotulo: "o banco financia 80% da avaliação = o preço inteiro", valor: 240000, texto: "R$ 240 mil", tom: "planta" },
+                  { rotulo: "ITBI e cartório, do seu bolso", valor: 12000, texto: "R$ 12 mil", tom: "mark" },
+                ],
+              },
+              legenda: "80% de R$ 300 mil são R$ 240 mil: o preço inteiro. A renda ainda precisa aguentar a parcela.",
+            },
+          },
+        ],
+      },
+      {
         titulo: "A conta",
         blocos: [
           {
@@ -280,7 +328,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "O condomínio entra nos 30% da renda?", a: "Não na conta do banco, mas entra no seu bolso todo mês. Faça a conta com ele." }],
+    faq: [{ q: "O condomínio entra nos 30% da renda?", a: "Não na conta do banco, mas entra no seu bolso todo mês. Faça a conta com ele." },
+      { q: "Funciona com apartamento na planta?", a: "Em geral não: na planta você paga a construtora durante a obra. A regra da avaliação vale para o imóvel pronto financiado." },
+      { q: "A renda precisa aguentar a parcela maior?", a: "Sim. Sem entrada, você financia mais, e a parcela tem de caber em 30% da renda." },
+    ],
   },
 
   "avaliacao-do-imovel": {
@@ -388,6 +439,27 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     resposta: "Dá para usar o [FGTS](g:fgts) para amortizar o financiamento de três jeitos: **abater** parte do saldo, **quitar** tudo ou **pagar até 80% da parcela por 12 meses**. Abater no começo do contrato é o que mais economiza juros.",
     secoes: [
       {
+        titulo: "Reduzir o prazo ou a parcela?",
+        blocos: [
+          {
+            figura: {
+              id: "prazo-x-parcela",
+              alt: "Usar o FGTS para amortizar o financiamento: reduzir o prazo economiza mais juros; reduzir a parcela alivia o orçamento do mês",
+              etiqueta: "Amortizar com FGTS",
+              titulo: "O mesmo FGTS,",
+              destaque: "dois efeitos.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Reduzir o prazo", tom: "mark", itens: ["Economiza mais juros", "Parcela continua parecida", "Termina de pagar antes"] },
+                  { titulo: "Reduzir a parcela", tom: "planta", itens: ["Alivia o mês", "Prazo continua o mesmo", "Economiza menos juros"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "Prazo menor ou parcela menor?",
         blocos: [
           { p: "Ao abater, você escolhe: reduzir o **prazo** (economiza mais juros) ou reduzir a **parcela** (alivia o mês)." },
@@ -408,6 +480,9 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Vale mais abater ou deixar o FGTS rendendo?", a: "Em geral, abater: os juros do financiamento costumam ser bem maiores que o rendimento do FGTS." }],
+    faq: [{ q: "Vale mais abater ou deixar o FGTS rendendo?", a: "Em geral, abater: os juros do financiamento costumam ser bem maiores que o rendimento do FGTS." },
+      { q: "De quanto em quanto tempo posso usar o FGTS para amortizar?", a: "Para abater ou quitar o saldo, em geral a cada 2 anos no mesmo contrato." },
+      { q: "Quem não tem 3 anos de FGTS pode amortizar?", a: "A regra dos 3 anos de trabalho com FGTS também vale para amortizar. Confira o seu tempo na Carteira de Trabalho Digital." },
+    ],
   },
 };

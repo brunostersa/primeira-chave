@@ -132,7 +132,6 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
           { aviso: { titulo: "Cuidado com golpes", texto: "A Caixa não pede senha nem código por mensagem. Use só o app oficial." } },
         ],
       },
-      { titulo: "E agora?", blocos: [{ p: "Veja [as regras para usar o FGTS na compra](#usar-fgts-comprar) e coloque o saldo no [simulador](#simulador)." }] },
       {
         titulo: "Quando o FGTS pode entrar na compra",
         blocos: [
@@ -157,6 +156,7 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
           { p: "Os detalhes e as exceções estão em [como usar o FGTS para comprar imóvel](#usar-fgts-comprar). Para conferir os 3 anos, veja o [tempo de carteira](#carteira-trabalho)." },
         ],
       },
+      { titulo: "E agora?", blocos: [{ p: "Veja [as regras para usar o FGTS na compra](#usar-fgts-comprar) e coloque o saldo no [simulador](#simulador)." }] },
     ],
     faq: [{ q: "Saldo bloqueado pode ser usado?", a: "Saldo comprometido com antecipação do saque-aniversário fica indisponível até a quitação da antecipação." },
       { q: "Dá para consultar o FGTS sem o aplicativo?", a: "Dá: pelo site da Caixa ou numa agência, com documento. O aplicativo FGTS é o caminho mais rápido." },
@@ -189,8 +189,33 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
           { aviso: { titulo: "Atrasou?", texto: "O saldo é corrigido com juros, multa e mora. Se apertar, procure o banco antes de atrasar: dá para mudar a data de vencimento." } },
         ],
       },
+      {
+        titulo: "Boleto verdadeiro ou golpe?",
+        blocos: [
+          {
+            figura: {
+              id: "verdadeiro-x-golpe",
+              alt: "Como saber se o boleto da Habitação Caixa é verdadeiro: tirado no app ou site oficial, código 104 e beneficiário Caixa, contra os sinais de golpe",
+              etiqueta: "2ª via do boleto da Caixa",
+              titulo: "Antes de pagar,",
+              destaque: "confira três coisas.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Verdadeiro", tom: "planta", itens: ["Tirado no app ou site oficial", "Código de barras começa com 104", "Beneficiário: Caixa Econômica Federal"] },
+                  { titulo: "Golpe", tom: "bad", itens: ["Chega por mensagem ou e-mail", "Pede Pix para pessoa ou empresa", "Beneficiário com outro nome"] },
+                ],
+              },
+            },
+          },
+          { p: "O **104** é o código da Caixa no sistema bancário: é por ele que a linha digitável começa. Na dúvida, não pague: gere a 2ª via de novo pelo app oficial." },
+        ],
+      },
     ],
-    faq: [{ q: "Boleto que chegou por e-mail é seguro?", a: "Confira sempre no app ou no site oficial antes de pagar: boleto falso é golpe comum." }],
+    faq: [{ q: "Boleto que chegou por e-mail é seguro?", a: "Confira sempre no app ou no site oficial antes de pagar: boleto falso é golpe comum." },
+      { q: "Perdi a data. Posso pagar o boleto vencido?", a: "Gere uma nova 2ª via pelo app ou site: ela sai com o valor atualizado (juros e multa do atraso)." },
+      { q: "Onde vejo o saldo devedor?", a: "No app Habitação CAIXA ou no site Habitação Digital, em Meu financiamento." },
+    ],
   },
 
   "certidao-matricula": {

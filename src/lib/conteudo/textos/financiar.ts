@@ -96,9 +96,63 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
           },
         ],
       },
+      {
+        titulo: "Casa ou apartamento: o que muda no financiamento",
+        blocos: [
+          {
+            figura: {
+              id: "casa-x-apartamento",
+              alt: "Diferenças entre financiar casa e financiar apartamento: condomínio, avaliação do prédio e documentos do condomínio",
+              etiqueta: "Financiar apartamento",
+              titulo: "Mesma regra,",
+              destaque: "outros custos.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Casa", tom: "planta", itens: ["Sem condomínio", "Avaliação do terreno e da construção", "Manutenção toda por sua conta"] },
+                  { titulo: "Apartamento", tom: "mark", itens: ["Condomínio todo mês", "Avaliação olha o prédio inteiro", "Documentos do condomínio"] },
+                ],
+              },
+              legenda: "O banco usa as mesmas regras (80% da avaliação, 30% da renda, até 35 anos). O que muda é o seu orçamento do mês.",
+            },
+          },
+        ],
+      },
+      {
+        titulo: "Apartamento na planta: como funciona o pagamento",
+        blocos: [
+          {
+            figura: {
+              id: "na-planta",
+              alt: "Como funciona a compra de apartamento na planta: sinal, parcelas à construtora durante a obra corrigidas pelo INCC e financiamento do saldo na entrega das chaves",
+              etiqueta: "Apartamento na planta",
+              titulo: "Na obra, a construtora;",
+              destaque: "na chave, o banco.",
+              esquema: {
+                tipo: "linha",
+                marcos: [
+                  { rotulo: "Compra", detalhe: "sinal e contrato com a construtora" },
+                  { rotulo: "Habite-se", detalhe: "obra pronta e averbada" },
+                  { rotulo: "Chave", detalhe: "o banco financia o saldo" },
+                ],
+                trechos: [
+                  { rotulo: "obra: parcelas corrigidas pelo INCC", tom: "mark" },
+                  { rotulo: "financiamento do saldo", tom: "planta" },
+                ],
+              },
+              legenda: "Em alguns empreendimentos o financiamento começa já na obra, com a construtora como parceira do banco.",
+            },
+          },
+          { p: "Durante a obra, as parcelas da construtora costumam ser corrigidas pelo **INCC**, o índice do custo da construção: o saldo que você vai financiar na entrega pode ficar maior que o previsto. Leia no contrato o índice, a periodicidade da correção e o **prazo de entrega**." },
+        ],
+      },
       { titulo: "Sem entrada?", blocos: [{ p: "Vale a mesma regra da avaliação: veja [apartamento sem entrada](#sem-entrada-apartamento)." }] },
     ],
-    faq: [{ q: "Apartamento usado financia igual ao novo?", a: "Na Caixa, a cota é a mesma (até 80%). A avaliação de usado costuma ser mais rigorosa com conservação." }],
+    faq: [{ q: "Apartamento usado financia igual ao novo?", a: "Na Caixa, a cota é a mesma (até 80%). A avaliação de usado costuma ser mais rigorosa com conservação." },
+      { q: "Dá para financiar apartamento na planta pela Caixa?", a: "Dá. Em geral você paga a construtora durante a obra e financia o saldo na entrega; em alguns empreendimentos, o financiamento já começa na obra." },
+      { q: "O que é o INCC?", a: "É o índice que mede o custo da construção. Ele costuma corrigir as parcelas pagas à construtora durante a obra." },
+      { q: "O condomínio entra na análise do banco?", a: "Não entra nos 30% da renda, mas pese no seu orçamento: ele vem todo mês junto com a parcela." },
+    ],
   },
 
   "imovel-usado": {
@@ -127,8 +181,32 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
           { p: "Quem vende também precisa entender isso: [vender para quem vai financiar](#vender-para-quem-financia)." },
         ],
       },
+      {
+        titulo: "Usado ou novo: o que pesa na escolha",
+        blocos: [
+          {
+            figura: {
+              id: "usado-x-novo",
+              alt: "Comparação entre financiar imóvel usado e imóvel novo pela Caixa: preço, avaliação, reforma, prazo para morar e documentação",
+              etiqueta: "Financiar imóvel usado",
+              titulo: "Usado ou novo:",
+              destaque: "cada um tem seu custo.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Usado", tom: "mark", itens: ["Mora logo", "Preço mais negociável", "Avaliação rigorosa com conservação", "Pode pedir reforma"] },
+                  { titulo: "Novo", tom: "planta", itens: ["Sem reforma", "Na planta, espera a obra", "Saldo corrigido pelo INCC na obra", "Documentação da construtora"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
     ],
-    faq: [{ q: "Imóvel sem habite-se financia?", a: "Em geral não: o banco exige a construção averbada na matrícula." }],
+    faq: [{ q: "Imóvel sem habite-se financia?", a: "Em geral não: o banco exige a construção averbada na matrícula." },
+      { q: "A Caixa financia imóvel usado no Minha Casa Minha Vida?", a: "Sim, dentro do teto da sua faixa e com a avaliação aprovada." },
+      { q: "Quem paga a avaliação do imóvel usado?", a: "O comprador paga a tarifa de avaliação ao banco, como em qualquer financiamento." },
+    ],
   },
 
   "quanto-custa-financiar": {
@@ -157,6 +235,28 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
     descricao: "SAC ou PRICE: qual escolher no financiamento imobiliário? O exemplo calculado mostra a parcela inicial, a última parcela e o total pago.",
     resposta: "SAC ou PRICE? No [SAC](g:sac), a parcela **começa mais alta e vai caindo**, e você paga **menos juros no total**. Na [PRICE](g:price), a parcela **fica igual**, começa menor, mas o total é maior. Se a primeira parcela do SAC cabe na renda, ele costuma valer mais.",
     secoes: [
+      {
+        titulo: "SAC ou PRICE em uma imagem",
+        blocos: [
+          {
+            figura: {
+              id: "sac-x-price",
+              alt: "SAC ou PRICE: no SAC a parcela começa maior e cai, com menos juros no total; na PRICE a parcela é fixa, começa menor e soma mais juros",
+              etiqueta: "SAC ou PRICE",
+              titulo: "Parcela que cai",
+              destaque: "× parcela fixa.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "SAC", tom: "mark", itens: ["1ª parcela maior", "Parcela cai todo mês", "Menos juros no total"] },
+                  { titulo: "PRICE", tom: "planta", itens: ["1ª parcela menor", "Parcela fixa (mais TR)", "Mais juros no total"] },
+                ],
+              },
+              legenda: "No SAC, você amortiza mais no começo; por isso os juros caem mais rápido.",
+            },
+          },
+        ],
+      },
       { titulo: "Lado a lado", blocos: [{ calculo: "sac-x-price" }] },
       {
         titulo: "Como escolher",
@@ -176,7 +276,10 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Posso trocar depois?", a: "Em geral não dentro do mesmo contrato. Uma saída é a portabilidade para outro banco." }],
+    faq: [{ q: "Posso trocar depois?", a: "Em geral não dentro do mesmo contrato. Uma saída é a portabilidade para outro banco." },
+      { q: "Qual sistema a Caixa usa?", a: "Na simulação, a linha de mercado (SBPE) sai em SAC e o Minha Casa Minha Vida em PRICE. Na contratação, o banco informa as opções do seu caso." },
+      { q: "No SAC eu financio menos?", a: "Com a mesma renda, sim: a primeira parcela é a mais alta, e é ela que precisa caber em 30% da renda." },
+    ],
   },
 
   "consorcio-ou-financiamento": {
@@ -185,6 +288,37 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
     descricao: "Como funciona um consórcio de imóvel: taxa de administração, sorteio, lance e carta de crédito, comparados ao financiamento, com custos e prazos.",
     resposta: "Como funciona um consórcio de imóvel: o grupo junta dinheiro todo mês e, a cada assembleia, alguém recebe a [carta de crédito](g:carta-de-credito) por **sorteio** ou **lance**. Não tem juros, mas tem taxa de administração. **Financiamento**: a chave vem agora, com juros. Quem precisa morar logo financia; quem pode esperar pode considerar o consórcio.",
     secoes: [
+      {
+        titulo: "Como funciona o consórcio de imóvel, na prática",
+        blocos: [
+          {
+            figura: {
+              id: "consorcio-na-pratica",
+              alt: "Como funciona um consórcio de imóvel: grupo, parcelas mensais, sorteio ou lance na assembleia e uso da carta de crédito para comprar o imóvel",
+              etiqueta: "Consórcio de imóvel",
+              titulo: "Sem juros,",
+              destaque: "mas sem data certa.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Entra no grupo", texto: "Escolhe o valor da carta e paga parcelas todo mês." },
+                  { titulo: "Assembleia", texto: "Todo mês alguém é contemplado por sorteio ou lance." },
+                  { titulo: "Carta de crédito", texto: "Contemplado, usa o crédito para comprar o imóvel." },
+                  { titulo: "Segue pagando", texto: "As parcelas continuam até o fim do grupo." },
+                ],
+              },
+              legenda: "O lance antecipa a contemplação: é como uma entrada, paga para sair antes.",
+            },
+          },
+          {
+            lista: [
+              "**Taxa de administração**: é o custo do consórcio no lugar dos juros. Some ao **fundo de reserva** e ao **seguro**.",
+              "**Correção da carta**: o valor do crédito e das parcelas é corrigido por um índice ao longo dos anos.",
+              "**Lance**: pode ser com dinheiro próprio ou parte da própria carta (lance embutido), conforme o regulamento do grupo.",
+            ],
+          },
+        ],
+      },
       {
         titulo: "Lado a lado",
         blocos: [
@@ -203,7 +337,10 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
       },
       { titulo: "Faça a conta", blocos: [{ p: "Compare a parcela do consórcio com a do [simulador](#simulador) e com o aluguel que você paga hoje: veja também [alugar ou financiar](#alugar-ou-financiar)." }] },
     ],
-    faq: [{ q: "Dá para usar FGTS no consórcio?", a: "Sim, em situações previstas nas regras do FGTS, como para dar lance ou complementar a carta." }],
+    faq: [{ q: "Dá para usar FGTS no consórcio?", a: "Sim, em situações previstas nas regras do FGTS, como para dar lance ou complementar a carta." },
+      { q: "Consórcio tem juros?", a: "Não. O custo é a taxa de administração, mais fundo de reserva e seguros, e as parcelas são corrigidas por um índice." },
+      { q: "Quanto tempo demora para ser contemplado?", a: "Não há data certa: depende do sorteio ou de um lance vencedor. Pode ser no primeiro mês ou no último." },
+    ],
   },
 
   "alugar-ou-financiar": {

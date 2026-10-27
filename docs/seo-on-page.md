@@ -45,6 +45,7 @@ Faz o build, abre cada `/figura/<pagina>/<id>/` (rota `noindex`, bloqueada no ro
 
 ## Andamento (27/10/2026)
 
-Aprofundadas (figuras + seções + FAQ), por volume de busca: simulador, Registrato, leilão da Caixa, Minha Casa Minha Vida, imóveis da Caixa, financiamento imobiliário, calculadora de ITBI, consultar FGTS, como financiar casa pela Caixa, contrato de compra e venda.
+- **Lote 1** (figuras + seções + FAQ): simulador, Registrato, leilão da Caixa, Minha Casa Minha Vida, imóveis da Caixa, financiamento imobiliário, calculadora de ITBI, consultar FGTS, como financiar casa pela Caixa, contrato de compra e venda.
+- **Lote 2**: como financiar apartamento (casa × apê, na planta e INCC), 2ª via do boleto (verdadeiro × golpe), imóvel usado, consórcio, Casa Verde e Amarela (linha do tempo), SAC ou PRICE, documentos, como comprar em leilão (teto do lance), FGTS para amortizar, apartamento sem entrada.
 
-Fila (ordem de volume): como financiar apartamento, 2ª via do boleto, imóvel usado, sem entrada (casa e apartamento), consórcio, Casa Verde e Amarela, SAC ou PRICE, documentos, como comprar em leilão, FGTS para amortizar, demais guias e os 23 termos do glossário.
+Fila (ordem de volume): casa sem entrada (página própria, sem figura), calculadora e imposto de ganho de capital, quanto vale meu imóvel, primeiro imóvel e ITBI, certidão de matrícula, vender financiado, alugar ou financiar, usar FGTS na compra, quanto custa financiar, score, financiamento negado, avaliação, documentos para vender, quanto tempo demora, demais guias e os 23 termos do glossário.

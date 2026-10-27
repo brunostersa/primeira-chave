@@ -28,7 +28,7 @@ export type Tom = "planta" | "mark" | "bad" | "ink";
 export type Esquema =
   | { tipo: "linha"; marcos: { rotulo: string; detalhe?: string }[]; trechos: { rotulo: string; tom: Tom }[] }
   | { tipo: "passos"; itens: { titulo: string; texto: string }[] }
-  | { tipo: "comparar"; colunas: { titulo: string; tom: Tom; itens: string[] }[] }
+  | { tipo: "comparar"; colunas: { titulo: string; tom: Tom; itens: string[] }[]; sinal?: "×" | "+" }
   | { tipo: "numeros"; itens: { valor: string; rotulo: string; tom?: Tom }[] }
   | { tipo: "barras"; itens: { rotulo: string; valor: number; texto: string; tom?: Tom }[] }
   | { tipo: "divisao"; partes: { rotulo: string; valor: number; texto: string; tom: Tom }[]; total?: string };
