@@ -9,7 +9,7 @@ import { estatisticas } from "@/lib/conteudo/links";
 
 const ETAPAS = [
   { n: "01", titulo: "Você junta a entrada", texto: "De bico em bico. Ou zera ela, se a avaliação vier 25% acima do preço.", pose: "voando" as const, carga: "barro" as const },
-  { n: "02", titulo: "O banco mede o imóvel", texto: "Um engenheiro vistoria e dá o valor de avaliação. É sobre ele que o banco empresta.", pose: "parado" as const },
+  { n: "02", titulo: "O banco avalia o imóvel", texto: "Um engenheiro vistoria o imóvel e define o valor de avaliação. É sobre ele que o banco empresta.", pose: "parado" as const },
   { n: "03", titulo: "Você assina o contrato", texto: "Comprador e vendedor juntos, no dia marcado pelo banco.", pose: "frente" as const },
   { n: "04", titulo: "A chave é sua", texto: "Registrado o contrato (até 30 dias), o banco paga o vendedor.", pose: "comemora" as const },
 ];

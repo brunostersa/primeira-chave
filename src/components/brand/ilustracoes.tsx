@@ -49,7 +49,7 @@ export const CENAS = {
     ),
   },
   avaliacao: {
-    titulo: "O banco mede o imóvel",
+    titulo: "O banco avalia o imóvel",
     uso: "Avaliação, laudo, preço × avaliação.",
     Desenho: () => (
       <>
