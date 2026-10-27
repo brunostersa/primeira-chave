@@ -65,7 +65,7 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
         blocos: [{ p: "Peça o **saldo devedor atualizado** ao seu banco (no app ou na agência; na Caixa, veja o [atalho do Habitação](#boleto-habitacao)). É ele que define quanto sobra para você." }],
       },
     ],
-    faq: [{ q: "Pago imposto na venda?", a: "Pode haver imposto sobre o lucro. Veja [imposto na venda](#imposto-venda)." }],
+    faq: [{ q: "Pago imposto na venda?", a: "Pode haver imposto sobre o lucro; o guia de imposto na venda explica as isenções." }],
   },
 
   "documentos-vender": {

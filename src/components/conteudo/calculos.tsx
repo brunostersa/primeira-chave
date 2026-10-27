@@ -5,6 +5,8 @@ import { mipRate, rendaMinimaPara, tabela } from "@/lib/financiamento/engine";
 import { brl, pct } from "@/lib/format";
 import type { NomeCalculo } from "@/lib/conteudo/tipos";
 import { CalculadoraGanhoCapital, CalculadoraItbi } from "./calculadoras";
+import { MapaCapitais, MapaSaoPaulo } from "@/components/mercado/sob-demanda";
+import { Termometro } from "@/components/mercado/Termometro";
 
 /** Tabelas e ferramentas que os textos citam por nome. Todo número sai do motor validado. */
 
@@ -158,5 +160,11 @@ export function Calculo({ nome }: { nome: NomeCalculo }) {
           <Simulador />
         </div>
       );
+    case "mapa-capitais":
+      return <MapaCapitais />;
+    case "mapa-sp":
+      return <MapaSaoPaulo />;
+    case "termometro":
+      return <Termometro />;
   }
 }

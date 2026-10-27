@@ -1,0 +1,55 @@
+# Publica o site na Hostinger a cada push na main: testa, gera o estático (out/) e envia por FTP.
+# Segredos (GitHub → Settings → Secrets and variables → Actions):
+#   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD e FTP_DIR (pasta do site, terminando em /).
+name: Deploy Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # o sitemap usa a data do último commit de cada página
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+      - name: Conferir segredos do FTP
+        id: ftp
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        run: |
+          if [ -z "$FTP_SERVER" ]; then
+            echo "::warning::Segredos do FTP ainda não configurados: build ok, nada foi publicado."
+            echo "pronto=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "pronto=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enviar out/ por FTP
+        if: steps.ftp.outputs.pronto == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_DIR }}
+          local-dir: ./out/
+          # Envia só o que mudou (guarda o estado no servidor) e não apaga o que não é do build.
+          dangerous-clean-slate: false

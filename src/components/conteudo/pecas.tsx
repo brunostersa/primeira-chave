@@ -73,3 +73,33 @@ export function CartaoPagina({ n, rotulo }: { n: No; rotulo?: string }) {
   );
 }
 
+
+export type Pergunta = { q: string; a: string };
+
+/** "Perguntas que todo mundo faz": FAQ em sanfona, a mesma em todo molde. */
+export function Perguntas({ faq }: { faq: Pergunta[] }) {
+  return (
+    <section className="flex flex-col gap-3">
+      <h2 className="font-display text-[clamp(26px,3.4vw,34px)] font-light">Perguntas que todo mundo faz</h2>
+      <div className="flex flex-col divide-y divide-line border-y border-line">
+        {faq.map((f) => (
+          <details key={f.q} className="group py-4">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+              {f.q}
+              <span aria-hidden className="font-mono transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p className="mt-2 text-ink-2">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/** O FAQ em dados estruturados (schema.org FAQPage). */
+export const faqJsonLd = (faq: Pergunta[]) => ({
+  "@type": "FAQPage",
+  mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+});

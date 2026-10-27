@@ -13,7 +13,7 @@ Header, rodapé, breadcrumbs e `sitemap.xml` são **derivados da árvore** (`src
 
 ## Regra de ouro: nada de link quebrado
 
-Página `planejado` aparece como **texto + selo "em breve"** (`<EmBreve />` em `components/ui/badge.tsx`), nunca como `<a>`. Vale para menu, rodapé e breadcrumb. Hoje só `/` e `/simulador/` estão publicadas, então quase tudo aparece "em breve": é honesto e mostra o tamanho do que vem.
+Página `planejado` aparece como **texto + selo "em breve"** (`<EmBreve />` em `components/ui/badge.tsx`), nunca como `<a>`. Vale para menu, rodapé e breadcrumb. Hoje só `/` e `/simulador-financiamento-caixa/` estão publicadas, então quase tudo aparece "em breve": é honesto e mostra o tamanho do que vem.
 
 ## O que adotamos (e por quê)
 

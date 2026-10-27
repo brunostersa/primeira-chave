@@ -66,6 +66,11 @@ describe("árvore de conteúdo", () => {
     }
   });
 
+  it("FAQ é texto puro (vai igual para a página e para o schema)", () => {
+    for (const [id, t] of Object.entries(TEXTOS))
+      for (const f of t.faq) expect(/\*\*|\]\(/.test(f.q + f.a), `${id}: "${f.q}"`).toBe(false);
+  });
+
   it("a jornada anda pra frente", () => {
     const n = ARVORE.find((x) => x.id === "preparar-a-casa")!;
     expect(proximoPasso(n)?.id).toBe("documentos-financiamento");

@@ -6,3 +6,6 @@ out/
 .vercel
 next-env.d.ts
 *.tsbuildinfo
+
+# dados brutos baixados por scripts/dados/atualizar.py
+.cache/

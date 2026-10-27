@@ -25,6 +25,14 @@
   --bad: #bf3c35;
   --bad-soft: #f8e1df;
 
+  /* mapas de calor: do mais barato (1) ao mais caro (6) */
+  --calor-1: #fbf1bc;
+  --calor-2: #f4d23f;
+  --calor-3: #e9a83a;
+  --calor-4: #d07a35;
+  --calor-5: #a8502f;
+  --calor-6: #6e2f22;
+
   --radius: 14px;
 }
 

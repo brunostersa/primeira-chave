@@ -44,21 +44,10 @@ export const TEXTOS_PROGRAMAS: Record<string, Texto> = {
             ],
           },
           { calculo: "faixas-mcmv" },
-          { p: "Descubra em qual faixa você entra no [simulador do Minha Casa Minha Vida](#simulador-mcmv)." },
+          { p: "Descubra em qual faixa você entra no [simulador](#simulador)." },
         ],
       },
     ],
     faq: [{ q: "Meu contrato do Casa Verde e Amarela muda?", a: "Não: contratos assinados seguem as condições que você assinou." }],
-  },
-
-  "simulador-mcmv": {
-    tituloSeo: "Simulador do Minha Casa Minha Vida 2026",
-    descricao: "Simule o Minha Casa Minha Vida com as regras de 2026: sua faixa, quanto pode financiar, a parcela e a entrada, em português claro.",
-    resposta: "Responda umas 10 perguntas: o simulador descobre sua **faixa do Minha Casa Minha Vida**, quanto a Caixa empresta, a parcela e quanto falta de entrada — com as mesmas regras do simulador oficial.",
-    secoes: [
-      { titulo: "Simule agora", blocos: [{ calculo: "simulador" }] },
-      { titulo: "As faixas usadas", blocos: [{ calculo: "faixas-mcmv" }] },
-    ],
-    faq: [{ q: "A simulação é aprovação?", a: "Não. É uma estimativa educativa com regras médias; a aprovação depende da análise do banco." }],
   },
 };

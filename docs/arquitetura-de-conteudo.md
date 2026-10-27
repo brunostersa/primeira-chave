@@ -8,7 +8,7 @@ A fonte única é `src/lib/conteudo/arvore.ts`. Toda página do site nasce ali; 
 
 | Parte | O que é | Exemplo |
 |---|---|---|
-| **Núcleo** | A ferramenta que dá o número da pessoa. Toda página aponta pra ele. | `/simulador/` (~1 mi buscas/mês no cluster) |
+| **Núcleo** | A ferramenta que dá o número da pessoa. Toda página aponta pra ele. | `/simulador-financiamento-caixa/` (~1 mi buscas/mês no cluster; único simulador do site) |
 | **Hubs (órgãos)** | 7 portas de entrada, cada uma responde a uma grande dúvida. | Comprar · Financiar · Programas · Leilão e imóveis Caixa · Vender · Atalhos · Ferramentas |
 | **Guias** | Uma intenção de busca por página, sempre com o número da pessoa no topo. | `/financiar-casa-sem-entrada/` |
 | **Ferramentas** | Calculadoras que respondem com números. Atraem link e tráfego. | simulador MCMV, ITBI, ganho de capital |

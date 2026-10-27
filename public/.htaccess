@@ -1,0 +1,2 @@
+# Hostinger (Apache): página de erro do próprio site.
+ErrorDocument 404 /404.html

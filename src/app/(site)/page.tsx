@@ -50,7 +50,7 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Button asChild size="lg">
-                <Link href="/simulador/">Simular agora, de graça</Link>
+                <Link href="/simulador-financiamento-caixa/">Simular agora, de graça</Link>
               </Button>
               <Link href="#segredo" className="font-semibold underline underline-offset-4">
                 Dá pra comprar sem entrada?
@@ -75,7 +75,7 @@ export default function Home() {
               só ITBI e cartório.
             </p>
             <Button asChild variant="default" className="self-start">
-              <Link href="/simulador/">Ver se dá no meu caso</Link>
+              <Link href="/simulador-financiamento-caixa/">Ver se dá no meu caso</Link>
             </Button>
           </div>
           <div className="flex flex-col gap-3 rounded-xl bg-white/55 p-5 font-mono text-[15px]">
@@ -125,7 +125,7 @@ export default function Home() {
             <h2 className="font-display text-3xl font-semibold">Seu número em 2 minutos</h2>
             <p className="text-ink-2">Quanto o banco empresta, quanto falta de entrada, e o que fazer primeiro.</p>
             <Button asChild className="mt-2 self-start">
-              <Link href="/simulador/">Abrir o simulador</Link>
+              <Link href="/simulador-financiamento-caixa/">Abrir o simulador</Link>
             </Button>
           </Card>
           <Card variant="planta" className="flex flex-col gap-3">

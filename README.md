@@ -50,3 +50,28 @@ npm run lint
 ```
 
 Regras do motor e o que falta conferir: `docs/regras-financiamento.md`. Padrões visuais: abrir `/marca`.
+
+## Publicação (Hostinger)
+
+Cada push na `main` roda `.github/workflows/deploy.yml`: testes, build estático e envio da pasta `out/` por FTP para a Hostinger (só os arquivos que mudaram). Sem os segredos configurados, o workflow testa e gera o build, mas não publica nada.
+
+Segredos em GitHub → Settings → Secrets and variables → Actions:
+
+| Segredo | Onde achar |
+|---|---|
+| `FTP_SERVER` | hPanel → Arquivos → Contas FTP (IP ou host) |
+| `FTP_USERNAME` | mesma tela (ex.: `u123456789`) |
+| `FTP_PASSWORD` | senha da conta FTP |
+| `FTP_DIR` | pasta do site, terminando em `/` (ex.: `domains/primeirachave.com.br/public_html/` ou `public_html/`, conforme a raiz da conta FTP) |
+
+Também dá para publicar sem push: aba Actions → Deploy Hostinger → Run workflow.
+
+## Dados de mercado (1x por mês)
+
+Mapas e números de mercado vêm de `src/data/mercado/*.json`, gerados por:
+
+```bash
+python3 scripts/dados/atualizar.py
+```
+
+Baixa o IVG-R (Banco Central), a série do FipeZAP, a malha das UFs (IBGE) e as guias de ITBI pagas de São Paulo (com os distritos do GeoSampa), e grava só os agregados. Os arquivos brutos ficam em `.cache/` (fora do git). Precisa de `pandas`, `openpyxl` e `shapely`. Depois: `npm test && npm run build`, revisar as páginas `/quanto-minha-renda-compra/` e `/metro-quadrado-sao-paulo/` e commitar os JSONs. Fontes e cuidados em `docs/pesquisa/fontes-de-dados-imoveis.md`.

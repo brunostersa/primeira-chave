@@ -5,6 +5,7 @@ import { TEXTOS_COMPRAR } from "./comprar";
 import { TEXTOS_FERRAMENTAS } from "./ferramentas";
 import { TEXTOS_FINANCIAR } from "./financiar";
 import { TEXTOS_LEILAO } from "./leilao";
+import { TEXTOS_MERCADO } from "./mercado";
 import { TEXTOS_PROGRAMAS } from "./programas";
 import { TEXTOS_VENDER } from "./vender";
 
@@ -22,6 +23,7 @@ export const TEXTOS: Record<string, Texto> = {
   ...TEXTOS_VENDER,
   ...TEXTOS_ATALHOS,
   ...TEXTOS_FERRAMENTAS,
+  ...TEXTOS_MERCADO,
 };
 
 /** Páginas com rota própria escrita à mão (fora da rota única). */

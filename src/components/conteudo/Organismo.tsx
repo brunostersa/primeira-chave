@@ -130,8 +130,6 @@ function rotuloCurto(n: No) {
     glossario: "glossário",
     registrato: "registrato",
     "imoveis-caixa": "imóveis caixa",
-    "simulador-caixa": "simulador caixa",
-    "simulador-mcmv": "simulador mcmv",
   };
   return curtos[n.id] ?? n.titulo.toLowerCase();
 }

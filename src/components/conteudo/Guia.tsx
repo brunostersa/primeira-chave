@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/badge";
 import { ETAPAS } from "@/lib/conteudo/arvore";
-import { CartaoPagina } from "./pecas";
+import { CartaoPagina, faqJsonLd, Perguntas, type Pergunta } from "./pecas";
 import { ferramenta, hubDe, no, proximoPasso, relacionados } from "@/lib/conteudo/links";
 import { PARAMS_ATUALIZADOS_EM } from "@/lib/financiamento/params";
 import { SITE } from "@/lib/site-config";
@@ -18,8 +18,7 @@ import { SITE } from "@/lib/site-config";
  * A página só escreve o conteúdo.
  */
 
-export type Pergunta = { q: string; a: string };
-export { Aviso, LinkNo, Secao, Termo } from "./pecas";
+export { Aviso, LinkNo, Secao, Termo, type Pergunta } from "./pecas";
 
 const mes = (ym: string) => new Date(`${ym}-01T12:00:00`).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
 
@@ -56,10 +55,7 @@ export function Guia({
         publisher: { "@id": `${SITE.url}/#org` },
         about: n.termos.slice(0, 3).map(([t]) => t),
       },
-      {
-        "@type": "FAQPage",
-        mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-      },
+      faqJsonLd(faq),
     ],
   };
 
@@ -92,22 +88,7 @@ export function Guia({
 
             {children}
 
-            <section className="flex flex-col gap-3">
-              <h2 className="font-display text-[clamp(26px,3.4vw,34px)] font-light">Perguntas que todo mundo faz</h2>
-              <div className="flex flex-col divide-y divide-line border-y border-line">
-                {faq.map((f) => (
-                  <details key={f.q} className="group py-4">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
-                      {f.q}
-                      <span aria-hidden className="font-mono transition-transform group-open:rotate-45">
-                        +
-                      </span>
-                    </summary>
-                    <p className="mt-2 text-ink-2">{f.a}</p>
-                  </details>
-                ))}
-              </div>
-            </section>
+            <Perguntas faq={faq} />
           </div>
 
           <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
@@ -115,7 +96,7 @@ export function Guia({
               <JoaoDeBarro pose="frente" humor="feliz" className="h-20 w-auto self-start" />
               <b className="font-display text-xl leading-tight">Faça a sua conta</b>
               <span className="text-[15px]">{tool.resumo}</span>
-              <Button asChild className="self-start">
+              <Button asChild className="h-auto min-h-11 self-start whitespace-normal py-2.5 text-left">
                 <Link href={tool.slug}>{tool.id === "simulador" ? "Abrir o simulador" : tool.titulo}</Link>
               </Button>
             </Card>

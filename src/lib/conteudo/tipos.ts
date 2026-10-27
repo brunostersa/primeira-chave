@@ -13,7 +13,10 @@ export type NomeCalculo =
   | "calculadora-itbi"
   | "calculadora-ganho-capital"
   | "simulador"
-  | "prazos";
+  | "prazos"
+  | "mapa-capitais"
+  | "mapa-sp"
+  | "termometro";
 
 export type Bloco =
   | { p: Rico }

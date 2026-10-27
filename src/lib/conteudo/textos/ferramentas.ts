@@ -1,12 +1,12 @@
 import type { Texto } from "../tipos";
 
 export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
-  "simulador-caixa": {
-    tituloSeo: "Simulador de financiamento Caixa, explicado em português claro",
-    descricao: "Simule o financiamento com as mesmas regras do simulador da Caixa (conferido em 2026) e entenda cada número: faixa, juros, entrada e parcela.",
+  // Lido pela página própria do simulador (fora da rota única): regras e perguntas abaixo da ferramenta.
+  simulador: {
+    tituloSeo: "Simulador de financiamento Caixa e Minha Casa Minha Vida",
+    descricao: "Simule o financiamento com as mesmas regras do simulador da Caixa (conferidas em 2026): sua faixa do Minha Casa Minha Vida, quanto pode financiar, a parcela e a entrada.",
     resposta: "Este simulador usa **as mesmas regras do simulador da Caixa**, conferidas em outubro de 2026 em seis perfis de renda — e explica cada número: por que essa faixa, de onde vem a parcela, quanto falta de [entrada](g:entrada).",
     secoes: [
-      { titulo: "Simule", blocos: [{ calculo: "simulador" }] },
       {
         titulo: "As regras que a Caixa usa",
         blocos: [
@@ -25,6 +25,8 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
     faq: [
       { q: "Este é o simulador oficial da Caixa?", a: "Não. É um simulador independente e educativo que reproduz as regras da Caixa. A simulação oficial e a aprovação são feitas pelo banco." },
       { q: "Por que meu resultado é diferente no banco?", a: "O banco considera seu histórico, a avaliação real do imóvel, a TR e os seguros da apólice. Aqui usamos as regras médias." },
+      { q: "Serve para o Minha Casa Minha Vida?", a: "Sim. O simulador descobre sua faixa pela renda e já usa os juros e o teto de imóvel dela." },
+      { q: "A simulação é aprovação?", a: "Não. É uma estimativa educativa; a aprovação depende da análise do banco." },
     ],
   },
 

@@ -11,7 +11,13 @@ export function Rico({ texto }: { texto: RicoTexto }) {
   let k = 0;
   for (const m of texto.matchAll(PADRAO)) {
     if (m.index! > ultimo) partes.push(texto.slice(ultimo, m.index));
-    if (m[1] !== undefined) partes.push(<b key={k++}>{m[1]}</b>);
+    // O negrito pode ter link dentro (ex.: "**30% da [renda](g:renda-bruta)**").
+    if (m[1] !== undefined)
+      partes.push(
+        <b key={k++}>
+          <Rico texto={m[1]} />
+        </b>,
+      );
     else {
       const [rotulo, alvo] = [m[2], m[3]];
       if (alvo.startsWith("#")) partes.push(<LinkNo key={k++} id={alvo.slice(1)}>{rotulo}</LinkNo>);
