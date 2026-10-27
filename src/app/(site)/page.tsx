@@ -52,7 +52,7 @@ export default function Home() {
               </Link>
             </div>
             <ul className="flex flex-wrap gap-2 font-mono text-[13px]">
-              {["Regras conferidas no simulador da Caixa", `${est.paginas} páginas conectadas`, "Dados do Banco Central e das prefeituras"].map((t) => (
+              {["Regras conferidas no simulador da Caixa", `${est.paginas} respostas, um caminho só`, "Dados do Banco Central e das prefeituras"].map((t) => (
                 <li key={t} className="rounded-full border border-line bg-surface px-3 py-1.5">
                   {t}
                 </li>
@@ -62,12 +62,12 @@ export default function Home() {
           <Link
             href="/mapa/"
             className="group relative mx-auto block w-full max-w-md md:mr-0"
-            aria-label={`Ver o mapa: ${est.paginas} páginas conectadas em volta do simulador`}
+            aria-label={`Ver o mapa do caminho até a chave: ${est.paginas} respostas ligadas em volta do simulador`}
           >
             <Organismo vivo className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
             <span className="absolute bottom-1 right-1 flex items-center gap-2 rounded-full border-[1.5px] border-ink bg-surface px-3 py-1.5 font-mono text-xs shadow-[3px_3px_0_var(--ink)] transition-transform group-hover:-translate-y-0.5">
               <i className="size-2.5 rounded-full bg-mark ring-1 ring-ink" aria-hidden />
-              {est.paginas} páginas conectadas · ver o mapa →
+              o mapa do caminho até a chave →
             </span>
           </Link>
         </div>

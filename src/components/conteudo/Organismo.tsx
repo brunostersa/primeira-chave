@@ -1,5 +1,6 @@
 import { ARVORE, HUBS, type No } from "@/lib/conteudo/arvore";
 import { no, saindo } from "@/lib/conteudo/links";
+import { Revoada, type Alvo } from "./Revoada";
 
 /**
  * O organismo desenhado: o simulador no centro, os hubs em volta, as páginas
@@ -63,6 +64,11 @@ export function Organismo({ className, vivo = false }: { className?: string; viv
     return `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
   };
 
+  // Para onde os joões-de-barro voam: páginas publicadas; a ronda começa pelas mais buscadas.
+  const paginas = [...pos.values()].filter(({ n }) => n.status === "publicado" && n.tipo !== "hub" && n.tipo !== "nucleo" && n.tipo !== "glossario");
+  const alvos: Alvo[] = paginas.map(({ x, y, n }) => ({ id: n.id, x: +x.toFixed(1), y: +y.toFixed(1), r: +raio(n).toFixed(1) }));
+  const rota = [...paginas].sort((a, b) => volume(b.n) - volume(a.n)).slice(0, 14).map(({ n }) => n.id);
+
   return (
     <svg viewBox="0 0 1000 1000" className={className} role="img" aria-label="Mapa das páginas da Primeira Chave e como elas se conectam">
       <circle cx={C} cy={C} r={R_HUB} fill="none" stroke="var(--grid)" strokeWidth="1" />
@@ -86,8 +92,8 @@ export function Organismo({ className, vivo = false }: { className?: string; viv
         const r = n.tipo === "nucleo" ? 26 : n.tipo === "hub" ? 15 : n.tipo === "glossario" ? 3.5 : raio(n);
         const pub = n.status === "publicado";
         return (
-          <g key={n.id}>
-            <title>{`${n.titulo}${volume(n) ? ` · ${volume(n).toLocaleString("pt-BR")} buscas/mês` : ""}${pub ? "" : " · em breve"}`}</title>
+          <g key={n.id} data-no={n.id}>
+            <title>{`${n.titulo}${pub ? "" : " · em breve"}`}</title>
             <circle
               cx={x}
               cy={y}
@@ -115,6 +121,7 @@ export function Organismo({ className, vivo = false }: { className?: string; viv
           </g>
         );
       })}
+      {vivo && <Revoada alvos={alvos} rota={rota} />}
     </svg>
   );
 }

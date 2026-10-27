@@ -108,11 +108,20 @@ export default function SobrePage() {
             </ul>
           </Secao>
 
-          <Secao titulo="O que não somos">
+          <Secao titulo="Como usar o que está aqui">
             <ul className="ml-5 flex list-disc flex-col gap-2">
-              <li>Não somos banco nem correspondente bancário, e nada aqui é aprovação de crédito.</li>
-              <li>Não somos o simulador oficial da Caixa: reproduzimos as regras dela para explicar, e a simulação oficial é do banco.</li>
-              <li>Não cobramos para “liberar” financiamento. Desconfie de quem cobra.</li>
+              <li>
+                <b>Somos uma plataforma independente.</b> Não somos banco nem correspondente bancário, e não temos vínculo com a Caixa ou com o governo.
+              </li>
+              <li>
+                <b>O conteúdo é de orientação.</b> Serve para você entender o caminho e chegar ao banco sabendo o que perguntar; não é consultoria jurídica nem financeira.
+              </li>
+              <li>
+                <b>Os simuladores são estimativas.</b> Seguem as regras que os bancos e o governo divulgam publicamente. Taxa, valor aprovado e parcela de verdade só saem da análise do banco.
+              </li>
+              <li>
+                <b>A decisão e o contrato são entre você e o banco.</b> Antes de assinar ou pagar qualquer coisa, confirme tudo na simulação oficial e com o seu gerente ou correspondente.
+              </li>
             </ul>
           </Secao>
 
