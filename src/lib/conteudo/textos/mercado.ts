@@ -1,5 +1,5 @@
 import { brl, pct } from "../../format";
-import { capitais, FIPEZAP, imovelQueARendaCompra, ITBI_SP, mesAno, variacaoIvgr } from "../../mercado";
+import { capitais, imovelQueARendaCompra, ITBI_CAPITAIS, ITBI_SP, mesAno, variacaoIvgr } from "../../mercado";
 import type { Texto } from "../tipos";
 
 /**
@@ -8,9 +8,15 @@ import type { Texto } from "../tipos";
  */
 
 const caps = capitais().sort((a, b) => a.m2 - b.m2);
-const barata = caps[0];
-const cara = caps[caps.length - 1];
 const exemplo = imovelQueARendaCompra(6000)!;
+// O crédito para de crescer quando a renda sai do MCMV: juro sem subsídio e SAC.
+const r8 = imovelQueARendaCompra(8000)!;
+const r14 = imovelQueARendaCompra(14000)!;
+const r13 = imovelQueARendaCompra(13000)!;
+const r13mais = imovelQueARendaCompra(13250)!;
+const reais = Object.entries(ITBI_CAPITAIS);
+const spReal = ITBI_CAPITAIS["São Paulo"];
+const spAnuncio = caps.find((c) => c.nome === "São Paulo")!;
 const ivgr = variacaoIvgr(12);
 const sp = ITBI_SP.cidade;
 const distritos = ITBI_SP.distritos.filter((d) => d.m2).sort((a, b) => a.m2! - b.m2!);
@@ -20,29 +26,47 @@ const periodoSp = `${mesAno(ITBI_SP.periodo.de)} a ${mesAno(ITBI_SP.periodo.ate)
 
 export const TEXTOS_MERCADO: Record<string, Texto> = {
   "quanto-minha-renda-compra": {
-    tituloSeo: "Preço do m² nas capitais e quanto a sua renda compra",
-    descricao: `O preço médio do m² em ${caps.length} capitais (FipeZAP, ${mesAno(FIPEZAP.ref)}) e quantos metros cabem no financiamento da sua renda, pelas regras da Caixa.`,
-    resposta: `Com **${brl(6000)} de renda**, o banco financia um imóvel de até **${brl(exemplo.valor)}**. Isso dá uns **${Math.floor(exemplo.valor / barata.m2)} m² em ${barata.nome}** e só **${Math.floor(exemplo.valor / cara.m2)} m² em ${cara.nome}**, pelo preço médio de anúncio. Mexa na renda e escolha a sua capital.`,
+    tituloSeo: "Quanto a sua renda compra: valor do imóvel e m² nas capitais",
+    descricao: `Até quanto o banco financia para a sua renda, pelas regras da Caixa, e quanto isso compra em ${caps.length} capitais: pelo preço real do ITBI onde existe e pelo anúncio médio (FipeZAP).`,
+    resposta: `Com **${brl(6000)} de renda**, o banco financia um imóvel de até **${brl(exemplo.valor)}**. Em São Paulo, pelo preço que as pessoas **pagaram de verdade**, isso dá uns **${Math.floor(exemplo.valor / spReal.m2)} m²**; pelo anúncio médio de apartamento, só ${Math.floor(exemplo.valor / spAnuncio.m2)} m². Mexa na renda e escolha a sua capital.`,
     secoes: [
       { titulo: "O mapa", blocos: [{ calculo: "mapa-capitais" }] },
+      {
+        titulo: "Ganhar mais nem sempre compra mais",
+        blocos: [
+          {
+            p: `Com **${brl(8000)}** de renda, o banco financia até **${brl(r8.valor)}**. Com **${brl(14000)}**, quase o dobro de renda, só **${brl(r14.valor)}**. Quem sai do [Minha Casa Minha Vida](#minha-casa-minha-vida) perde o juro subsidiado e cai na linha de mercado, em [SAC](g:sac): a primeira parcela é a mais alta, e é ela que precisa caber em 30% da renda.`,
+          },
+          {
+            aviso: {
+              titulo: "O degrau de quem sai do programa",
+              texto: `Com **${brl(13000)}** de renda, o banco financia até **${brl(r13.valor)}**. Com **${brl(13250)}**, só **${brl(r13mais.valor)}**: ${brl(r13.valor - r13mais.valor)} a menos por ganhar ${brl(250)} a mais. Se a sua renda está logo acima de um limite de faixa, faça a conta completa: entrada maior e FGTS ajudam a compensar.`,
+              tom: "mark",
+            },
+          },
+          { p: "Por isso, acima dessa faixa, o que mais muda o jogo é **entrada maior, FGTS e comprar junto**: veja no [simulador](#simulador)." },
+        ],
+      },
       {
         titulo: "Como ler esses números",
         blocos: [
           {
             lista: [
-              "**É preço de anúncio**, não de venda: o que o dono pede. Na negociação, o preço costuma cair.",
+              `**O valor do imóvel é o número firme:** sai das regras da Caixa, conferidas no simulador oficial.`,
+              `**O m² real** vem das compras registradas no ITBI, onde a prefeitura publica: ${reais.map(([nome]) => nome).join(", ")}.`,
+              "**O m² de anúncio** (FipeZAP) é o preço **pedido** em anúncios de apartamentos prontos, puxado pelos bairros mais procurados. Use como teto, não como regra: casas e bairros mais simples saem bem mais em conta.",
               "**O banco empresta sobre a [avaliação](g:avaliacao)**, não sobre o anúncio. Se a avaliação vier abaixo do preço, a diferença sai do seu bolso.",
               `**O mercado está subindo:** as avaliações dos bancos subiram ${pct(ivgr.pct, 1)} em 12 meses (Banco Central).`,
-              "**A média esconde o bairro:** dentro da mesma cidade, o m² pode variar mais de três vezes. Veja [São Paulo distrito por distrito](#metro-quadrado-sao-paulo).",
+              "**A média esconde o bairro:** em São Paulo, o m² pago vai de três a quatro vezes entre distritos. Veja [distrito por distrito](#metro-quadrado-sao-paulo).",
             ],
           },
           { calculo: "termometro" },
-          { p: "Quer o número com a sua idade, suas dívidas e o seu FGTS? Faça a conta completa no [simulador](#simulador)." },
         ],
       },
     ],
     faq: [
-      { q: "De onde vêm os preços do m²?", a: "Do Índice FipeZAP, da Fipe com o Grupo OLX, que acompanha os anúncios de venda em 56 cidades. É o preço pedido, em média móvel de 3 meses." },
+      { q: "De onde vêm os preços do m²?", a: "O real, das compras registradas no ITBI que as prefeituras de São Paulo, Recife e Porto Alegre publicam. O de anúncio, do Índice FipeZAP (Fipe e Grupo OLX), que acompanha anúncios de apartamentos prontos em 56 cidades, em média móvel de 3 meses." },
+      { q: "Por que o m² de anúncio é tão maior que o real?", a: "Anúncio é preço pedido, de apartamento, e se concentra nos bairros mais procurados. O ITBI registra o que foi pago, em todo tipo de bairro e também em casas. Parte da diferença vem da área usada: cada prefeitura publica uma." },
       { q: "Por que algumas capitais não aparecem?", a: "Porto Velho, Rio Branco, Macapá, Boa Vista e Palmas não entram no índice. Preferimos deixar em branco a inventar um número." },
       { q: "O financiamento considera o teto do Minha Casa Minha Vida?", a: "Sim. O cálculo usa a faixa da sua renda, com os juros e o teto de imóvel dela, como no simulador da Caixa." },
     ],

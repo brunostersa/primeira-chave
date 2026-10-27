@@ -61,3 +61,14 @@ Cuidado já registrado em `regras-financiamento.md`: nos imóveis da Caixa o fin
 - O ITBI também traz **tipo de financiamento e valor financiado**: 39% das compras residenciais de imóvel inteiro foram financiadas (set/2025–ago/2026); MCMV 3,5%.
 - Páginas: `/quanto-minha-renda-compra/` (mapa das capitais + renda → m² pelo motor) e `/metro-quadrado-sao-paulo/` (mapa por distrito). Termômetro do IVG-R nas duas.
 - Próximo passo possível: Recife (CSV ODbL) e Porto Alegre pelo mesmo caminho; volumes de busca das novas páginas ainda não levantados no Planejador.
+
+## Revisão do mapa das capitais (27/10/2026)
+O Bruno notou que "R$ 14 mil de renda para 55 m²" não reflete a realidade. Duas causas:
+1. **O FipeZap acompanha anúncios de apartamentos prontos**, concentrados nos bairros mais procurados. Comparação com o preço pago (ITBI): SP R$ 12.206 × R$ 4.970; Recife R$ 9.045 × R$ 4.480; Porto Alegre R$ 7.545 × R$ 5.120 (POA usa área privativa, então a diferença lá é quase toda de preço).
+2. **Real:** o crédito trava acima do MCMV. R$ 8 mil → R$ 400 mil; R$ 14 mil → R$ 447 mil (SBPE 11,49%, SAC). Virou seção "Ganhar mais nem sempre compra mais".
+
+Mudança: o destaque passa a ser o **valor do imóvel** (motor validado); m² **real** (ITBI) onde existe; m² de anúncio sempre secundário e com aviso.
+
+ITBI por capital (`itbi-capitais` no script, 12 últimos meses completos):
+- **Recife** (CKAN, ODbL): CSV anual; campo `valor_avaliacao` = avaliação da prefeitura para o ITBI (não o declarado); área construída.
+- **Porto Alegre** (CKAN `dadosabertos.poa.br`, CC-BY): ZIP anual com CSV; `base_de_calculo` da guia paga (`data_pagamento` preenchida); tem `area_constr_privativa`.

@@ -239,7 +239,89 @@ def itbi_sp():
     )
 
 
-TAREFAS = {"ivgr": ivgr, "fipezap": fipezap, "brasil": brasil, "itbi-sp": itbi_sp}
+# ——— ITBI de outras capitais (só o número da cidade) ——————————————————————
+
+RECIFE = "https://dados.recife.pe.gov.br/api/3/action/package_show?id=imposto-sobre-transmissao-de-bens-imoveis-itbi"
+POA = "https://dadosabertos.poa.br/api/3/action/package_show?id=itbi"
+
+
+def recursos(api: str, padrao: str, n: int = 2):
+    """URLs dos `n` recursos mais recentes (por ano no nome) de um dataset CKAN."""
+    res = json.loads(subprocess.run(["curl", "-sSL", "-A", UA, api], capture_output=True, text=True, check=True).stdout)["result"]["resources"]
+    anos = sorted(((int(m.group(1)), r["url"]) for r in res if (m := re.search(padrao, r["name"]))), reverse=True)
+    return [u for _, u in anos[:n]]
+
+
+def doze_meses(datas):
+    """Os 12 últimos meses COMPLETOS da série (o mês corrente costuma vir pela metade)."""
+    import pandas as pd
+
+    fim = datas.max().to_period("M")
+    if datas.max().day < 28:
+        fim -= 1
+    ini = fim - 11
+    return datas.dt.to_period("M").between(ini, fim), {"de": str(ini), "ate": str(fim)}
+
+
+def resumo_cidade(valores, areas, periodo, **rotulos):
+    import pandas as pd
+
+    df = pd.DataFrame({"v": pd.to_numeric(valores, errors="coerce"), "a": pd.to_numeric(areas, errors="coerce")})
+    df = df[(df.a >= 20) & (df.a <= 600) & (df.v >= 50000)]
+    df["m2"] = df.v / df.a
+    df = df[(df.m2 >= 1500) & (df.m2 <= 60000)]
+    return {"m2": round(df.m2.median() / 10) * 10, "valor": round(df.v.median() / 1000) * 1000, "n": int(len(df)), "periodo": periodo, **rotulos}
+
+
+def itbi_capitais():
+    """m² real (ITBI) de cada capital que publica os dados. SP vem do itbi-sp.json já gerado."""
+    import pandas as pd
+
+    sp = json.loads((SAIDA / "itbi-sp.json").read_text())
+    cidades = {
+        "São Paulo": {
+            **{k: sp["cidade"][k] for k in ("m2", "valor", "n")},
+            "periodo": sp["periodo"],
+            "valorUsado": "valor declarado na compra",
+            "area": "área construída do IPTU (inclui parte das áreas comuns)",
+            "fonte": "Prefeitura de São Paulo, guias de ITBI pagas",
+        }
+    }
+
+    # Recife: CSV anual (ODbL). O valor publicado é a avaliação da prefeitura para o ITBI.
+    rec = pd.concat([pd.read_csv(baixar(u, f"itbi-recife-{i}.csv", refazer=True), sep=";", decimal=",") for i, u in enumerate(recursos(RECIFE, r"ITBI (\d{4})"))])
+    rec["dt"] = pd.to_datetime(rec.data_transacao, errors="coerce")
+    no_periodo, periodo = doze_meses(rec.dt)
+    rec = rec[no_periodo & rec.tipo_imovel.isin(["Apartamento", "Casa"])]
+    cidades["Recife"] = resumo_cidade(
+        rec.valor_avaliacao, rec.area_construida, periodo,
+        valorUsado="valor avaliado pela prefeitura para o ITBI", area="área construída", fonte="Prefeitura do Recife, dados abertos do ITBI",
+    )
+
+    # Porto Alegre: ZIP anual com CSV (CC-BY). Base de cálculo da guia paga; tem área privativa.
+    import zipfile
+
+    partes = []
+    for i, u in enumerate(recursos(POA, r"ITBI (\d{4})")):
+        with zipfile.ZipFile(baixar(u, f"itbi-poa-{i}.zip", refazer=True)) as z:
+            partes.append(pd.read_csv(z.open(z.namelist()[0]), sep=";"))
+    poa = pd.concat(partes)
+    poa["pg"] = pd.to_datetime(poa.data_pagamento, errors="coerce")
+    poa = poa[poa.pg.notna()]
+    _, periodo = doze_meses(poa.pg)
+    no_periodo = poa.pg.dt.to_period("M").between(periodo["de"], periodo["ate"])
+    residencial = poa.finalidade_construcao.fillna("").str.match(r"^(APARTAMENTO|RESIDENCIA)")
+    poa = poa[no_periodo & residencial & (poa.perc_transmitido == 100)]
+    area = poa.area_constr_privativa.where(poa.area_constr_privativa > 0, poa.area_constr_total)
+    cidades["Porto Alegre"] = resumo_cidade(
+        poa.base_de_calculo, area, periodo,
+        valorUsado="base de cálculo da guia de ITBI paga", area="área privativa", fonte="Prefeitura de Porto Alegre, dados abertos do ITBI",
+    )
+
+    salvar("itbi-capitais.json", {"nota": "Preço de compras registradas, não de anúncio. Cada prefeitura publica um valor e uma área diferentes.", "cidades": cidades})
+
+
+TAREFAS = {"ivgr": ivgr, "fipezap": fipezap, "brasil": brasil, "itbi-sp": itbi_sp, "itbi-capitais": itbi_capitais}
 
 if __name__ == "__main__":
     for nome in sys.argv[1:] or TAREFAS:

@@ -39,7 +39,8 @@ function layout(): Map<string, Ponto> {
   return pos;
 }
 
-export function Organismo({ className }: { className?: string }) {
+/** `vivo`: o núcleo pulsa e as pontes entre assuntos correm (uso no hero da home). */
+export function Organismo({ className, vivo = false }: { className?: string; vivo?: boolean }) {
   const pos = layout();
   const arestas: { a: Ponto; b: Ponto; cruza: boolean }[] = [];
   const vistas = new Set<string>();
@@ -76,9 +77,10 @@ export function Organismo({ className }: { className?: string }) {
         {arestas
           .filter((e) => e.cruza)
           .map((e, i) => (
-            <path key={`c${i}`} d={curva(e.a, e.b)} stroke="#d9b520" strokeOpacity="0.45" strokeWidth="1.3" />
+            <path key={`c${i}`} d={curva(e.a, e.b)} stroke="#d9b520" strokeOpacity="0.45" strokeWidth="1.3" className={vivo ? "organismo-fluxo" : undefined} />
           ))}
       </g>
+      {vivo && <circle cx={C} cy={C} r={26} fill="var(--mark)" className="organismo-pulso" />}
       {[...pos.values()].map(({ x, y, n }) => {
         const hub = n.tipo === "hub" || n.tipo === "nucleo";
         const r = n.tipo === "nucleo" ? 26 : n.tipo === "hub" ? 15 : n.tipo === "glossario" ? 3.5 : raio(n);

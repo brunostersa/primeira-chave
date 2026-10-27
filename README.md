@@ -74,4 +74,4 @@ Mapas e números de mercado vêm de `src/data/mercado/*.json`, gerados por:
 python3 scripts/dados/atualizar.py
 ```
 
-Baixa o IVG-R (Banco Central), a série do FipeZAP, a malha das UFs (IBGE) e as guias de ITBI pagas de São Paulo (com os distritos do GeoSampa), e grava só os agregados. Os arquivos brutos ficam em `.cache/` (fora do git). Precisa de `pandas`, `openpyxl` e `shapely`. Depois: `npm test && npm run build`, revisar as páginas `/quanto-minha-renda-compra/` e `/metro-quadrado-sao-paulo/` e commitar os JSONs. Fontes e cuidados em `docs/pesquisa/fontes-de-dados-imoveis.md`.
+Baixa o IVG-R (Banco Central), a série do FipeZAP, a malha das UFs (IBGE) as guias de ITBI pagas de São Paulo (com os distritos do GeoSampa) e o ITBI de Recife e Porto Alegre, e grava só os agregados. Os arquivos brutos ficam em `.cache/` (fora do git). Precisa de `pandas`, `openpyxl` e `shapely`. Depois: `npm test && npm run build`, revisar as páginas `/quanto-minha-renda-compra/` e `/metro-quadrado-sao-paulo/` e commitar os JSONs. Fontes e cuidados em `docs/pesquisa/fontes-de-dados-imoveis.md`.
