@@ -196,11 +196,21 @@ function Avatar() {
   );
 }
 
-/** O ícone da marca (chave no círculo) em 512 px: logo do Google e ícone de app. */
-function IconeApp() {
+/** O símbolo da marca (chave no círculo) em 512 px: logo da organização para o Google. */
+function LogoApp() {
   return (
     <Moldura w={512} h={512} grade={false} className="items-center justify-center">
       <Icone className="w-[512px]" />
+    </Moldura>
+  );
+}
+
+/** A carinha do João-de-barro em 512 px: favicon grande e ícone de app (o mesmo desenho de src/app/icon.svg). */
+function IconeApp() {
+  return (
+    <Moldura w={512} h={512} grade={false} className="items-center justify-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/icon.svg" alt="" width={512} height={512} />
     </Moldura>
   );
 }
@@ -213,6 +223,7 @@ export const MOLDES = [
   { slug: "story", nome: "Story · Pergunta do dia", formato: "Story 1080×1920", w: 1080, h: 1920, Componente: Story },
   { slug: "compartilhamento", nome: "Imagem de compartilhamento", formato: "OG 1200×630", w: 1200, h: 630, Componente: Compartilhamento },
   { slug: "avatar", nome: "Avatar", formato: "1080×1080", w: 1080, h: 1080, Componente: Avatar },
+  { slug: "logo", nome: "Logo da organização", formato: "512×512", w: 512, h: 512, Componente: LogoApp },
   { slug: "icone", nome: "Ícone do app", formato: "512×512", w: 512, h: 512, Componente: IconeApp },
 ] as const;
 

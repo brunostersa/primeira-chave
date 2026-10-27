@@ -16,6 +16,7 @@ import { PERSONAS } from "@/lib/conteudo/personas";
 import { brl, pct } from "@/lib/format";
 import { capitais, imovelQueARendaCompra, ITBI_CAPITAIS, ITBI_SP, variacaoIvgr } from "@/lib/mercado";
 import { secoesMenu } from "@/lib/navegacao";
+import { FUNDADOR } from "@/lib/site-config";
 
 /**
  * As seções da home: cada uma é uma porta para uma parte do ecossistema (jornada,
@@ -316,12 +317,15 @@ export function QuemFaz() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
       <div className="grid items-center gap-6 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-6 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:p-8">
-        <JoaoDeBarro pose="frente" humor="feliz" className="h-24 w-auto justify-self-center" />
+        <span className="relative justify-self-center">
+          <Image src={FUNDADOR.foto} alt={`Foto de ${FUNDADOR.nome}`} width={96} height={96} className="size-24 rounded-full border-[1.5px] border-ink object-cover" />
+          <JoaoDeBarro pose="chave" humor="feliz" pequeno className="absolute -bottom-1 -right-5 w-11" />
+        </span>
         <div className="flex flex-col gap-2">
           <Eyebrow>Quem faz</Eyebrow>
           <p className="text-lg">
-            Feito por quem compra, reforma e vende imóvel, e arremata em leilão. Uma iniciativa do Bruno, com a CustomerHub, para traduzir o mercado para quem está
-            comprando o primeiro imóvel.
+            Feito por quem compra, reforma e vende imóvel, e arremata em leilão. Uma iniciativa do {FUNDADOR.nome}, com a CustomerHub, para traduzir o mercado
+            para quem está comprando o primeiro imóvel.
           </p>
         </div>
         <VerMais href="/sobre/">Conheça a história</VerMais>

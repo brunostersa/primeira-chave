@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import { Ilustracao } from "@/components/brand/ilustracoes";
@@ -8,7 +9,7 @@ import { Eyebrow } from "@/components/ui/badge";
 import { Secao } from "@/components/conteudo/pecas";
 import { estatisticas, no } from "@/lib/conteudo/links";
 import { metadadosPagina } from "@/lib/seo";
-import { SITE } from "@/lib/site-config";
+import { FUNDADOR, SITE } from "@/lib/site-config";
 
 /**
  * Página institucional: por que a Primeira Chave existe, quem está por trás e o que
@@ -29,6 +30,7 @@ const JSON_LD = {
   inLanguage: "pt-BR",
   about: { "@id": `${SITE.url}/#org` },
   publisher: { "@type": "Organization", name: "CustomerHub", url: "https://customerhub.com.br" },
+  mainEntity: { "@id": `${SITE.url}/sobre/#fundador` },
 };
 
 export default function SobrePage() {
@@ -73,21 +75,44 @@ export default function SobrePage() {
           </Secao>
 
           <Secao titulo="Quem está por trás">
-            <Card className="grid items-center gap-6 sm:grid-cols-[auto_minmax(0,1fr)]">
-              <JoaoDeBarro pose="frente" humor="feliz" className="h-24 w-auto justify-self-center" />
+            <Card className="grid items-start gap-6 sm:grid-cols-[auto_minmax(0,1fr)]">
+              <div className="flex flex-col items-center gap-3 justify-self-center sm:w-36">
+                <span className="relative">
+                  <Image
+                    src={FUNDADOR.foto}
+                    alt={`Foto de ${FUNDADOR.nome}`}
+                    width={128}
+                    height={128}
+                    className="size-32 rounded-full border-[1.5px] border-ink object-cover"
+                  />
+                  <JoaoDeBarro pose="chave" humor="feliz" pequeno className="absolute -bottom-2 -right-6 w-14" />
+                </span>
+                <span className="text-center">
+                  <b className="block font-display text-xl leading-tight">{FUNDADOR.nome}</b>
+                  <span className="font-mono text-xs text-muted">fundador</span>
+                </span>
+              </div>
               <div className="flex flex-col gap-3 text-[17px] leading-relaxed text-ink-2">
                 <p>
-                  A Primeira Chave é uma iniciativa do <b className="text-ink">Bruno</b>, que compra imóveis usados, reforma e revende, e arremata imóveis em leilão. O
-                  projeto é feito pela{" "}
+                  A Primeira Chave é uma iniciativa do <b className="text-ink">{FUNDADOR.nome}</b>. Ele compra imóveis usados, reforma e revende, e arremata imóveis
+                  em leilão.
+                </p>
+                <p>
+                  Do outro lado do balcão, acompanha de perto o que trava quem vai comprar financiado: a avaliação que veio abaixo do preço, o documento que faltou, a
+                  entrada que ninguém explicou que podia ser menor. A ideia foi colocar esse conhecimento, que costuma ficar com quem é do ramo, ao alcance de quem está
+                  comprando o primeiro imóvel.
+                </p>
+                <p>
+                  Antes, passou mais de dez anos desenhando produtos digitais e cuidando da experiência do cliente, os últimos cinco no setor financeiro (no PagBank,
+                  coordenou processos e melhoria contínua da conta digital). Hoje é fundador da{" "}
                   <a href="https://customerhub.com.br" rel="noopener" className="font-semibold text-ink underline underline-offset-4">
                     CustomerHub
                   </a>
-                  , a empresa por trás da plataforma.
-                </p>
-                <p>
-                  Do outro lado do balcão, ele acompanha de perto o que trava quem vai comprar financiado: a avaliação que veio abaixo do preço, o documento que faltou,
-                  a entrada que ninguém explicou que podia ser menor. A ideia foi colocar esse conhecimento, que costuma ficar com quem é do ramo, ao alcance de quem
-                  está comprando o primeiro imóvel.
+                  , a empresa que faz a plataforma, e da Klientti.{" "}
+                  <a href={FUNDADOR.perfil} rel="noopener" className="font-semibold text-ink underline underline-offset-4">
+                    Trajetória completa
+                  </a>
+                  .
                 </p>
               </div>
             </Card>

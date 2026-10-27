@@ -103,6 +103,7 @@ Dois produtos, mesmo formato: página de vendas + PDF/área simples + checklist.
 - **Ferramentas atraem links**: calculadoras boas ganham backlinks de blogs e fóruns — melhor que post genérico.
 - **"Taxas do mês"**: página/newsletter mensal com juros dos bancos — motivo para voltar e para o Google rastrear sempre.
 - **Antes e depois**: anúncio comparando a explicação do banco com a da Primeira Chave.
+- **PR digital (avaliar depois)**: virar fonte de jornalista com dado próprio — "m² pago (ITBI) × m² anunciado", "quanto precisa ganhar em cada capital", termômetro mensal do IVG-R — numa página `/dados/` com metodologia + release. Links de portal valem mais que meses de conteúdo.
 
 ## Regras do jogo
 

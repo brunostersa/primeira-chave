@@ -96,7 +96,8 @@ if ((!so || so === "cartas") && existsSync(join(OUT, "carta"))) {
 if (!so || so === "marca") {
   const MARCA = [
     { molde: "compartilhamento", w: 1200, h: 630, destinos: [join(RAIZ, "public", "og.png")] },
-    { molde: "icone", w: 512, h: 512, destinos: [join(RAIZ, "public", "logo.png"), join(RAIZ, "public", "icone-512.png")] },
+    { molde: "logo", w: 512, h: 512, destinos: [join(RAIZ, "public", "logo.png")] },
+    { molde: "icone", w: 512, h: 512, destinos: [join(RAIZ, "public", "icone-512.png")] },
   ];
   for (const m of MARCA) {
     const png = join(tmp, `${m.molde}.png`);
