@@ -50,4 +50,6 @@ Faz o build, abre cada `/figura/<pagina>/<id>/` (rota `noindex`, bloqueada no ro
 
 - **Lote 3**: casa sem entrada (página própria: figuras via `textos/proprias.ts`), calculadora de ganho de capital, imposto na venda (isenções), quanto vale meu imóvel (três valores), primeiro imóvel e ITBI, certidão de matrícula, vender financiado, alugar ou financiar, usar FGTS na compra, quanto custa financiar (total em 35 anos pelo motor).
 
-Fila: score, financiamento negado, avaliação do imóvel, documentos para vender, quanto tempo demora, preparar a casa, registro, faixas do MCMV, financiar leilão, reforma de leilão, vender para quem financia, carteira de trabalho, quanto preciso ganhar, e os 23 termos do glossário.
+- **Lote 4**: score, financiamento negado, avaliação do imóvel (abaixo × acima), documentos para vender, quanto tempo demora (prazos), antes de financiar, registro (da assinatura à chave), faixas do MCMV (teto por faixa), financiar leilão (comum × retomado), reforma de leilão (folga de 20%).
+
+Fila: vender para quem financia, carteira de trabalho, quanto preciso ganhar, hubs Comprar/Vender/Atalhos/Ferramentas, e os 23 termos do glossário.

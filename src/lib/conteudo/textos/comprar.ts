@@ -8,6 +8,29 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
       "Quatro coisas, nesta ordem: **nome limpo**, **parcelas atuais sob controle** (elas comem o espaço da parcela da casa), **dinheiro para entrada e custos** (perto de 25% do imóvel) e **saber se o FGTS pode entrar**.",
     secoes: [
       {
+        titulo: "O checklist em uma imagem",
+        blocos: [
+          {
+            figura: {
+              id: "quatro-passos",
+              alt: "O que fazer antes de financiar um imóvel: conferir o CPF, olhar as parcelas atuais, juntar entrada e custos e ver se o FGTS entra",
+              etiqueta: "Antes de financiar",
+              titulo: "Arrume a casa",
+              destaque: "antes de pedir.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Confira o CPF", texto: "Registrato e restrições no nome." },
+                  { titulo: "Some as parcelas", texto: "Elas saem dos 30% da renda." },
+                  { titulo: "Junte entrada e custos", texto: "20% de entrada e uns 5% de ITBI e cartório." },
+                  { titulo: "Veja o FGTS", texto: "Com 3 anos de carteira, ele entra na entrada." },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "1. Confira seu CPF",
         blocos: [
           { p: "Com restrição no nome, o banco recusa o crédito mesmo com renda boa. Consulte de graça no [Registrato, do Banco Central](#registrato), que mostra todas as dívidas em seu nome, e nos birôs de crédito." },
@@ -39,6 +62,7 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "Preciso ter a entrada toda antes de começar?", a: "Não para pedir a aprovação de crédito. Mas antes de assinar, sim: entrada, ITBI e cartório precisam estar disponíveis." },
       { q: "Quanto tempo antes devo me organizar?", a: "O ideal é de 3 a 6 meses: tempo para limpar o nome, quitar parcelas pequenas e juntar a reserva." },
+      { q: "Vale quitar um empréstimo antes de financiar?", a: "Muitas vezes, sim: cada parcela a menos libera espaço nos 30% da renda e aumenta o valor que o banco empresta. Faça a conta no simulador." },
     ],
   },
 
@@ -201,6 +225,29 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     resposta: "Não existe um [score](g:score) mínimo divulgado para financiamento de casa. O banco olha a nota, mas pesa mais **nome sem restrição**, **parcelas atuais** e o seu **histórico no Banco Central**.",
     secoes: [
       {
+        titulo: "Quatro passos antes de pedir o crédito",
+        blocos: [
+          {
+            figura: {
+              id: "antes-de-pedir",
+              alt: "Score para financiamento de casa: quatro passos antes de pedir o crédito, do Registrato à comprovação de renda",
+              etiqueta: "Score para financiamento",
+              titulo: "Mais que a nota,",
+              destaque: "o que o banco enxerga.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Veja o Registrato", texto: "Tudo o que você deve, banco a banco, de graça." },
+                  { titulo: "Negocie atrasos", texto: "Dívida vencida é o que mais barra o crédito." },
+                  { titulo: "Quite o pequeno", texto: "Uma parcela a menos libera espaço nos 30% da renda." },
+                  { titulo: "Organize a renda", texto: "Holerites, extratos e imposto de renda em dia." },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "O que o banco realmente olha",
         blocos: [
           {
@@ -229,6 +276,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "Score baixo impede o financiamento?", a: "Não necessariamente. Nome limpo e renda suficiente costumam pesar mais que a nota." },
       { q: "Onde vejo meu score?", a: "Nos sites e apps dos birôs de crédito. As dívidas em bancos você vê no Registrato, de graça." },
+      { q: "Nome sujo consegue financiar?", a: "Em regra, não: restrição no CPF barra a aprovação. Negocie a dívida, guarde o comprovante e espere a baixa antes de pedir." },
+      { q: "Consultar o próprio score derruba a nota?", a: "Não. Consultar o seu próprio CPF não afeta a nota." },
     ],
   },
 
@@ -238,6 +287,29 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     descricao: "Financiamento negado? Os motivos mais comuns, o que fazer em cada caso e quando posso tentar novamente, sem perder tempo nem a próxima análise.",
     resposta: "Financiamento negado quase sempre é por um destes motivos: **restrição no nome**, **renda comprometida demais**, **renda difícil de comprovar** ou **problema no imóvel**. Quando posso tentar novamente? **Assim que resolver o motivo** — não há prazo fixo de espera.",
     secoes: [
+      {
+        titulo: "Negado? Faça nesta ordem",
+        blocos: [
+          {
+            figura: {
+              id: "o-que-fazer",
+              alt: "Financiamento negado: o que fazer e quando posso tentar novamente, em quatro passos, do motivo da recusa à nova simulação",
+              etiqueta: "Financiamento negado",
+              titulo: "Descubra o motivo,",
+              destaque: "resolva e tente de novo.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Pergunte o motivo", texto: "O correspondente ou o gerente costuma indicar o que barrou." },
+                  { titulo: "Veja o Registrato", texto: "Confira atrasos e parcelas que o banco enxergou." },
+                  { titulo: "Resolva o ponto", texto: "Negocie, quite parcelas, comprove renda ou troque o imóvel." },
+                  { titulo: "Simule de novo", texto: "Com os números novos, antes de voltar ao banco." },
+                ],
+              },
+            },
+          },
+        ],
+      },
       {
         titulo: "Os motivos e o que fazer",
         blocos: [
@@ -266,6 +338,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "O banco é obrigado a dizer o motivo?", a: "Você pode perguntar ao gerente ou correspondente. Nem sempre o detalhe é informado, mas o tipo de problema costuma ser." },
       { q: "Posso tentar em outro banco?", a: "Sim. As regras de cada banco variam um pouco, mas restrição no nome barra em todos." },
+      { q: "Ser negado na Caixa impede de tentar em outro banco?", a: "Não. Cada banco faz a sua análise. Mas, se o motivo for restrição no nome ou renda, ele vai aparecer em qualquer banco." },
+      { q: "A recusa fica registrada no meu CPF?", a: "A recusa em si não vira dívida nem restrição. O que pesa são os atrasos e as parcelas que já existem." },
     ],
   },
 
@@ -275,6 +349,30 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     descricao: "Quanto tempo demora o financiamento da Caixa, etapa por etapa: da aprovação do crédito ao registro, e o que atrasa (ou acelera) o processo.",
     resposta: "Quanto tempo demora o financiamento da Caixa? Do pedido à chave, **de 30 a 90 dias** em média. O que mais atrasa é documento que chega aos poucos e pendência na [matrícula](g:matricula) do imóvel.",
     secoes: [
+      {
+        titulo: "Os prazos em números",
+        blocos: [
+          {
+            figura: {
+              id: "prazos",
+              alt: "Quanto tempo demora o financiamento da Caixa: prazos médios da aprovação de crédito, da avaliação, da assinatura e do registro",
+              etiqueta: "Quanto tempo demora",
+              titulo: "Do pedido à chave,",
+              destaque: "etapa por etapa.",
+              esquema: {
+                tipo: "numeros",
+                itens: [
+                  { valor: "5–15 dias", rotulo: "para a aprovação do crédito" },
+                  { valor: "7–15 dias", rotulo: "para a avaliação do imóvel" },
+                  { valor: "1 dia", rotulo: "para assinar o contrato" },
+                  { valor: "até 30 dias", rotulo: "para o registro no cartório", tom: "mark" },
+                ],
+              },
+              legenda: "Prazos médios. Documento incompleto e pendência na matrícula são os maiores atrasos.",
+            },
+          },
+        ],
+      },
       { titulo: "O prazo de cada etapa", blocos: [{ calculo: "prazos" }] },
       {
         titulo: "Como andar mais rápido",
@@ -290,7 +388,9 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "O vendedor recebe quando?", a: "Depois do registro do contrato no cartório, que precisa sair em até 30 dias da assinatura." }],
+    faq: [{ q: "O vendedor recebe quando?", a: "Depois do registro do contrato no cartório, que precisa sair em até 30 dias da assinatura." },
+      { q: "Quanto tempo vale a aprovação de crédito?", a: "A aprovação tem validade definida pelo banco. Se vencer antes de você achar o imóvel, é preciso atualizar a análise." },
+    ],
   },
 
   "sem-entrada-apartamento": {
@@ -364,6 +464,27 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     resposta: "Na avaliação do imóvel pela Caixa, um engenheiro vistoria o imóvel e define o valor de [avaliação](g:avaliacao). **Quem compra paga a tarifa.** O banco empresta até 80% desse valor: abaixo do preço, você cobre a diferença; acima, a entrada diminui.",
     secoes: [
       {
+        titulo: "Abaixo ou acima: o que muda no seu bolso",
+        blocos: [
+          {
+            figura: {
+              id: "abaixo-x-acima",
+              alt: "Avaliação do imóvel pela Caixa abaixo ou acima do preço: abaixo, o banco empresta menos e você cobre a diferença; acima, a entrada diminui",
+              etiqueta: "Avaliação do imóvel pela Caixa",
+              titulo: "O laudo",
+              destaque: "muda a entrada.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Abaixo do preço", tom: "bad", itens: ["Banco empresta menos", "Você cobre a diferença", "Hora de renegociar o preço"] },
+                  { titulo: "Acima do preço", tom: "mark", itens: ["A entrada diminui", "25% acima: entrada zero", "A renda precisa aguentar"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "Como funciona",
         blocos: [
           {
@@ -399,6 +520,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "Posso contestar a avaliação?", a: "Pode pedir revisão com argumentos (vendas parecidas, reformas). Não há garantia de mudança." },
       { q: "A avaliação vale para sempre?", a: "Não. O laudo tem validade limitada; se o negócio demorar, pode ser preciso refazer." },
+      { q: "Dá para contestar a avaliação?", a: "Dá para pedir revisão com argumentos, como vendas parecidas na região, mas a decisão final é do banco." },
+      { q: "A avaliação é feita antes ou depois do sinal?", a: "O ideal é antes: peça a avaliação e só pague sinal com o laudo na mão." },
     ],
   },
 
@@ -407,6 +530,34 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     descricao: "Depois de assinar o contrato: pagar o ITBI, registrar no cartório em até 30 dias e receber as chaves. O passo a passo e os custos.",
     resposta: "Depois da assinatura você paga o [ITBI](g:itbi), leva o contrato ao Cartório de Registro de Imóveis (prazo de **30 dias**) e, com o [registro](g:registro) feito, o banco paga o vendedor e a chave é sua.",
     secoes: [
+      {
+        titulo: "Da assinatura à chave",
+        blocos: [
+          {
+            figura: {
+              id: "da-assinatura-a-chave",
+              alt: "Registro do imóvel depois da assinatura: pagar o ITBI, registrar no cartório em até 30 dias e o banco liberar o dinheiro ao vendedor",
+              etiqueta: "Registro do imóvel",
+              titulo: "Sem registro,",
+              destaque: "a chave não é sua.",
+              esquema: {
+                tipo: "linha",
+                marcos: [
+                  { rotulo: "Assinatura", detalhe: "contrato com o banco" },
+                  { rotulo: "ITBI pago", detalhe: "guia da prefeitura" },
+                  { rotulo: "Registro", detalhe: "no Cartório de Imóveis" },
+                  { rotulo: "Chave", detalhe: "o banco paga o vendedor" },
+                ],
+                trechos: [
+                  { rotulo: "pague o ITBI", tom: "mark" },
+                  { rotulo: "até 30 dias", tom: "planta" },
+                  { rotulo: "liberação", tom: "planta" },
+                ],
+              },
+            },
+          },
+        ],
+      },
       {
         titulo: "O passo a passo",
         blocos: [
@@ -428,7 +579,10 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Preciso de escritura?", a: "No financiamento bancário, o contrato do banco já tem força de escritura. O que falta é o registro." }],
+    faq: [{ q: "Preciso de escritura?", a: "No financiamento bancário, o contrato do banco já tem força de escritura. O que falta é o registro." },
+      { q: "O vendedor recebe antes do registro?", a: "Não. O banco libera o dinheiro ao vendedor depois que o contrato é registrado na matrícula." },
+      { q: "O registro pode entrar no financiamento?", a: "Em alguns casos o banco permite incluir custos de cartório. Pergunte no momento da contratação." },
+    ],
   },
 
   "primeiro-imovel-desconto": {

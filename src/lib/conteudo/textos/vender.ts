@@ -114,8 +114,34 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
           { p: "Do outro lado, o comprador junta os dele: [documentos para financiar](#documentos-financiamento)." },
         ],
       },
+      {
+        titulo: "Os três grupos de documentos",
+        blocos: [
+          {
+            figura: {
+              id: "tres-grupos",
+              alt: "Documentos para vender um imóvel em três grupos: os do vendedor, os do imóvel e as certidões de débitos e ações",
+              etiqueta: "Documentos para vender um imóvel",
+              titulo: "Três pastas",
+              destaque: "para não travar a venda.",
+              esquema: {
+                tipo: "comparar",
+                sinal: "+",
+                colunas: [
+                  { titulo: "Seus", tom: "mark", itens: ["Identidade e CPF", "Estado civil (e cônjuge)", "Comprovante de endereço"] },
+                  { titulo: "Do imóvel", tom: "planta", itens: ["Matrícula atualizada", "IPTU em dia", "Declaração do condomínio"] },
+                  { titulo: "Certidões", tom: "ink", itens: ["Débitos e protestos", "Ações na Justiça", "Emitidas há pouco tempo"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
     ],
-    faq: [{ q: "Imóvel de herança pode ser vendido?", a: "Depois do inventário e da partilha registrados na matrícula, sim." }],
+    faq: [{ q: "Imóvel de herança pode ser vendido?", a: "Depois do inventário e da partilha registrados na matrícula, sim." },
+      { q: "Quanto tempo valem as certidões?", a: "O banco do comprador costuma pedir certidões recentes, em geral de até 30 dias. Tire perto da data do contrato." },
+      { q: "O cônjuge precisa assinar a venda?", a: "Em regra, sim, conforme o regime de bens. Confira na certidão de casamento antes de fechar." },
+    ],
   },
 
   "imposto-venda": {

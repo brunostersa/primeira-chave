@@ -1,4 +1,7 @@
+import { PARAMS } from "../../financiamento/params";
 import type { Texto } from "../tipos";
+
+const milP = (v: number) => `R$ ${Math.round(v / 1000)} mil`;
 
 export const TEXTOS_PROGRAMAS: Record<string, Texto> = {
   "mcmv-faixas": {
@@ -6,6 +9,30 @@ export const TEXTOS_PROGRAMAS: Record<string, Texto> = {
     descricao: "As 4 faixas do Minha Casa Minha Vida em 2026: renda bruta familiar, valor máximo do imóvel e juros de cada uma, conferidos no simulador da Caixa.",
     resposta: "São **4 faixas pela renda bruta da família**: até R$ 3.200, até R$ 5.000, até R$ 9.600 e até R$ 13.000. Quanto menor a renda, **menores os juros**; nas faixas 1 e 2 pode haver subsídio.",
     secoes: [
+      {
+        titulo: "O teto do imóvel em cada faixa",
+        blocos: [
+          {
+            figura: {
+              id: "teto-por-faixa",
+              alt: "Faixas do Minha Casa Minha Vida em 2026: valor máximo do imóvel em cada faixa de renda, de R$ 210 mil na faixa 1 a R$ 600 mil na faixa 4",
+              etiqueta: "Faixas do Minha Casa Minha Vida",
+              titulo: "Quanto maior a faixa,",
+              destaque: "maior o teto do imóvel.",
+              esquema: {
+                tipo: "barras",
+                itens: PARAMS.faixas.map((f) => ({
+                  rotulo: `Faixa ${f.faixa} · até R$ ${f.rendaAte.toLocaleString("pt-BR")}`,
+                  valor: f.tetoImovel,
+                  texto: `imóvel até ${milP(f.tetoImovel)}${f.faixa <= 2 ? "*" : ""}`,
+                  tom: "mark" as const,
+                })),
+              },
+              legenda: "Renda bruta da família por mês. *Nas faixas 1 e 2 o teto vai de R$ 210 mil a R$ 275 mil conforme a cidade.",
+            },
+          },
+        ],
+      },
       { titulo: "A tabela", blocos: [{ calculo: "faixas-mcmv" }] },
       {
         titulo: "Como ler",
@@ -25,6 +52,7 @@ export const TEXTOS_PROGRAMAS: Record<string, Texto> = {
     faq: [
       { q: "Quem já tem imóvel pode entrar?", a: "Não. O programa é para quem não tem imóvel no nome." },
       { q: "Autônomo pode participar?", a: "Pode, comprovando a renda com extratos e declaração." },
+      { q: "Posso comprar um imóvel acima do teto da minha faixa?", a: "Pelo programa, não. Acima do teto, o financiamento vai para a linha de mercado, com juros maiores." },
     ],
   },
 

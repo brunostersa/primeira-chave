@@ -133,6 +133,27 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
     resposta: "**Dá, quando o anúncio diz que aceita financiamento.** Mas, para imóveis retomados, a regra usa o **menor valor entre o preço e a [avaliação](g:avaliacao)** — então, diferente da compra comum, avaliação acima do preço **não** reduz a entrada.",
     secoes: [
       {
+        titulo: "A diferença em uma imagem",
+        blocos: [
+          {
+            figura: {
+              id: "comum-x-retomado",
+              alt: "Financiar imóvel de leilão da Caixa: na compra comum o banco financia sobre a avaliação; no retomado, sobre o menor valor entre preço e avaliação",
+              etiqueta: "Financiar imóvel de leilão",
+              titulo: "No retomado,",
+              destaque: "vale o menor valor.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Compra comum", tom: "planta", itens: ["80% da avaliação, até o preço", "Avaliação acima reduz a entrada", "Qualquer imóvel aprovado"] },
+                  { titulo: "Imóvel da Caixa", tom: "mark", itens: ["Sobre o menor: preço ou avaliação", "Avaliação acima não reduz a entrada", "Só se o anúncio aceitar"] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
         titulo: "A regra que muda",
         blocos: [
           { p: "Numa compra comum, o banco empresta até 80% da avaliação, limitado ao preço: avaliação alta pode zerar a entrada ([veja como](#sem-entrada-casa)). Nos imóveis retomados pela própria Caixa, a norma do programa usa o menor dos valores entre venda e avaliação." },
@@ -151,7 +172,9 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
       },
       { titulo: "Antes do lance", blocos: [{ p: "Simule a parcela no [simulador](#simulador) com o preço do lance e confirme no anúncio se aceita FGTS e financiamento." }] },
     ],
-    faq: [{ q: "E leilão de outros bancos?", a: "Cada banco e edital tem regras próprias. Confirme com o banco que vai financiar." }],
+    faq: [{ q: "E leilão de outros bancos?", a: "Cada banco e edital tem regras próprias. Confirme com o banco que vai financiar." },
+      { q: "O prazo para pagar é o mesmo do financiamento comum?", a: "Não: o edital dá prazos curtos para a contratação. Tenha documentos e entrada prontos antes do lance." },
+    ],
   },
 
   "reforma-leilao": {
@@ -159,6 +182,31 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
     descricao: "Quando comprar imóvel de leilão ou abaixo do mercado vale a pena: a conta com preço, reforma, custos, dívidas e o valor de mercado.",
     resposta: "Vale quando **preço + reforma + custos + dívidas** fica bem abaixo do **valor de mercado** do imóvel pronto. Uma folga de 20% ou mais costuma cobrir imprevistos.",
     secoes: [
+      {
+        titulo: "Quando a conta fecha",
+        blocos: [
+          {
+            figura: {
+              id: "conta-que-fecha",
+              alt: "Imóvel de leilão vale a pena quando preço, reforma, custos e dívidas ficam bem abaixo do valor de mercado, com folga de 20% para imprevistos",
+              etiqueta: "Imóvel de leilão vale a pena?",
+              titulo: "Vale quando sobra",
+              destaque: "folga de 20%.",
+              esquema: {
+                tipo: "divisao",
+                total: "exemplo: imóvel que vale R$ 300 mil pronto",
+                partes: [
+                  { rotulo: "preço pago", valor: 180000, texto: "R$ 180 mil", tom: "mark" },
+                  { rotulo: "reforma", valor: 30000, texto: "R$ 30 mil", tom: "bad" },
+                  { rotulo: "custos e dívidas", valor: 30000, texto: "R$ 30 mil", tom: "ink" },
+                  { rotulo: "folga (20%)", valor: 60000, texto: "R$ 60 mil", tom: "planta" },
+                ],
+              },
+              legenda: "Valores ilustrativos. A folga cobre o que só aparece depois de abrir a parede.",
+            },
+          },
+        ],
+      },
       {
         titulo: "A conta",
         blocos: [
@@ -193,6 +241,8 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Imóvel reformado é avaliado mais alto?", a: "Em geral sim: estado de conservação pesa na avaliação. Reformas com nota fiscal também reduzem o imposto na venda." }],
+    faq: [{ q: "Imóvel reformado é avaliado mais alto?", a: "Em geral sim: estado de conservação pesa na avaliação. Reformas com nota fiscal também reduzem o imposto na venda." },
+      { q: "Dá para financiar a reforma junto?", a: "Na compra de leilão, em geral não: o financiamento cobre só a aquisição. Separe o dinheiro da reforma." },
+    ],
   },
 };
