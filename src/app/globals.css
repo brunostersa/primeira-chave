@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/*
+ * Tokens da marca Primeira Chave — direção "Planta".
+ * Papéis fixos das cores (ver /marca):
+ *   marca-texto = o seu dinheiro · planta = o banco, os papéis e a casa · tinta = texto e traço.
+ */
+:root {
+  --paper: #f2f3f1;
+  --surface: #ffffff;
+  --ink: #121418;
+  --ink-2: #3a3f47;
+  --muted: #5a6069;
+  --line: #c9cdc7;
+  --grid: #e3e9ee;
+
+  --mark: #f4d23f;
+  --mark-soft: #fbf1bc;
+  --planta: #c6d6e3;
+  --planta-deep: #6f8ca5;
+  --barro: #eeb194; /* só a bochecha do João-de-barro */
+
+  --ok: #1e8556;
+  --warn: #a86e12;
+  --bad: #bf3c35;
+  --bad-soft: #f8e1df;
+
+  --radius: 14px;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-grid: var(--grid);
+  --color-mark: var(--mark);
+  --color-mark-soft: var(--mark-soft);
+  --color-planta: var(--planta);
+  --color-planta-deep: var(--planta-deep);
+  --color-barro: var(--barro);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+
+  --font-display: var(--font-outfit), "Avenir Next", system-ui, sans-serif;
+  --font-sans: var(--font-figtree), "Helvetica Neue", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
+
+  --radius-card: var(--radius);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  /* O header fixo (h-16) não cobre âncoras nem o foco (WCAG 2.4.11). */
+  html {
+    scroll-padding-top: 5rem;
+  }
+  a {
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Grade de planta baixa, usada em heros e áreas de destaque. */
+@utility bg-planta-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Grifo de marca-texto: o destaque do "seu dinheiro" nos títulos. */
+@utility marca-texto {
+  background: linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 92%, transparent 92%);
+  padding: 0 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Custos (ITBI, cartório): hachurado. */
+@utility bg-hachura {
+  background-image: repeating-linear-gradient(135deg, var(--ink) 0 1.5px, var(--mark-soft) 1.5px 8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/*
+ * Deslizador da marca: a trilha enche de marca-texto e quem arrasta é o
+ * João-de-barro com a chave no bico. --pct vem do componente <Deslizador />.
+ */
+.deslizador {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 86px;
+  background: transparent;
+  cursor: pointer;
+}
+.deslizador::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: linear-gradient(to right, var(--mark) var(--pct, 50%), var(--surface) var(--pct, 50%));
+}
+.deslizador::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: linear-gradient(to right, var(--mark) var(--pct, 50%), var(--surface) var(--pct, 50%));
+}
+.deslizador::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  /* círculo de ~23px centrado na trilha; o pássaro fica pousado em cima */
+  width: 66px;
+  height: 74px;
+  margin-top: -51px;
+  border: 0;
+  background: var(--passaro) center bottom / contain no-repeat;
+  transform-origin: 50% 78%;
+  transition: transform 0.15s;
+}
+.deslizador::-moz-range-thumb {
+  width: 66px;
+  height: 74px;
+  border: 0;
+  background: var(--passaro) center bottom / contain no-repeat;
+  transform: translateY(-20px);
+}
+.deslizador:active::-webkit-slider-thumb {
+  transform: scale(1.08);
+}
+.deslizador:focus-visible {
+  outline: none;
+}
+.deslizador:focus-visible::-webkit-slider-thumb {
+  filter: drop-shadow(0 0 0 var(--ink)) drop-shadow(0 2px 0 var(--mark));
+}
+
+/* PASSARO-DESLIZADOR:INICIO */
+/* gerado por scripts/gerar-passaro-deslizador.mjs */
+.deslizador {
+  --passaro-gentil: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%20-2%20128%20142%27%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%2721%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%23121418%27%20stroke-width%3D%275%27%2F%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%277%27%20fill%3D%27%23F4D23F%27%2F%3E%3Cg%20stroke%3D%27%23121418%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M57%2063%20L55%2080%20M67%2062%20L69%2080%27%20fill%3D%27none%27%2F%3E%3Cpath%20d%3D%27M36%2055%20L11%2042%20L15%2051%20L8%2055%20L33%2062%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M30%2058%20C24%2048%2034%2036%2050%2034%20C57%2033%2063%2031%2067%2025%20C71%2017%2083%2013%2089%2021%20C93%2027%2091%2035%2087%2040%20C85%2052%2077%2062%2062%2064%20C50%2066%2038%2064%2030%2058%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M88%2022%20Q98%2024%20106%2028%20Q97%2030%2088%2033%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M43%2043%20C53%2037%2066%2041%2071%2052%20C61%2055%2050%2052%2043%2043%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M108%2040%20V60%20M108%2051%20H114%27%20fill%3D%27none%27%2F%3E%3Ccircle%20cx%3D%27108%27%20cy%3D%2734%27%20r%3D%276.5%27%20fill%3D%27%23F4D23F%27%2F%3E%3C%2Fg%3E%3Cellipse%20cx%3D%2777%27%20cy%3D%2731%27%20rx%3D%274.6%27%20ry%3D%272.8%27%20fill%3D%27%23EEB194%27%2F%3E%3Ccircle%20cx%3D%2782%27%20cy%3D%2724.4%27%20r%3D%273.1%27%20fill%3D%27%23121418%27%2F%3E%3Ccircle%20cx%3D%2783.085%27%20cy%3D%2723.314999999999998%27%20r%3D%271.1780000000000002%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M78%2022.2%20Q82%2018.6%2086%2022.2%27%20fill%3D%27none%27%20stroke%3D%27%23121418%27%20stroke-width%3D%272.2%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E");
+  --passaro-feliz: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%20-2%20128%20142%27%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%2721%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%23121418%27%20stroke-width%3D%275%27%2F%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%277%27%20fill%3D%27%23F4D23F%27%2F%3E%3Cg%20stroke%3D%27%23121418%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M57%2063%20L55%2080%20M67%2062%20L69%2080%27%20fill%3D%27none%27%2F%3E%3Cpath%20d%3D%27M36%2055%20L11%2042%20L15%2051%20L8%2055%20L33%2062%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M30%2058%20C24%2048%2034%2036%2050%2034%20C57%2033%2063%2031%2067%2025%20C71%2017%2083%2013%2089%2021%20C93%2027%2091%2035%2087%2040%20C85%2052%2077%2062%2062%2064%20C50%2066%2038%2064%2030%2058%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M88%2022%20Q98%2024%20106%2028%20Q97%2030%2088%2033%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M43%2043%20C53%2037%2066%2041%2071%2052%20C61%2055%2050%2052%2043%2043%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M108%2040%20V60%20M108%2051%20H114%27%20fill%3D%27none%27%2F%3E%3Ccircle%20cx%3D%27108%27%20cy%3D%2734%27%20r%3D%276.5%27%20fill%3D%27%23F4D23F%27%2F%3E%3C%2Fg%3E%3Cellipse%20cx%3D%2777%27%20cy%3D%2731%27%20rx%3D%274.6%27%20ry%3D%272.8%27%20fill%3D%27%23EEB194%27%2F%3E%3Cpath%20d%3D%27M78.4%2025.4%20Q82%2020%2085.6%2025.4%27%20fill%3D%27none%27%20stroke%3D%27%23121418%27%20stroke-width%3D%273.4%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E");
+  --passaro-triste: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%20-2%20128%20142%27%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%2721%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%23121418%27%20stroke-width%3D%275%27%2F%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%277%27%20fill%3D%27%23F4D23F%27%2F%3E%3Cg%20stroke%3D%27%23121418%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M57%2063%20L55%2080%20M67%2062%20L69%2080%27%20fill%3D%27none%27%2F%3E%3Cpath%20d%3D%27M36%2055%20L11%2042%20L15%2051%20L8%2055%20L33%2062%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M30%2058%20C24%2048%2034%2036%2050%2034%20C57%2033%2063%2031%2067%2025%20C71%2017%2083%2013%2089%2021%20C93%2027%2091%2035%2087%2040%20C85%2052%2077%2062%2062%2064%20C50%2066%2038%2064%2030%2058%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M88%2022%20Q98%2024%20106%2028%20Q97%2030%2088%2033%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M43%2043%20C53%2037%2066%2041%2071%2052%20C61%2055%2050%2052%2043%2043%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M108%2040%20V60%20M108%2051%20H114%27%20fill%3D%27none%27%2F%3E%3Ccircle%20cx%3D%27108%27%20cy%3D%2734%27%20r%3D%276.5%27%20fill%3D%27%23F4D23F%27%2F%3E%3C%2Fg%3E%3Cellipse%20cx%3D%2777%27%20cy%3D%2731%27%20rx%3D%274.6%27%20ry%3D%272.8%27%20fill%3D%27%23EEB194%27%2F%3E%3Ccircle%20cx%3D%2782%27%20cy%3D%2725%27%20r%3D%272.8%27%20fill%3D%27%23121418%27%2F%3E%3Ccircle%20cx%3D%2782.98%27%20cy%3D%2724.02%27%20r%3D%271.0639999999999998%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M78%2019.8%20L85.8%2016.8%27%20fill%3D%27none%27%20stroke%3D%27%23121418%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E");
+  --passaro-surpreso: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%20-2%20128%20142%27%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%2721%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%23121418%27%20stroke-width%3D%275%27%2F%3E%3Ccircle%20cx%3D%2762%27%20cy%3D%27108%27%20r%3D%277%27%20fill%3D%27%23F4D23F%27%2F%3E%3Cg%20stroke%3D%27%23121418%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M57%2063%20L55%2080%20M67%2062%20L69%2080%27%20fill%3D%27none%27%2F%3E%3Cpath%20d%3D%27M36%2055%20L11%2042%20L15%2051%20L8%2055%20L33%2062%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M30%2058%20C24%2048%2034%2036%2050%2034%20C57%2033%2063%2031%2067%2025%20C71%2017%2083%2013%2089%2021%20C93%2027%2091%2035%2087%2040%20C85%2052%2077%2062%2062%2064%20C50%2066%2038%2064%2030%2058%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M88%2022%20Q98%2024%20106%2028%20Q97%2030%2088%2033%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M43%2043%20C53%2037%2066%2041%2071%2052%20C61%2055%2050%2052%2043%2043%20Z%27%20fill%3D%27%23ffffff%27%2F%3E%3Cpath%20d%3D%27M108%2040%20V60%20M108%2051%20H114%27%20fill%3D%27none%27%2F%3E%3Ccircle%20cx%3D%27108%27%20cy%3D%2734%27%20r%3D%276.5%27%20fill%3D%27%23F4D23F%27%2F%3E%3C%2Fg%3E%3Cellipse%20cx%3D%2777%27%20cy%3D%2731%27%20rx%3D%274.6%27%20ry%3D%272.8%27%20fill%3D%27%23EEB194%27%2F%3E%3Ccircle%20cx%3D%2782%27%20cy%3D%2724%27%20r%3D%274.4%27%20fill%3D%27%23ffffff%27%20stroke%3D%27%23121418%27%20stroke-width%3D%272.4%27%2F%3E%3Ccircle%20cx%3D%2782%27%20cy%3D%2724%27%20r%3D%271.9%27%20fill%3D%27%23121418%27%2F%3E%3Cpath%20d%3D%27M78.6%2016.2%20Q82%2013.8%2085.4%2016.2%27%20fill%3D%27none%27%20stroke%3D%27%23121418%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E");
+  --passaro: var(--passaro-gentil);
+}
+.deslizador[data-humor="feliz"] {
+  --passaro: var(--passaro-feliz);
+}
+.deslizador[data-humor="triste"] {
+  --passaro: var(--passaro-triste);
+}
+.deslizador[data-humor="surpreso"] {
+  --passaro: var(--passaro-surpreso);
+}
+/* PASSARO-DESLIZADOR:FIM */

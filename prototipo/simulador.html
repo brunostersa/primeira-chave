@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de financiamento do primeiro imóvel · Primeira Chave</title>
+<meta name="description" content="Descubra quanto você pode comprar, quanto precisa de entrada e qual o seu próximo passo, em palavras que dá pra entender.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: conversa de uma pergunta por tela, depois resultado em 3 camadas (resposta → entender → detalhes). Amarelo = seu bolso, índigo = banco. */
+:root{
+  --paper:#F1F2EE; --surface:#FFFFFF; --ink:#161A22; --muted:#5B6270; --line:#D8DBD3; --line-strong:#B9BDB3;
+  --accent:#3936C9; --accent-soft:#E6E6FA; --on-accent:#FFFFFF;
+  --mark:#F4D23F; --mark-soft:#FBF1BC; --on-mark:#161A22; --hl:rgba(244,210,63,.75);
+  --seg:#9AA0AA; --ok:#1E8556; --warn:#A86E12; --bad:#BF3C35; --bad-soft:#F8E1DF;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Figtree", "Helvetica Neue", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#111318; --surface:#1A1D24; --ink:#ECEDEF; --muted:#9BA1AC; --line:#2B2F39; --line-strong:#404551;
+  --accent:#8F8CFF; --accent-soft:#25244F; --on-accent:#111318;
+  --mark:#E8C93C; --mark-soft:#3D3618; --on-mark:#161A22; --hl:rgba(232,201,60,.38);
+  --seg:#6C7280; --ok:#4CC38A; --warn:#E3A94E; --bad:#F07067; --bad-soft:#3D1E1C; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#111318; --surface:#1A1D24; --ink:#ECEDEF; --muted:#9BA1AC; --line:#2B2F39; --line-strong:#404551;
+  --accent:#8F8CFF; --accent-soft:#25244F; --on-accent:#111318;
+  --mark:#E8C93C; --mark-soft:#3D3618; --on-mark:#161A22; --hl:rgba(232,201,60,.38);
+  --seg:#6C7280; --ok:#4CC38A; --warn:#E3A94E; --bad:#F07067; --bad-soft:#3D1E1C; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+mark{background:linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 92%, transparent 92%);color:inherit;padding:0 .08em}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+
+.top{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:22px 10px}
+.logo{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:-.03em}
+.logo{text-decoration:none;color:inherit}
+.logo i{font-style:normal;background:var(--mark);color:var(--on-mark);padding:0 .14em;border-radius:3px}
+.linkbtn{background:none;border:0;padding:6px 0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px}
+
+/* ---------- conversa ---------- */
+.flow{max-width:620px;margin:0 auto;padding-block:28px}
+.progress{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:3px;transition:width .3s ease}
+.count{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.q{font-size:clamp(28px,5vw,40px);line-height:1.1;font-weight:700}
+.help{margin-top:14px;color:var(--muted);font-size:15.5px;max-width:52ch}
+.help b{color:var(--ink);font-weight:600}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+.opt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s, transform .15s}
+.opt:hover{border-color:var(--ink)}
+.opt b{font-size:17px;font-weight:600}
+.opt span{font-size:14px;color:var(--muted)}
+.opt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.inp{margin-top:22px;display:flex;flex-direction:column;gap:8px}
+.inp label{font-weight:600;font-size:15px}
+.money{position:relative}
+.money::before{content:"R$";position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:20px;font-family:var(--f-display);font-weight:500}
+.money input{padding-left:52px}
+.big{width:100%;font-family:var(--f-display);font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px 18px}
+.big:focus{border-color:var(--ink);outline:none;box-shadow:inset 0 0 0 1px var(--ink)}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg2 .opt{padding:12px 14px}
+.check{display:flex;gap:10px;align-items:center;font-size:15px;cursor:pointer;margin-top:6px}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:30px}
+.primary{background:var(--ink);color:var(--paper);border:0;border-radius:12px;padding:15px 26px;font-weight:700;font-size:16px;cursor:pointer}
+.primary[disabled]{opacity:.35;cursor:not-allowed}
+.hint{font-size:13px;color:var(--muted)}
+
+.welcome h1{font-size:clamp(34px,6vw,54px);line-height:1.04;font-weight:800}
+.welcome .help{font-size:17px}
+.promise{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:14px;color:var(--muted)}
+.promise span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mark);margin-right:8px;vertical-align:middle}
+
+/* ---------- resultado ---------- */
+.result{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-block:18px}
+.badge-ex{align-self:flex-start;font-size:13px;background:var(--mark-soft);border-radius:8px;padding:6px 10px}
+.answer{display:flex;flex-direction:column;gap:14px}
+.answer h1{font-size:clamp(32px,5.2vw,56px);line-height:1.05;font-weight:800}
+.answer p{font-size:18px;color:var(--muted);max-width:60ch}
+.answer p strong{color:var(--ink)}
+.lights{display:flex;gap:8px;flex-wrap:wrap}
+.light{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;border-radius:999px;padding:6px 12px 6px 10px;background:var(--surface);border:1px solid var(--line)}
+.light i{width:10px;height:10px;border-radius:50%}
+.light.ok i{background:var(--ok)} .light.warn i{background:var(--warn)} .light.bad i{background:var(--bad)}
+
+.next{background:var(--surface);border:1.5px solid var(--ink);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.next h2{font-size:22px}
+.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:t}
+.todo li{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start;counter-increment:t}
+.todo li::before{content:counter(t);width:32px;height:32px;border-radius:50%;background:var(--mark);color:var(--on-mark);font-family:var(--f-display);font-weight:800;display:grid;place-items:center}
+.todo b{display:block;font-size:16px}
+.todo span{color:var(--muted);font-size:14.5px}
+.next.alt{background:var(--mark);color:var(--on-mark);border:none;position:relative;overflow:hidden}
+.next.alt .eyebrow{color:var(--on-mark);opacity:.75}
+.next.alt h2{font-size:clamp(26px,3.6vw,36px);line-height:1.05}
+.next.alt p{margin:0}
+.next.alt .note{color:var(--on-mark);opacity:.8}
+.alt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.alt-row>div{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:12px;background:rgba(255,255,255,.5)}
+.alt-row b{font-family:var(--f-display);font-size:28px;font-weight:800}
+.alt-row span{font-size:13.5px;opacity:.75}
+.sim{display:flex;flex-direction:column;gap:14px;padding:16px;border-radius:14px;background:rgba(255,255,255,.5)}
+.sim input[type=range]{accent-color:var(--on-mark)}
+.sim-out{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:560px){.sim-out{grid-template-columns:1fr}}
+.sim-big{display:flex;flex-direction:column;gap:4px}
+.sim-big b{font-family:var(--f-display);font-size:clamp(34px,5vw,48px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.sim-big span,.sim-mini span{font-size:13px;opacity:.75}
+.sim-bar{height:10px;border-radius:6px;background:rgba(22,26,34,.15);overflow:hidden;margin:6px 0 2px}
+.sim-bar i{display:block;height:100%;background:var(--on-mark);border-radius:6px;transition:width .15s}
+.sim-mini{display:grid;grid-template-columns:auto auto;gap:4px 12px;align-items:baseline}
+.sim-mini b{text-align:right;font-variant-numeric:tabular-nums}
+.sim-say{margin:0;font-size:15px}
+.sim-hint{font-size:13px;opacity:.75;margin-top:-6px}
+.alt-row .strike{text-decoration:line-through;text-decoration-thickness:2px;opacity:.55}
+
+.layer-title{font-size:13px;margin-top:10px}
+details.story{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+details.story > summary{list-style:none;cursor:pointer;padding:18px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:center}
+details.story > summary::-webkit-details-marker{display:none}
+details.story > summary h3{font-size:19px;font-weight:700}
+details.story > summary p{grid-column:1;color:var(--muted);font-size:14.5px}
+details.story > summary::after{content:"+";grid-row:1 / 3;grid-column:2;font-family:var(--f-display);font-size:26px;line-height:1;color:var(--muted)}
+details.story[open] > summary::after{content:"–"}
+.story-body{padding:4px 20px 22px;display:flex;flex-direction:column;gap:16px}
+.why-list{display:flex;flex-direction:column;gap:14px}
+.why-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding-bottom:14px;border-bottom:1px dashed var(--line-strong)}
+.why-item:last-child{border-bottom:0;padding-bottom:0}
+.why-item b{font-weight:600}
+.why-item .v{font-family:var(--f-display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;text-align:right}
+.why-item p{grid-column:1 / 3;color:var(--muted);font-size:14.5px}
+
+.scroll-x{overflow-x:auto}
+.plan{display:grid;row-gap:8px;font-family:var(--f-mono);font-size:12px;min-width:440px}
+.cota{position:relative;border-top:1px solid var(--ink);height:0;margin-top:14px}
+.cota::before,.cota::after{content:"";position:absolute;top:-6px;width:1px;height:11px;background:var(--ink)}
+.cota::before{left:0} .cota::after{right:0}
+.cota span{position:absolute;left:50%;top:-10px;transform:translateX(-50%);background:var(--surface);padding:0 8px;white-space:nowrap}
+.seg-b{height:64px;border-radius:6px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;font-family:var(--f-body);min-width:0}
+.seg-b b{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg-b span{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.seg-you{background:var(--mark);color:var(--on-mark)}
+.seg-bank{background:var(--accent);color:var(--on-accent)}
+.seg-cost{background:repeating-linear-gradient(135deg,var(--mark) 0 7px,var(--mark-soft) 7px 14px);color:var(--on-mark);margin-left:10px}
+.who{text-align:center;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.ledger{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 16px;font-size:15px;max-width:520px}
+.ledger .t{font-weight:700;border-top:1px solid var(--line);padding-top:8px}
+.ledger .r{text-align:right;font-variant-numeric:tabular-nums}
+.ledger .neg{color:var(--bad)} .ledger .pos{color:var(--ok)} .ledger .sub{color:var(--muted);font-size:13.5px;padding-left:12px}
+.note{font-size:14.5px;line-height:1.5;background:var(--paper);border-radius:10px;padding:12px 14px}
+.slider{display:flex;flex-direction:column;gap:8px}
+.slider .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.slider output{font-family:var(--f-display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.say{font-family:var(--f-display);font-size:clamp(21px,2.6vw,27px);font-weight:700;line-height:1.2}
+.trail{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:720px){.trail{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.trail li{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:4px;position:relative;min-width:0}
+.trail .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.trail b{font-size:14px;line-height:1.25}
+.trail span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.trail li.done{background:var(--paper)}
+.trail li.here{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.trail li.here::after{content:"Você está aqui";position:absolute;top:-9px;right:10px;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;background:var(--mark);color:var(--on-mark);padding:2px 6px;border-radius:4px}
+
+/* camada 3 */
+details.deep{border-top:1px solid var(--line);padding-top:14px}
+details.deep > summary{cursor:pointer;color:var(--muted);font-weight:600}
+.deep-body{display:flex;flex-direction:column;gap:22px;margin-top:18px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card h3{font-size:18px}
+.card .lead{color:var(--muted);font-size:14.5px}
+.xray{display:flex;height:36px;border-radius:7px;overflow:hidden}
+.xray i{display:block;height:100%}
+.legend{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px 10px;font-size:14px;align-items:center}
+.sw{width:12px;height:12px;border-radius:3px}
+.legend .r{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
+svg text{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+.cmp{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.cmp th,.cmp td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+.cmp th:first-child,.cmp td:first-child{text-align:left}
+.cmp th{font-size:12px;color:var(--muted);font-weight:600}
+.key{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.pgrid h4{grid-column:1 / -1;font-size:14px;margin:6px 0 0}
+.pgrid label{font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.pgrid input{font:inherit;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+
+.cta{background:var(--ink);color:var(--paper);border-radius:16px;padding:26px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
+@media (max-width:720px){.cta{grid-template-columns:minmax(0,1fr)}}
+.cta h2{font-size:clamp(22px,2.8vw,30px);font-weight:800}
+.cta p{margin-top:8px;opacity:.8;max-width:56ch}
+.cta .btn{background:var(--mark);color:var(--on-mark);border:0;border-radius:12px;padding:15px 22px;font-weight:700;cursor:pointer;white-space:nowrap}
+.cta small{display:block;text-align:center;opacity:.65;margin-top:8px;font-size:12px}
+.disclaimer{font-size:12.5px;color:var(--muted);line-height:1.5;max-width:90ch}
+.blocked{background:var(--bad-soft);border-radius:14px;padding:20px}
+@media (prefers-reduced-motion: reduce){ .bar i,.opt{transition:none} }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="./">Primeira <i>Chave</i></a>
+  <button type="button" class="linkbtn" id="restart" hidden>Mudar minhas respostas</button>
+</header>
+
+<main id="app"></main>
+
+<script>
+/* ================= parâmetros (referência out/2026, conferir) ================= */
+const PARAMS = {
+  comp:30, idadeLimite:80.5, prazoMax:420, itbi:3, cartorio:1.5, avaliacao:0.5, taxaAdm:25, dfi:0.0071,
+  f1Renda:2850, f1Teto:264000, f1Juros:4.5, f2Renda:4700, f2Teto:264000, f2Juros:6.5,
+  f3Renda:8600, f3Teto:350000, f3Juros:8.16, f4Renda:12000, f4Teto:500000, f4Juros:10.5,
+  cotistaDesc:0.5, mcmvLtv:80, sbpeJuros:11.49, sbpeLtvUsado:80, sbpeLtvNovo:80, sfhTeto:2250000
+};
+const SCHEMA = [
+  ['Regras do banco',[['comp','Parcela máx. (% da renda)'],['idadeLimite','Idade + prazo até (anos)'],['prazoMax','Prazo máximo (meses)']]],
+  ['Custos da compra (% do imóvel)',[['itbi','ITBI'],['cartorio','Escritura e registro'],['avaliacao','Avaliação e taxas']]],
+  ['Seguros e taxa',[['taxaAdm','Taxa de administração (R$/mês)'],['dfi','Seguro DFI (% do imóvel/mês)']]],
+  ['MCMV Faixa 1',[['f1Renda','Renda até (R$)'],['f1Teto','Imóvel até (R$)'],['f1Juros','Juros (% a.a.)']]],
+  ['MCMV Faixa 2',[['f2Renda','Renda até (R$)'],['f2Teto','Imóvel até (R$)'],['f2Juros','Juros (% a.a.)']]],
+  ['MCMV Faixa 3',[['f3Renda','Renda até (R$)'],['f3Teto','Imóvel até (R$)'],['f3Juros','Juros (% a.a.)']]],
+  ['MCMV Faixa 4',[['f4Renda','Renda até (R$)'],['f4Teto','Imóvel até (R$)'],['f4Juros','Juros (% a.a.)']]],
+  ['MCMV geral',[['cotistaDesc','Desconto cotista FGTS (p.p.)'],['mcmvLtv','Financia até (% do imóvel)']]],
+  ['SBPE (poupança)',[['sbpeJuros','Juros (% a.a.)'],['sbpeLtvUsado','Financia usado até (%)'],['sbpeLtvNovo','Financia novo até (%)'],['sfhTeto','Teto SFH (R$)']]]
+];
+
+/* ================= estado ================= */
+const BLANK = { quem:null, idade:'', renda:0, dividasOpt:null, dividas:0, reservaOpt:null, reserva:0,
+  fgtsOpt:null, fgts:0, fgts3:null, imovel:null, nome:null, achou:null, valor:0, tipo:'usado', avaliou:false, avalReal:0,
+  aval:90, poup:1500, exemplo:false };
+const EXEMPLO = { ...BLANK, quem:'junto', idade:31, renda:6000, dividasOpt:'nao', reservaOpt:'sim', reserva:25000,
+  fgtsOpt:'sim', fgts:18000, fgts3:'sim', imovel:'nao', nome:'naosei', achou:'nao', exemplo:true };
+let S = { ...BLANK }, view = 'welcome', stepIdx = 0;
+
+const $ = s => document.querySelector(s);
+const brl = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+const pct = (v,d=2) => v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}) + '%';
+const digits = v => Number(String(v).replace(/\D/g,'')) || 0;
+const fmt = n => n ? Number(n).toLocaleString('pt-BR') : '';
+const junto = () => S.quem === 'junto';
+
+/* ================= perguntas ================= */
+const STEPS = [
+  { key:'quem', type:'choice', q:()=>'Você vai comprar sozinho ou com alguém?',
+    help:()=>'Comprar junto permite <b>somar as rendas</b>, e isso aumenta o valor que o banco empresta.',
+    opts:[['sozinho','Sozinho','Só a minha renda'],['junto','Com outra pessoa','Cônjuge, parceiro ou parente']] },
+  { key:'idade', type:'number', q:()=>junto()?'Qual a idade de quem é mais velho?':'Quantos anos você tem?',
+    help:()=>'O banco soma a idade ao prazo do financiamento. <b>Quanto mais jovem, mais tempo pra pagar</b> e menor a parcela.', label:'Idade em anos' },
+  { key:'renda', type:'money', q:()=>junto()?'Quanto vocês ganham por mês, somando?':'Quanto você ganha por mês?',
+    help:()=>'Use o valor do holerite <b>antes dos descontos</b>. Se for autônomo, a média do que entra por mês.', label:'Renda por mês' },
+  { key:'dividasOpt', type:'choice', money:'dividas', moneyOn:'sim', q:()=>junto()?'Vocês pagam alguma parcela hoje?':'Você paga alguma parcela hoje?',
+    help:()=>'Carro, empréstimo, consignado, cartão parcelado. <b>O banco desconta isso</b> do que sobra pra parcela da casa.',
+    opts:[['nao','Não pago nenhuma',''],['sim','Sim, pago parcelas','Vou dizer quanto somam']], moneyLabel:'Quanto somam essas parcelas por mês?' },
+  { key:'reservaOpt', type:'choice', money:'reserva', moneyOn:'sim', q:()=>'Tem dinheiro guardado pra essa compra?',
+    help:()=>'Poupança, investimentos, qualquer valor que você usaria na entrada. <b>Pode ser pouco</b>, a gente monta o plano.',
+    opts:[['nada','Ainda não guardei nada',''],['sim','Tenho um valor guardado','Vou dizer quanto']], moneyLabel:'Quanto você tem guardado?' },
+  { key:'fgtsOpt', type:'choice', money:'fgts', moneyOn:'sim', q:()=>'Você tem saldo de FGTS?',
+    help:()=>'Na compra, o FGTS pode virar parte da entrada. Depois, ele ainda ajuda a pagar a dívida. O saldo aparece no <b>app FGTS</b>, da Caixa.',
+    opts:[['sim','Sim, sei o saldo',''],['naosei','Tenho, mas não sei quanto','Tudo bem, vira uma tarefa no seu plano'],['nao','Não tenho','Ou sou autônomo']], moneyLabel:'Saldo do FGTS' },
+  { key:'fgts3', type:'choice', skip:()=>S.fgtsOpt==='nao', q:()=>'Somando todos os empregos, você tem 3 anos ou mais de carteira assinada?',
+    help:()=>'É a regra pra <b>usar o FGTS na compra</b>. Também dá um desconto nos juros do Minha Casa Minha Vida.',
+    opts:[['sim','Sim',''],['nao','Não',''],['naosei','Não sei','Dá pra ver na Carteira de Trabalho Digital']] },
+  { key:'imovel', type:'choice', q:()=>junto()?'Algum de vocês já tem imóvel no nome?':'Você já tem algum imóvel no seu nome?',
+    help:()=>'Quem já tem imóvel <b>não entra no Minha Casa Minha Vida</b> e, em geral, não pode usar o FGTS.',
+    opts:[['nao','Não tenho',''],['sim','Sim, tenho','']] },
+  { key:'nome', type:'choice', q:()=>'Seu nome está limpo?',
+    help:()=>'Com o nome negativado, <b>o banco recusa o crédito</b>. Dá pra consultar de graça.',
+    opts:[['sim','Sim, está limpo',''],['nao','Tenho alguma restrição',''],['naosei','Não sei','A gente te mostra como ver']] },
+  { key:'achou', type:'choice', q:()=>'Você já achou o imóvel?',
+    help:()=>'Se ainda está procurando, a gente calcula <b>até quanto você pode buscar</b>.',
+    opts:[['nao','Ainda estou procurando',''],['sim','Já achei','Vou contar sobre ele']] },
+  { key:'imovelDados', type:'imovel', skip:()=>S.achou!=='sim', q:()=>'Me conta sobre esse imóvel',
+    help:()=>'Use o preço que o vendedor está pedindo. Se o banco já avaliou, informe também: <b>ele financia com base na avaliação</b>, sem passar do preço.' }
+];
+const visibleSteps = () => STEPS.filter(s => !(s.skip && s.skip()));
+
+/* ================= motor ================= */
+function mipRate(age){
+  const t = [[30,.0095],[35,.011],[40,.014],[45,.019],[50,.027],[55,.04],[60,.06],[65,.09],[200,.13]];
+  for (const [a,r] of t) if (age <= a) return r/100;
+}
+function sbpe(s){ const p=PARAMS; return { curto:'SBPE', nome:'linha de mercado (SBPE)', juros:p.sbpeJuros, ltv:(s.tipo==='novo'?p.sbpeLtvNovo:p.sbpeLtvUsado)/100, teto:p.sfhTeto, mcmv:false, cotista:false }; }
+function programa(s){
+  const p = PARAMS, cot = s.fgts3==='sim' && s.fgtsOpt!=='nao';
+  if (s.imovel !== 'sim') for (const f of [1,2,3,4]) if (s.renda <= p['f'+f+'Renda']){
+    const c = cot && f <= 3;
+    return { curto:'MCMV Faixa '+f, nome:'Minha Casa Minha Vida, Faixa '+f, faixa:f, juros:p['f'+f+'Juros']-(c?p.cotistaDesc:0), ltv:p.mcmvLtv/100, teto:p['f'+f+'Teto'], mcmv:true, cotista:c };
+  }
+  return sbpe(s);
+}
+function schedule(P,i,n,V,sys,mip,dfi,adm){
+  let saldo=P, total=0, first=null, last=0; const pts=[];
+  const base=P*i/(1-Math.pow(1+i,-n)), am=P/n;
+  for (let m=1;m<=n;m++){
+    const j=saldo*i, amort=sys==='price'?base-j:am, seg=saldo*mip+V*dfi, pg=j+amort+seg+adm;
+    if (m===1) first={j,amort,seg,adm,pg};
+    if (m===1||m%12===0||m===n) pts.push([m,pg]);
+    total+=pg; last=pg; saldo-=amort;
+  }
+  return {first,last,total,pts};
+}
+function calc(s){
+  const p = PARAMS, idade = Number(s.idade)||18;
+  const dividas = s.dividasOpt==='sim' ? s.dividas : 0, reserva = s.reservaOpt==='sim' ? s.reserva : 0;
+  const C = s.renda*p.comp/100 - dividas;
+  const modo = s.achou==='sim' ? 'imovel' : 'renda';
+  let prog = programa(s), saiuMcmv = false;
+  if (modo==='imovel' && prog.mcmv && s.valor > prog.teto){ prog = sbpe(s); saiuMcmv = true; }
+  const n = Math.max(0, Math.min(p.prazoMax, Math.floor(p.idadeLimite*12 - idade*12)));
+  const r = { modo, prog, n, C, dividas, reserva, idade, saiuMcmv };
+  if (n < 12) return { ...r, blocked:'idade' };
+  if (C <= p.taxaAdm + 50) return { ...r, blocked:'renda' };
+  if (modo==='imovel' && s.valor < 30000) return { ...r, blocked:'valor' };
+
+  const i = prog.juros/100/12, a = i/(1-Math.pow(1+i,-n));
+  const mip = mipRate(idade), dfi = p.dfi/100, adm = p.taxaAdm;
+  const custoPct = (p.itbi+p.cartorio+p.avaliacao)/100;
+  const fgtsUse = (s.fgtsOpt==='sim' && s.fgts3==='sim' && s.imovel!=='sim') ? s.fgts : 0;
+  let V, P, Pcap, Vbank=null, Vbolso=null, base, limTeto=false, extraAval=0, extraRenda=0;
+
+  if (modo==='renda'){
+    Pcap = Math.max(0,(C-adm)/(a+mip+dfi/prog.ltv));
+    Vbank = Pcap/prog.ltv; if (Vbank > prog.teto){ Vbank = prog.teto; limTeto = true; }
+    const ok = V => { const P=Math.min(Pcap,prog.ltv*V); return Math.max(0,V-P-fgtsUse)+custoPct*V <= reserva; };
+    if (ok(Vbank)) Vbolso = Vbank; else { let lo=0,hi=Vbank; for(let k=0;k<60;k++){const m=(lo+hi)/2; ok(m)?lo=m:hi=m;} Vbolso=lo; }
+    V = Vbank; base = V; P = Math.min(Pcap, prog.ltv*V);
+  } else {
+    // o banco empresta % da avaliação, mas nunca mais que o preço de venda
+    V = s.valor; base = (s.avaliou && s.avalReal>0) ? s.avalReal : V;
+    Pcap = Math.max(0,(C-adm-dfi*V)/(a+mip));
+    const maxAval = Math.min(prog.ltv*base, V);
+    P = Math.min(maxAval, Pcap);
+    extraAval = prog.ltv*V - maxAval; extraRenda = maxAval - P;
+  }
+  const entrada = V-P, entradaPadrao = V*(1-prog.ltv), custos = custoPct*V;
+  const fgtsNaEntrada = Math.min(fgtsUse, entrada);
+  const precisaDinheiro = entrada - fgtsNaEntrada + custos;
+  const gap = Math.max(0, precisaDinheiro - reserva), sobra = Math.max(0, reserva - precisaDinheiro);
+  return { ...r, i, ef:(Math.pow(1+i,12)-1)*100, mip, dfi, adm, custoPct, fgtsUse, fgtsNaEntrada, V, P, Pcap, base,
+    Vbank, Vbolso, limTeto, entrada, entradaPadrao, extraAval, extraRenda, custos, precisaDinheiro, gap, sobra,
+    price:schedule(P,i,n,V,'price',mip,dfi,adm), sac:schedule(P,i,n,V,'sac',mip,dfi,adm) };
+}
+
+/* ================= telas da conversa ================= */
+function renderWelcome(){
+  $('#restart').hidden = true;
+  $('#app').innerHTML = `
+    <section class="flow welcome">
+      <p class="eyebrow">Primeiro imóvel · financiamento</p>
+      <h1 style="margin-top:14px">Descubra quanto você pode comprar, <mark>em palavras que dá pra entender</mark>.</h1>
+      <p class="help">Umas 10 perguntas simples. No fim você recebe um número, o que ele significa e o seu próximo passo.</p>
+      <div class="promise"><span>2 minutos</span><span>Sem cadastro</span><span>"Não sei" vale como resposta</span></div>
+      <div class="actions" style="justify-content:flex-start;gap:18px">
+        <button type="button" class="primary" id="go">Começar</button>
+        <button type="button" class="linkbtn" id="ex">Ver um resultado de exemplo</button>
+      </div>
+    </section>`;
+  $('#go').onclick = () => { S = { ...BLANK }; stepIdx = 0; view = 'step'; render(); };
+  $('#ex').onclick = () => { S = { ...EXEMPLO }; view = 'result'; render(); };
+}
+
+function stepValid(st){
+  if (st.type==='number') return Number(S.idade) >= 18 && Number(S.idade) <= 80;
+  if (st.type==='money') return S[st.key] > 0;
+  if (st.type==='imovel') return S.valor >= 30000 && (!S.avaliou || S.avalReal > 0);
+  if (st.type==='choice'){ if (!S[st.key]) return false; if (st.money && S[st.key]===st.moneyOn) return S[st.money] > 0; return true; }
+}
+
+function renderStep(){
+  $('#restart').hidden = true;
+  const steps = visibleSteps(), st = steps[stepIdx], total = steps.length;
+  let body = '';
+  if (st.type==='choice'){
+    body = `<div class="opts" role="group">${st.opts.map(([v,l,sub]) =>
+      `<button type="button" class="opt" data-v="${v}" aria-pressed="${S[st.key]===v}"><b>${l}</b>${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div>`;
+    if (st.money) body += `<div class="inp" id="moneybox" ${S[st.key]===st.moneyOn?'':'hidden'}><label for="mv">${st.moneyLabel}</label><div class="money"><input class="big" id="mv" inputmode="numeric" value="${fmt(S[st.money])}" autocomplete="off"></div></div>`;
+  } else if (st.type==='number'){
+    body = `<div class="inp"><label for="nv">${st.label}</label><input class="big" id="nv" type="number" inputmode="numeric" min="18" max="80" value="${S.idade}" style="max-width:200px"></div>`;
+  } else if (st.type==='money'){
+    body = `<div class="inp"><label for="mv">${st.label}</label><div class="money"><input class="big" id="mv" inputmode="numeric" value="${fmt(S[st.key])}" autocomplete="off"></div></div>`;
+  } else if (st.type==='imovel'){
+    body = `<div class="inp"><label for="mv">Preço pedido pelo vendedor</label><div class="money"><input class="big" id="mv" inputmode="numeric" value="${fmt(S.valor)}" autocomplete="off"></div></div>
+      <div class="inp"><label>Ele é</label><div class="seg2" role="group">
+        <button type="button" class="opt" data-t="usado" aria-pressed="${S.tipo==='usado'}"><b>Usado</b></button>
+        <button type="button" class="opt" data-t="novo" aria-pressed="${S.tipo==='novo'}"><b>Novo</b></button></div></div>
+      <label class="check"><input type="checkbox" id="avaliou" ${S.avaliou?'checked':''}> O banco já avaliou esse imóvel</label>
+      <div class="inp" id="avalbox" ${S.avaliou?'':'hidden'}><label for="av">Valor da avaliação (está no laudo)</label><div class="money"><input class="big" id="av" inputmode="numeric" value="${fmt(S.avalReal)}" autocomplete="off"></div></div>`;
+  }
+  const last = stepIdx === total-1;
+  $('#app').innerHTML = `
+    <section class="flow">
+      <div class="progress"><div class="bar"><i style="width:${(stepIdx)/total*100}%"></i></div><span class="count">${stepIdx+1} de ${total}</span></div>
+      <h1 class="q">${st.q()}</h1>
+      <p class="help">${st.help()}</p>
+      ${body}
+      <div class="actions">
+        <button type="button" class="linkbtn" id="back">${stepIdx===0?'Voltar ao início':'Voltar'}</button>
+        <button type="button" class="primary" id="next" ${stepValid(st)?'':'disabled'}>${last?'Ver meu resultado':'Continuar'}</button>
+      </div>
+    </section>`;
+
+  const refresh = () => { $('#next').disabled = !stepValid(st); };
+  // a resposta pode abrir ou fechar telas (ex.: "Já achei" abre a do imóvel), então recalcula aqui
+  const advance = () => { if (!stepValid(st)) return; if (stepIdx >= visibleSteps().length-1){ view='result'; } else stepIdx++; render(); window.scrollTo({top:0}); };
+  document.querySelectorAll('.opt[data-v]').forEach(b => b.onclick = () => {
+    S[st.key] = b.dataset.v;
+    document.querySelectorAll('.opt[data-v]').forEach(x => x.setAttribute('aria-pressed', x===b));
+    if (st.money && b.dataset.v===st.moneyOn){ $('#moneybox').hidden=false; $('#mv').focus(); refresh(); }
+    else { if (st.money) $('#moneybox').hidden=true; refresh(); setTimeout(advance, 160); }
+  });
+  document.querySelectorAll('.opt[data-t]').forEach(b => b.onclick = () => {
+    S.tipo = b.dataset.t; document.querySelectorAll('.opt[data-t]').forEach(x => x.setAttribute('aria-pressed', x===b));
+  });
+  const mv = $('#mv');
+  if (mv) mv.oninput = () => { const d=digits(mv.value); mv.value=fmt(d); S[st.type==='imovel'?'valor':(st.money||st.key)] = d; refresh(); };
+  const nv = $('#nv');
+  if (nv) nv.oninput = () => { S.idade = nv.value; refresh(); };
+  const av = $('#av');
+  if (av) av.oninput = () => { const d=digits(av.value); av.value=fmt(d); S.avalReal=d; refresh(); };
+  const ck = $('#avaliou');
+  if (ck) ck.onchange = () => { S.avaliou = ck.checked; $('#avalbox').hidden = !ck.checked; if (ck.checked) $('#av').focus(); refresh(); };
+  $('#app').querySelectorAll('input.big').forEach(el => el.onkeydown = e => { if (e.key==='Enter') advance(); });
+  $('#next').onclick = advance;
+  $('#back').onclick = () => { if (stepIdx===0) view='welcome'; else stepIdx--; render(); };
+  const f = $('#app').querySelector('input.big:not([hidden])');
+  if (f && st.type!=='choice') f.focus();
+}
+
+/* ================= resultado ================= */
+function todos(r){
+  const t = [];
+  if (S.nome==='nao') t.push(['Regularize seu CPF antes de tudo','Com restrição, o banco recusa. Negocie as dívidas em aberto. É o passo que destrava o resto.']);
+  if (S.nome==='naosei') t.push(['Consulte seu CPF, de graça','No app da Serasa ou no Registrato, do Banco Central. Leva 5 minutos.']);
+  if (S.fgtsOpt==='naosei') t.push(['Veja o saldo do seu FGTS','No app FGTS. Esse dinheiro pode entrar na entrada e mudar seu resultado.']);
+  if (S.fgts3==='naosei') t.push(['Confira seu tempo de carteira','Na Carteira de Trabalho Digital. Com 3 anos somados, você usa o FGTS e paga menos juros.']);
+  if (!r.blocked && r.dividas > S.renda*0.05){
+    const sem = calc({ ...S, dividasOpt:'nao' });
+    const ganho = r.modo==='renda' ? sem.Vbank - r.Vbank : sem.P - r.P;
+    if (ganho > 5000) t.push([`Quitar suas parcelas libera ${brl(ganho)}`, `Hoje elas ocupam ${brl(r.dividas)} do espaço da parcela. Sem elas, ${r.modo==='renda'?'o imóvel que cabe na sua renda sobe':'o banco empresta mais'}.`]);
+  }
+  if (!r.blocked && r.gap > 0){
+    const m = Math.ceil(r.gap/S.poup);
+    t.push([`Junte mais ${brl(r.gap)}`, `Guardando ${brl(S.poup)} por mês, são ${m} ${m===1?'mês':'meses'}. Lembre: o FGTS não paga ITBI e cartório.`]);
+  }
+  if (!r.blocked && r.modo==='imovel' && !S.avaliou) t.push(['Peça a avaliação do banco antes de pagar sinal','Se o imóvel for avaliado abaixo do preço, a diferença sai do seu bolso.']);
+  if (!r.blocked && r.gap===0 && S.nome==='sim' && r.modo==='renda') t.push(['Peça a aprovação de crédito','Antes de escolher o imóvel. Com a carta de crédito na mão, você negocia com segurança.']);
+  return t.slice(0,3);
+}
+
+function renderResult(){
+  $('#restart').hidden = false;
+  const r = calc(S);
+  const exemplo = S.exemplo ? `<span class="badge-ex">Exemplo: casal, 31 anos, renda de R$ 6.000. Clique em "Mudar minhas respostas" pra fazer o seu.</span>` : '';
+
+  if (r.blocked){
+    const m = {
+      idade:['Pela idade, o prazo fica curto demais.',`O banco exige que idade + prazo não passe de ${PARAMS.idadeLimite.toLocaleString('pt-BR')} anos. Uma saída é comprar junto com alguém mais novo.`],
+      renda:['Hoje não sobra espaço pra parcela.',`O banco aceita no máximo ${PARAMS.comp}% da renda pra todas as parcelas somadas, e suas outras dívidas já ocupam esse espaço. Quitar ou reduzir uma delas é o primeiro passo.`],
+      valor:['Faltou o preço do imóvel.','Informe o valor pedido pelo vendedor pra ver se ele cabe no seu bolso.']
+    }[r.blocked];
+    const fix = r.blocked==='valor' ? `<div class="actions" style="justify-content:flex-start"><button type="button" class="primary" id="fixvalor">Informar o preço</button></div>` : '';
+    $('#app').innerHTML = `<section class="result">${exemplo}<div class="answer"><h1>${m[0]}</h1></div><div class="blocked">${m[1]}</div>${fix}${todosHtml(todos(r))}</section>`;
+    if (fix) $('#fixvalor').onclick = () => { stepIdx = visibleSteps().findIndex(s => s.key==='imovelDados'); view = 'step'; render(); window.scrollTo({top:0}); };
+    return;
+  }
+
+  // camada 1: resposta
+  let h, sub;
+  if (r.modo==='renda'){
+    if (r.gap===0){ h = `Você já pode buscar imóveis de até <mark>${brl(r.Vbank)}</mark>.`;
+      sub = `O banco empresta <strong>${brl(r.P)}</strong>. O que você já tem cobre o resto${r.sobra>1000?`, e ainda sobram <strong>${brl(r.sobra)}</strong>`:''}.`; }
+    else if (r.Vbolso < 20000){ h = `Sua renda aguenta um imóvel de até <mark>${brl(r.Vbank)}</mark>.`;
+      sub = `O que falta é dinheiro na mão: <strong>${brl(r.gap)}</strong> pra entrada e custos. É aí que mora o seu plano.`; }
+    else { h = `Hoje, cabe um imóvel de até <mark>${brl(r.Vbolso)}</mark>.`;
+      sub = `Sua renda aguenta até <strong>${brl(r.Vbank)}</strong>. O que falta é dinheiro na mão: <strong>${brl(r.gap)}</strong> pra entrada e custos.`; }
+    if (r.limTeto) sub += ` Esse é o valor máximo do ${r.prog.curto}.`;
+    if (semEntrada(r)) sub += ` <a href="#segredo">Mas existe um caminho sem entrada ↓</a>`;
+  } else {
+    if (r.entrada < 1){ h = `Esse imóvel de ${brl(r.V)} <mark>sai sem entrada</mark>.`;
+      sub = `O banco avaliou acima do preço e empresta o valor inteiro, <strong>${brl(r.P)}</strong>. ${r.gap===0?'Os custos de ITBI e cartório você já cobre com o que tem.':`Só faltam <strong>${brl(r.gap)}</strong> pros custos de ITBI e cartório.`}`; }
+    else if (r.gap===0){ h = `Esse imóvel de ${brl(r.V)} <mark>cabe no seu bolso</mark>.`;
+      sub = `O banco empresta <strong>${brl(r.P)}</strong> e você cobre o resto com o que já tem.`; }
+    else { h = `Pra esse imóvel de ${brl(r.V)}, <mark>faltam ${brl(r.gap)}</mark>.`;
+      sub = r.entrada < 1
+        ? `O banco empresta o preço inteiro, <strong>${brl(r.P)}</strong>. <strong>Sua entrada é zero.</strong> Só faltam os custos de ITBI e cartório.`
+        : `O banco empresta <strong>${brl(r.P)}</strong>. Entrada e custos somam <strong>${brl(r.entrada+r.custos)}</strong>${r.fgtsNaEntrada?`, e seu FGTS cobre ${brl(r.fgtsNaEntrada)} disso`:''}.`; }
+    if (r.extraAval > 0) sub += ` A avaliação abaixo do preço pesa <strong>${brl(r.extraAval)}</strong> nessa conta.`;
+    if (r.extraAval < 0 && r.entrada >= 1) sub += ` Como o banco avaliou acima do preço, ele empresta mais e sua entrada cai <strong>${brl(-r.extraAval)}</strong>.`;
+    if (r.saiuMcmv) sub += ` Como o preço passa do limite do Minha Casa Minha Vida, a conta vai pela linha de mercado, com juros maiores.`;
+  }
+  const lights = [
+    r.dividas > S.renda*.1 ? ['warn','Parcela: dívidas pesando'] : ['ok','Parcela: cabe na renda'],
+    r.gap===0 ? ['ok','Entrada: coberta'] : r.gap <= S.poup*12 ? ['warn','Entrada: falta pouco'] : ['bad','Entrada: falta bastante'],
+    S.nome==='sim' ? ['ok','Nome: limpo'] : S.nome==='naosei' ? ['warn','Nome: conferir'] : ['bad','Nome: regularizar']
+  ];
+
+  // camada 2
+  const p = PARAMS, anos = r.n/12;
+  const anosTxt = Number.isInteger(anos) ? anos+' anos' : anos.toLocaleString('pt-BR',{maximumFractionDigits:1})+' anos';
+  const whyHtml = `
+    <div class="why-item"><b>Parcela de até</b><span class="v">${brl(r.C)}</span>
+      <p>O banco só deixa a parcela ocupar ${p.comp}% da renda${r.dividas?`, e desconta as parcelas que você já paga (${brl(r.dividas)})`:''}. Isso protege você de se apertar.</p></div>
+    <div class="why-item"><b>Tempo pra pagar</b><span class="v">${anosTxt}</span>
+      <p>Sua idade somada ao prazo não pode passar de ${p.idadeLimite.toLocaleString('pt-BR')} anos${r.n===p.prazoMax?`, e o máximo é ${p.prazoMax/12} anos`:''}. Mais tempo deixa a parcela menor.</p></div>
+    <div class="why-item"><b>Juros por ano</b><span class="v">${pct(r.ef)}</span>
+      <p>${r.prog.mcmv?`Você entra no ${r.prog.nome}, que tem juros menores por causa da sua renda`:'Sua compra vai pela linha de mercado, sem os juros reduzidos do programa do governo'}${r.prog.cotista?'. Os 3 anos de FGTS ainda dão um desconto':''}. Esses juros ainda são corrigidos pela <b>TR</b>, uma taxa que muda todo mês e pode subir um pouco a parcela. Aqui ela fica de fora da conta.</p></div>
+    <div class="why-item"><b>O banco empresta até</b><span class="v">${Math.round(r.prog.ltv*100)}%</span>
+      <p>Do valor que o banco avaliar, sem passar do preço de venda. O resto é a entrada, que sai do seu bolso ou do FGTS.</p></div>`;
+
+  const fr = x => Math.max(x,1), pp = PARAMS;
+  const planHtml = `
+    <div class="scroll-x"><div class="plan" style="grid-template-columns:minmax(80px,${fr(r.entrada)}fr) minmax(100px,${fr(r.P)}fr) minmax(86px,${fr(r.custos)}fr)">
+      <div class="cota" style="grid-column:1 / 3"><span>Preço do imóvel · ${brl(r.V)}</span></div><div></div>
+      <div class="seg-b seg-you"><b>Entrada</b><span>${brl(r.entrada)}</span></div>
+      <div class="seg-b seg-bank"><b>Banco empresta</b><span>${brl(r.P)}</span></div>
+      <div class="seg-b seg-cost"><b>Custos</b><span>${brl(r.custos)}</span></div>
+      <div class="who">você</div><div class="who">banco</div><div class="who" style="padding-left:10px">você</div>
+    </div></div>
+    <div class="ledger">
+      <span>Entrada (${Math.round((1-r.prog.ltv)*100)}% do preço)</span><span class="r">${brl(r.entradaPadrao)}</span>
+      ${r.extraAval>0?`<span>Avaliação abaixo do preço</span><span class="r">${brl(r.extraAval)}</span>`:''}
+      ${r.extraAval<0?`<span>Avaliação acima do preço</span><span class="r">− ${brl(-r.extraAval)}</span>`:''}
+      ${r.extraRenda>0?`<span>Parte que sua renda não cobre</span><span class="r">${brl(r.extraRenda)}</span>`:''}
+      <span>ITBI, imposto da prefeitura</span><span class="r">${brl(r.V*pp.itbi/100)}</span>
+      <span>Escritura e registro no cartório</span><span class="r">${brl(r.V*pp.cartorio/100)}</span>
+      <span>Avaliação e taxas do banco</span><span class="r">${brl(r.V*pp.avaliacao/100)}</span>
+      <span class="t">Total que sai de você</span><span class="r t">${brl(r.entrada+r.custos)}</span>
+      <span class="sub">Seu FGTS (na entrada)</span><span class="r pos">− ${brl(r.fgtsNaEntrada)}</span>
+      <span class="sub">Seu dinheiro guardado</span><span class="r pos">− ${brl(Math.min(r.reserva, r.precisaDinheiro))}</span>
+      <span class="t">Falta</span><span class="r t ${r.gap?'neg':'pos'}">${brl(r.gap)}</span>
+    </div>
+    <p class="note">Na compra, o FGTS <b>só entra na entrada</b>. O ITBI sai do dinheiro guardado. O cartório também, mas ele <b>pode ser incluído no financiamento</b>: pergunte no banco na hora de contratar.${S.fgtsOpt==='sim' && r.fgtsUse===0?' Pelas suas respostas, seu FGTS não pode ser usado nessa compra.':''}</p>
+    <p class="note">Depois da compra, o FGTS volta a ajudar: a cada 2 anos ele pode <b>abater ou quitar a dívida</b>, e também pode <b>pagar parte da prestação</b>. Não saque à toa.</p>`;
+
+  const temLaudo = r.modo==='imovel' && S.avaliou && S.avalReal>0;
+  const avalHtml = temLaudo
+    ? `<p>O banco avaliou em <b>${brl(S.avalReal)}</b>${S.avalReal < r.V
+        ? `, ${brl(r.V - S.avalReal)} abaixo do preço. Como ele empresta com base na avaliação, você cobre mais <mark>${brl(r.extraAval)}</mark>. Use isso pra negociar o preço com o vendedor.`
+        : S.avalReal > r.V ? `, ${brl(S.avalReal - r.V)} acima do preço. Como ele empresta com base na avaliação, <mark>sua entrada cai ${brl(Math.max(0,-r.extraAval))}</mark>. Ele só não empresta mais que o preço de venda.${r.extraRenda>0?` Aqui quem limita é a sua renda, não a avaliação.`:''}`
+        : `, igual ao preço. A avaliação não muda sua conta.`}</p>`
+    : `<p>Antes de liberar o dinheiro, um engenheiro do banco vistoria o imóvel. <b>O banco empresta até ${Math.round(r.prog.ltv*100)}% do valor dessa avaliação</b>, sem passar do preço de venda. Avaliou abaixo, você cobre a diferença. Avaliou acima, sua entrada diminui.</p>
+       <div class="slider"><div class="row"><label for="aval">Se o banco avaliar em</label><output id="aval-out">${S.aval}% do preço</output></div>
+       <input type="range" id="aval" min="70" max="150" step="5" value="${S.aval}"></div>
+       <p class="say" id="aval-say"></p><p class="note" id="aval-note"></p>`;
+
+  // "Preparar" lista só o que falta pra essa pessoa
+  const prep = [r.gap>0 && `juntar ${brl(r.gap)} pra entrada e custos`, S.nome==='nao' && 'limpar o nome', S.nome==='naosei' && 'consultar o CPF', S.fgtsOpt==='naosei' && 'ver o saldo do FGTS'].filter(Boolean);
+  const prepTxt = prep.length ? prep.join(', ').replace(/^./, c=>c.toUpperCase()).replace(/, ([^,]*)$/, ' e $1') + '.' : 'Nada pendente. Você já pode seguir.';
+  const steps = [['Diagnóstico','Hoje. Você sabe seus números.'],['Preparar',prepTxt],['Aprovação de crédito','5 a 15 dias. O banco analisa você.'],['Escolher o imóvel','Já sabendo o seu limite real.'],['Avaliação do banco','7 a 15 dias. O engenheiro vistoria.'],['Análise de documentos','15 a 30 dias. Imóvel e vendedor.'],['Contrato','Assinatura com o banco.'],['ITBI, registro e chaves','15 a 30 dias até o registro sair.']];
+  const here = (r.gap>0 || S.nome!=='sim' || S.fgtsOpt==='naosei') ? 2 : (r.modo==='imovel' ? 5 : 3);
+  const trailHtml = steps.map((s,k)=>`<li class="${k+1<here?'done':k+1===here?'here':''}"><span class="n">${String(k+1).padStart(2,'0')}</span><b>${s[0]}</b><span>${s[1]}</span></li>`).join('');
+
+  const f = r.price.first, xparts = [['O que abate a dívida',f.amort,'var(--mark)'],['Juros',f.j,'var(--accent)'],['Seguros obrigatórios',f.seg,'var(--seg)'],['Taxa do banco',f.adm,'var(--line-strong)']];
+  const sf = r.sac.first.pg, econ = r.price.total - r.sac.total;
+
+  $('#app').innerHTML = `
+  <section class="result">
+    ${exemplo}
+    <div class="answer">
+      <div class="lights">${lights.map(l=>`<span class="light ${l[0]}"><i></i>${l[1]}</span>`).join('')}</div>
+      <h1>${h}</h1>
+      <p>${sub}</p>
+    </div>
+
+    ${todosHtml(todos(r))}
+    ${semEntradaHtml(semEntrada(r))}
+
+    <p class="eyebrow layer-title">Quer entender esse número?</p>
+    <details class="story"><summary><h3>De onde vem esse número</h3><p>As quatro regras que o banco usou com você.</p></summary>
+      <div class="story-body"><div class="why-list">${whyHtml}</div></div></details>
+    <details class="story"><summary><h3>Quem paga o quê</h3><p>Quanto sai do banco, quanto sai de você, e os custos que ninguém conta.</p></summary>
+      <div class="story-body">${planHtml}</div></details>
+    <details class="story"><summary><h3>O cuidado com a avaliação</h3><p>${temLaudo?'O que o laudo do banco muda na sua conta.':'Por que o preço do imóvel e o valor do banco podem ser diferentes.'}</p></summary>
+      <div class="story-body">${avalHtml}</div></details>
+    <details class="story"><summary><h3>Seu plano até a chave</h3><p>Quanto tempo falta e em que etapa você está.</p></summary>
+      <div class="story-body">
+        ${r.gap>0?`<div class="slider"><div class="row"><label for="poup">Quanto você consegue guardar por mês</label><output id="poup-out">${brl(S.poup)}</output></div>
+        <input type="range" id="poup" min="200" max="8000" step="100" value="${S.poup}"></div><p class="say" id="poup-say"></p>`:''}
+        <ol class="trail">${trailHtml}</ol>
+        <p class="disclaimer">Prazos típicos. Variam por banco, cidade e situação do imóvel.</p>
+      </div></details>
+
+    <details class="deep"><summary>Ver todos os detalhes, pra quem gosta de número</summary>
+      <div class="deep-body">
+        <div class="two">
+          <div class="card"><h3>Raio-X da 1ª parcela</h3>
+            <p class="lead">Dos ${brl(f.pg)} do primeiro mês, só <mark>${brl(f.amort)}</mark> diminuem a dívida. Por isso adiantar parcelas no começo economiza tanto.</p>
+            <div class="xray">${xparts.map(x=>`<i style="width:${x[1]/f.pg*100}%;background:${x[2]}"></i>`).join('')}</div>
+            <div class="legend">${xparts.map(x=>`<span class="sw" style="background:${x[2]}"></span><span>${x[0]}</span><span class="r">${brl(x[1])}</span>`).join('')}</div>
+          </div>
+          <div class="card"><h3>Os números do banco</h3>
+            <table class="cmp"><tbody>
+              <tr><td>Linha</td><td>${r.prog.curto}</td></tr>
+              <tr><td>Juros efetivos</td><td>${pct(r.ef)} a.a.</td></tr>
+              <tr><td>Prazo</td><td>${r.n} meses</td></tr>
+              <tr><td>Valor financiado</td><td>${brl(r.P)}</td></tr>
+              <tr><td>Seguros MIP + DFI (1º mês)</td><td>${brl(f.seg)}</td></tr>
+              <tr><td>Taxa de administração</td><td>${brl(f.adm)}</td></tr>
+            </tbody></table></div>
+        </div>
+        <div class="card"><h3>SAC ou PRICE?</h3>
+          <p class="lead">PRICE: parcela fixa. SAC: começa mais alta e vai caindo. A linha tracejada é o limite que o banco aceita pra você.</p>
+          <div class="scroll-x"><svg id="chart" viewBox="0 0 680 250" width="100%" style="min-width:480px" role="img" aria-label="Parcela ao longo do tempo em SAC e PRICE"></svg></div>
+          <table class="cmp"><thead><tr><th></th><th>1ª parcela</th><th>Última</th><th>Total pago</th></tr></thead><tbody>
+            <tr><td><span class="key" style="background:var(--accent)"></span>PRICE</td><td>${brl(f.pg)}</td><td>${brl(r.price.last)}</td><td>${brl(r.price.total)}</td></tr>
+            <tr><td><span class="key" style="background:var(--ink)"></span>SAC</td><td>${brl(sf)}</td><td>${brl(r.sac.last)}</td><td>${brl(r.sac.total)}</td></tr></tbody></table>
+          <p class="note">${sf > r.C+1 ? `SAC economiza <b>${brl(econ)}</b> no total, mas a 1ª parcela (${brl(sf)}) passa do seu limite de ${brl(r.C)}. Pra usar SAC, o valor emprestado teria que ser menor.` : `SAC cabe no seu limite e economiza <b>${brl(econ)}</b> no total. Vale perguntar ao banco.`}</p>
+        </div>
+        <div class="card"><h3>Parâmetros do cálculo</h3>
+          <p class="lead">Referências de out/2026, pra conferir. Taxas e limites do Minha Casa Minha Vida mudam e variam por cidade. Ajuste e o resultado recalcula.</p>
+          <div class="pgrid">${SCHEMA.map(([t,fs])=>`<h4>${t}</h4>`+fs.map(([k,l])=>`<label>${l}<input type="number" step="any" id="p-${k}" value="${PARAMS[k]}"></label>`).join('')).join('')}</div>
+        </div>
+      </div>
+    </details>
+
+    <section class="cta">
+      <div><h2>Agora você tem o número. A cartilha mostra o caminho.</h2>
+        <p>As 7 etapas da compra, na mesma linguagem desta calculadora: documentos, aprovação, avaliação, contrato e chaves.</p></div>
+      <div><button type="button" class="btn" id="cta">Quero a cartilha</button><small id="cta-note">Protótipo: sem checkout</small></div>
+    </section>
+
+    <p class="disclaimer">Simulação educativa, não é aprovação de crédito. Não inclui a correção pela TR. Usa regras médias de mercado e não substitui a análise do banco, que considera seu histórico, os documentos e a avaliação do imóvel. Seguros e taxas são estimados.</p>
+  </section>`;
+
+  drawChart(r);
+  const updAval = () => {
+    if (!$('#aval')) return;
+    const avalV = r.V*S.aval/100, Pn = Math.min(r.prog.ltv*avalV, r.V, r.Pcap), diff = Pn - r.P;
+    $('#aval-out').textContent = S.aval+'% do preço';
+    $('#aval-say').innerHTML = diff < -1 ? `Você teria que cobrir mais <mark>${brl(-diff)}</mark>.`
+      : diff > 1 ? `Sua entrada cairia <mark>${brl(diff)}</mark>.` : 'Nesse cenário, nada muda pra você.';
+    $('#aval-note').innerHTML = diff < -1
+      ? `Se o imóvel de ${brl(r.V)} for avaliado em ${brl(avalV)}, o banco empresta no máximo ${brl(Pn)}. A diferença sai do seu bolso no dia da assinatura. <b>Peça a avaliação antes de pagar qualquer sinal.</b>`
+      : diff > 1 ? `Avaliado em ${brl(avalV)}, o banco empresta ${brl(Pn)}${Pn>=r.V-1?', o preço inteiro':''}. Ele usa a avaliação, mas nunca empresta mais que o preço de venda.${Pn<r.prog.ltv*avalV-1 && Pn<r.V-1?' Daqui pra cima, quem limita é a sua renda.':''}`
+      : S.aval > 100 ? `Sua renda já limita o empréstimo, então uma avaliação maior não aumenta o que o banco libera.`
+      : `Sua renda já limita o empréstimo abaixo de ${Math.round(r.prog.ltv*100)}% do imóvel, então essa avaliação ainda cobre o que o banco vai liberar.`;
+  };
+  const updPoup = () => {
+    if (!$('#poup')) return;
+    const m = Math.ceil(r.gap/S.poup), dt = new Date(); dt.setMonth(dt.getMonth()+m);
+    $('#poup-out').textContent = brl(S.poup);
+    $('#poup-say').innerHTML = `Você chega lá em <mark>${m} ${m===1?'mês':'meses'}</mark>, por volta de ${dt.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}.`;
+  };
+  updAval(); updPoup();
+  const zSim = semEntrada(r); updSim(zSim);
+  ['#simV','#simA'].forEach(id => { if ($(id)) $(id).oninput = () => updSim(zSim); });
+  if ($('#aval')) $('#aval').oninput = e => { S.aval = Number(e.target.value); updAval(); };
+  if ($('#poup')) $('#poup').oninput = e => { S.poup = Number(e.target.value); updPoup(); };
+  $('#cta').onclick = () => { $('#cta-note').textContent = 'No produto final, aqui abre o checkout.'; };
+  SCHEMA.forEach(([,fs]) => fs.forEach(([k]) => $('#p-'+k).onchange = e => {
+    const v = Number(e.target.value); if (e.target.value!=='' && !isNaN(v)){ PARAMS[k]=v; const open=[...document.querySelectorAll('details')].map(d=>d.open); renderResult(); document.querySelectorAll('details').forEach((d,i)=>d.open=open[i]); }
+  }));
+}
+
+// caminho sem entrada: imóvel avaliado acima do preço, banco empresta o preço inteiro
+function semEntrada(r){
+  if (r.blocked || r.modo!=='renda' || r.gap<=0) return null;
+  const a = r.i/(1-Math.pow(1+r.i,-r.n));
+  const V = Math.floor(Math.min((r.C-r.adm)/(a+r.mip+r.dfi), r.prog.teto)/1000)*1000;
+  if (V < 30000) return null;
+  const aval = V/r.prog.ltv, custos = r.custoPct*V, falta = Math.max(0, custos-r.reserva);
+  if (falta >= r.gap) return null;
+  return { r, V, aval, custos, falta, ltv:r.prog.ltv, comum:r.precisaDinheiro, gap:r.gap, meses: Math.ceil(falta/S.poup) };
+}
+function semEntradaHtml(z){
+  if (!z) return '';
+  return `<section class="next alt" id="segredo"><p class="eyebrow">O segredo que pouca gente conta</p>
+    <h2>Dá pra comprar sem entrada.</h2>
+    <p>O banco empresta ${Math.round(z.ltv*100)}% do valor que <b>ele avaliar</b>, até o limite do preço. Então um imóvel de <b>${brl(z.V)}</b> avaliado em <b>${brl(z.aval)}</b> ou mais é financiado inteiro.</p>
+    <div class="alt-row"><div><span>Falta juntar</span><b>${z.falta===0?'Nada':brl(z.falta)}</b><span>${z.falta===0?`você já tem os ${brl(z.custos)} de ITBI e cartório`:`só pros custos de ITBI e cartório${z.falta<z.custos-1?` (${brl(z.custos)} no total, parte você já tem)`:''}`}</span></div>
+      <div><span>Em vez de</span><b class="strike">${brl(z.gap)}</b><span>que faltam no caminho comum</span></div></div>
+    <div class="sim">
+      <p class="eyebrow">Teste você mesmo</p>
+      <div class="slider"><div class="row"><label for="simV">Preço do imóvel</label><output id="simV-out"></output></div>
+        <input type="range" id="simV" min="${simMin(z)}" max="${simMax(z)}" step="1000" value="${S.simV||z.V}"></div>
+      <div class="slider"><div class="row"><label for="simA">O banco avaliou em</label><output id="simA-out"></output></div>
+        <span class="sim-hint" id="simA-sub"></span>
+        <input type="range" id="simA" min="80" max="150" step="1" value="${S.simA||Math.ceil(100/z.ltv)}"></div>
+      <div class="sim-out">
+        <div class="sim-big"><span>Sua entrada</span><b id="sim-ent"></b><div class="sim-bar"><i id="sim-bar"></i></div><span id="sim-ent-sub"></span></div>
+        <div class="sim-mini"><span>Banco empresta</span><b id="sim-p"></b><span>ITBI e cartório</span><b id="sim-c"></b><span>Parcela de</span><b id="sim-pg"></b></div>
+      </div>
+      <p class="sim-say" id="sim-say"></p>
+    </div>
+    <p class="note">${z.falta===0?'':`Guardando ${brl(S.poup)} por mês, são ${z.meses} ${z.meses===1?'mês':'meses'} em vez de ${Math.ceil(z.gap/S.poup)}. `}Dica: o cartório (${brl(z.V*PARAMS.cartorio/100)}) pode entrar no financiamento, o que diminui ainda mais o que você precisa juntar. Esse imóvel costuma ser um usado comprado abaixo do valor de mercado, como um que precisou de reforma. O valor só fica confirmado no laudo do banco, então peça a avaliação antes de pagar sinal.</p></section>`;
+}
+const simMin = z => Math.max(50000, Math.round(z.V*0.4/1000)*1000);
+const simMax = z => Math.round(Math.min(z.r.prog.teto, z.V*1.5)/1000)*1000;
+// prévia do caminho sem entrada: preço e avaliação ligados (avaliação = % do preço)
+function updSim(z){
+  if (!z || !$('#simV')) return;
+  const r = z.r, V = Number($('#simV').value), pctA = Number($('#simA').value), aval = V*pctA/100;
+  const a = r.i/(1-Math.pow(1+r.i,-r.n));
+  const Pcap = Math.max(0,(r.C-r.adm-r.dfi*V)/(a+r.mip));
+  const pAval = Math.min(r.prog.ltv*aval, V), P = Math.min(pAval, Pcap), ent = V-P, custos = r.custoPct*V;
+  const pg = P*(a+r.mip) + r.dfi*V + r.adm, entMax = V*(1-r.prog.ltv*0.8);
+  S.simV = V; S.simA = pctA;
+  $('#simV-out').textContent = brl(V);
+  $('#simA-out').textContent = brl(aval);
+  $('#simA-sub').textContent = pctA===100 ? 'igual ao preço' : `${Math.abs(pctA-100)}% ${pctA>100?'acima':'abaixo'} do preço${pctA===Math.ceil(100/r.prog.ltv)?' · o ponto da entrada zero':''}`;
+  $('#sim-ent').textContent = ent < 1 ? 'Zero' : brl(ent);
+  $('#sim-bar').style.width = Math.min(100, ent/Math.max(entMax,1)*100)+'%';
+  $('#sim-ent-sub').textContent = ent < 1 ? 'o banco financia o preço inteiro' : `${Math.round(ent/V*100)}% do preço`;
+  $('#sim-p').textContent = brl(P); $('#sim-c').textContent = brl(custos); $('#sim-pg').textContent = brl(pg)+'/mês';
+  $('#sim-say').innerHTML = P < pAval-1 ? `Aqui quem limita é a sua renda: a parcela não cabe. Os ${brl(pAval-P)} que o banco não empresta viram entrada.`
+    : ent < 1 ? `Avaliado ${pctA-100}% acima do preço, o banco cobre tudo. Você só paga ITBI e cartório, e o cartório pode até entrar no financiamento.`
+    : `Pra zerar a entrada, a avaliação precisa chegar a <b>${brl(V/r.prog.ltv)}</b> (${Math.ceil(100/r.prog.ltv)-100}% acima do preço).`;
+}
+function todosHtml(t){
+  if (!t.length) return '';
+  return `<section class="next"><p class="eyebrow">Seu próximo passo</p><h2>${t.length===1?'O que fazer agora':'O que fazer agora, nesta ordem'}</h2>
+    <ol class="todo">${t.map(x=>`<li><div><b>${x[0]}</b><span>${x[1]}</span></div></li>`).join('')}</ol></section>`;
+}
+
+function niceMax(v){ const e=Math.pow(10,Math.floor(Math.log10(v))), f=v/e; return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*e; }
+function drawChart(r){
+  const W=680,H=250,L=62,R=14,T=14,B=34,n=r.n, el=$('#chart'); if (!el) return;
+  const ymax = niceMax(Math.max(r.sac.first.pg, r.price.first.pg, r.C)*1.08);
+  const x = m => L+(W-L-R)*m/n, y = v => T+(H-T-B)*(1-v/ymax);
+  let g='';
+  for (let k=0;k<=4;k++){ const v=ymax*k/4; g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end">${Math.round(v).toLocaleString('pt-BR')}</text>`; }
+  const step = n/12 > 20 ? 10 : 5;
+  for (let a=0;a<=n/12+.001;a+=step) g+=`<text x="${x(a*12)}" y="${H-12}" text-anchor="middle">${a===0?'início':a+' anos'}</text>`;
+  const path = pts => pts.map((p,k)=>(k?'L':'M')+x(p[0]).toFixed(1)+' '+y(p[1]).toFixed(1)).join(' ');
+  g+=`<line x1="${L}" x2="${W-R}" y1="${y(r.C)}" y2="${y(r.C)}" stroke="var(--bad)" stroke-dasharray="5 4" stroke-width="1.5"/>`;
+  g+=`<text x="${W-R}" y="${y(r.C)-6}" text-anchor="end" style="fill:var(--bad)">seu limite ${brl(r.C)}</text>`;
+  g+=`<path d="${path(r.sac.pts)}" fill="none" stroke="var(--ink)" stroke-width="2.25"/>`;
+  g+=`<path d="${path(r.price.pts)}" fill="none" stroke="var(--accent)" stroke-width="2.75"/>`;
+  g+=`<circle cx="${x(r.sac.pts[0][0])}" cy="${y(r.sac.pts[0][1])}" r="4" fill="var(--ink)"/>`;
+  el.innerHTML = g;
+}
+
+function render(){ if (view==='welcome') renderWelcome(); else if (view==='step') renderStep(); else renderResult(); }
+$('#restart').onclick = () => { S = { ...S, exemplo:false }; if (!S.quem) S = { ...BLANK }; stepIdx = 0; view = 'step'; render(); window.scrollTo({top:0}); };
+render();
+</script>
+
+</body>
+</html>
