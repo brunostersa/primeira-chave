@@ -182,6 +182,7 @@ body {
   height: 86px;
   background: transparent;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .deslizador::-webkit-slider-runnable-track {
   height: 10px;
@@ -203,7 +204,10 @@ body {
   height: 74px;
   margin-top: -51px;
   border: 0;
-  background: var(--passaro) center bottom / contain no-repeat;
+  border-radius: 0;
+  /* O Safari do iPhone desenha fundo e sombra no puxador mesmo sem appearance. */
+  box-shadow: none;
+  background: var(--passaro) center bottom / contain no-repeat transparent;
   transform-origin: 50% 78%;
   transition: transform 0.15s;
 }
@@ -211,7 +215,9 @@ body {
   width: 66px;
   height: 74px;
   border: 0;
-  background: var(--passaro) center bottom / contain no-repeat;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--passaro) center bottom / contain no-repeat transparent;
   transform: translateY(-20px);
 }
 .deslizador:active::-webkit-slider-thumb {
