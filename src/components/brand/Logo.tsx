@@ -8,13 +8,21 @@ import { JoaoDeBarro } from "./JoaoDeBarro";
  * - Icone: o pássaro com a chave. Avatar, favicon, selo.
  */
 
-export function LogoNome({ className, cota = false }: { className?: string; cota?: boolean }) {
-  return (
-    <span className={cn("inline-flex flex-col font-display leading-none", className)}>
+export function LogoNome({ className, cota = false, icone = false }: { className?: string; cota?: boolean; icone?: boolean }) {
+  const nome = (
+    <span className={cn("inline-flex flex-col font-display leading-none", !icone && className)}>
       <span className="whitespace-nowrap">
         <span className="font-light">primeira</span> <span className="marca-texto font-semibold">chave</span>
       </span>
       {cota && <Cota className="mt-1.5" />}
+    </span>
+  );
+  if (!icone) return nome;
+  // Com o ícone (chave no círculo) à esquerda: o mesmo símbolo do favicon, para o topo bater com a aba.
+  return (
+    <span className={cn("inline-flex items-center gap-[0.38em]", className)}>
+      <Icone className="w-[1.45em] shrink-0" />
+      {nome}
     </span>
   );
 }

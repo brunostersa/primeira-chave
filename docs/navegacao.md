@@ -11,6 +11,18 @@ Header, rodapé, breadcrumbs e `sitemap.xml` são **derivados da árvore** (`src
 | Breadcrumb + JSON-LD | `src/components/layout/Breadcrumbs.tsx` | `migalhas(id)` |
 | Sitemap | `src/app/sitemap.ts` | `ARVORE` filtrado por `publicado` |
 
+## Revisão de 27/10/2026: navegação em cascata
+
+O menu antigo tinha 7 hubs no topo e cada painel listava **todas** as páginas do hub (até 12); o rodapé tinha ~80 links. Era informação demais para quem chega sem saber por onde começar. Agora:
+
+- **5 portas no topo**, por intenção: **Comprar · Ferramentas · Leilão · Vender · Ajuda** (+ "Simular", sempre visível).
+- **Comprar é cascata**: as 8 etapas viram **5 fases** (`FASES` em `navegacao.ts`): Antes de começar · Aprovar o crédito · Escolher o imóvel · Contrato e chaves · Depois da chave. No desktop, fases à esquerda (mouse, foco ou clique troca) e só as páginas da fase ativa no meio, no máximo 6, com "Ver as N páginas desta fase" → `/guias/#<etapa>`. À direita, "Por assunto": Minha Casa Minha Vida, Financiamento imobiliário, Todos os guias.
+- **Demais portas**: a promessa da seção + no máximo 6 páginas (publicadas primeiro, por prioridade) e "Ver tudo".
+- **Ajuda** junta Atalhos, Glossário, Todos os guias e Mapa do site.
+- **Celular**: em vez de acordeão, **navegação em níveis** (Menu → Comprar → fase), com "← voltar" no topo e o foco indo para o título de cada nível.
+- **Rodapé enxuto** (~30 links): as mesmas 5 portas, só o 1º nível (em Comprar, as fases). "Todas as páginas (mapa do site)" fica em destaque na linha final: cada página continua a um clique do rodapé, via `/mapa/`.
+- A página `/guias/` ganhou âncoras por etapa (`id` = id da etapa).
+
 ## Regra de ouro: nada de link quebrado
 
 Página `planejado` aparece como **texto + selo "em breve"** (`<EmBreve />` em `components/ui/badge.tsx`), nunca como `<a>`. Vale para menu, rodapé e breadcrumb. Hoje só `/` e `/simulador-financiamento-caixa/` estão publicadas, então quase tudo aparece "em breve": é honesto e mostra o tamanho do que vem.

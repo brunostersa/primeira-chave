@@ -54,7 +54,7 @@ export default function GuiasPage() {
             );
             if (!itens.length) return null;
             return (
-              <section key={e.id} className="flex flex-col gap-2">
+              <section key={e.id} id={e.id} className="flex scroll-mt-24 flex-col gap-2">
                 <span className="font-mono text-xs uppercase tracking-[0.07em] text-muted">
                   {String(i + 1).padStart(2, "0")} · {e.nome}
                 </span>
