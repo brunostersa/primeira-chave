@@ -96,3 +96,13 @@ describe("motor de financiamento", () => {
     expect(calcular({ ...PERFIL_EXEMPLO, dividasOpt: "sim", dividas: 2000 }).blocked).toBe("renda");
   });
 });
+
+describe("renda mínima com degrau de faixa", () => {
+  it("acha a menor renda mesmo quando o crédito cai na troca de faixa", () => {
+    // R$ 500 mil cabe na faixa 4 (teto R$ 600 mil, renda até R$ 13 mil): não pode pular para o SBPE.
+    const r = rendaMinimaPara(500000)!;
+    expect(r.renda).toBeLessThanOrEqual(13000);
+    expect(r.programa.mcmv).toBe(true);
+  });
+});
+

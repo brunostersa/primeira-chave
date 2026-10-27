@@ -52,4 +52,6 @@ Faz o build, abre cada `/figura/<pagina>/<id>/` (rota `noindex`, bloqueada no ro
 
 - **Lote 4**: score, financiamento negado, avaliação do imóvel (abaixo × acima), documentos para vender, quanto tempo demora (prazos), antes de financiar, registro (da assinatura à chave), faixas do MCMV (teto por faixa), financiar leilão (comum × retomado), reforma de leilão (folga de 20%).
 
-Fila: vender para quem financia, carteira de trabalho, quanto preciso ganhar, hubs Comprar/Vender/Atalhos/Ferramentas, e os 23 termos do glossário.
+- **Lote 5**: vender para quem financia, carteira de trabalho (o tempo soma), quanto preciso ganhar (renda por valor, pelo motor) e os hubs Comprar (cinco fases), Vender (quatro passos), Atalhos e Ferramentas (seções e FAQ).
+
+Fila: os 23 termos do glossário (molde próprio, `TermoPagina`) e os mapas (renda × capitais, m² em SP), que já são ferramentas visuais.

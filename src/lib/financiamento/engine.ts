@@ -349,10 +349,15 @@ export function rendaMinimaPara(valor: number, idade = 30, p: Params = PARAMS) {
     const r = calcular(perfil(renda), p);
     return !r.blocked && (r.Vbank ?? 0) >= valor - 1 && !(r.limTeto && r.prog.teto < valor);
   };
-  let lo = 1000;
-  let hi = 200000;
-  if (!aguenta(hi)) return null;
-  for (let k = 0; k < 50; k++) {
+  // "Mais renda, mais crédito" NÃO vale sempre: na troca de faixa o juro sobe e o crédito cai
+  // (ex.: R$ 13.000 financia mais que R$ 13.250). Então primeiro varre a renda em passos de
+  // R$ 100 até achar a primeira que aguenta, e só depois refina entre ela e a anterior.
+  const PASSO = 100;
+  let hi = 1000;
+  while (hi <= 200000 && !aguenta(hi)) hi += PASSO;
+  if (hi > 200000) return null;
+  let lo = Math.max(0, hi - PASSO);
+  for (let k = 0; k < 30; k++) {
     const m = (lo + hi) / 2;
     if (aguenta(m)) hi = m;
     else lo = m;

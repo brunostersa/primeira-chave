@@ -27,6 +27,37 @@ export const HUBS_TEXTOS: Record<string, TextoHub> = {
       "A compra do primeiro imóvel tem uma ordem: saber quanto pode, arrumar a casa, aprovar o crédito, escolher, avaliar, assinar e registrar. Cada guia abaixo responde uma etapa e te leva à próxima.",
     descricao: "Como comprar o primeiro imóvel, etapa por etapa: quanto posso, documentos, aprovação, avaliação, contrato e registro, em português claro.",
     calculo: "prazos",
+    secoes: [
+      {
+        titulo: "As cinco fases da compra",
+        blocos: [
+          {
+            figura: {
+              id: "cinco-fases",
+              alt: "Como comprar o primeiro imóvel em cinco fases: antes de começar, aprovar o crédito, escolher o imóvel, contrato e chaves, e depois da chave",
+              etiqueta: "Do zero à chave",
+              titulo: "O primeiro imóvel",
+              destaque: "em cinco fases.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Antes de começar", texto: "Quanto posso comprar e o que arrumar." },
+                  { titulo: "Aprovar o crédito", texto: "Documentos e análise do banco." },
+                  { titulo: "Escolher o imóvel", texto: "Dentro do teto, com a avaliação." },
+                  { titulo: "Contrato e chaves", texto: "Assinatura, ITBI e registro." },
+                  { titulo: "Depois da chave", texto: "FGTS e parcelas a menos." },
+                ],
+              },
+            },
+          },
+          { p: "Cada fase tem os seus guias abaixo, na ordem. Comece pelo seu número no [simulador](#simulador)." },
+        ],
+      },
+    ],
+    faq: [
+      { q: "Quanto tempo leva para comprar o primeiro imóvel financiado?", a: "Do pedido de crédito à chave, de 30 a 90 dias em média, se os documentos estiverem prontos." },
+      { q: "Por onde começo?", a: "Pelo seu número: simule quanto pode comprar, confira o CPF e veja se o FGTS entra. Depois peça a aprovação de crédito." },
+    ],
   },
   "financiamento-imobiliario": {
     intro:
@@ -258,13 +289,73 @@ export const HUBS_TEXTOS: Record<string, TextoHub> = {
     intro:
       "Vender um usado é entender o comprador: quase todo mundo financia, e o banco dele vai avaliar o seu imóvel. Aqui estão documentos, preço, imóvel financiado, contrato e imposto.",
     descricao: "Como vender um imóvel usado: documentos, preço e avaliação do banco do comprador, imóvel financiado, contrato e imposto.",
+    secoes: [
+      {
+        titulo: "Vender um usado em quatro passos",
+        blocos: [
+          {
+            figura: {
+              id: "quatro-passos",
+              alt: "Como vender um imóvel usado em quatro passos: documentos, preço que cabe na avaliação, contrato com o comprador financiado e imposto",
+              etiqueta: "Vender imóvel usado",
+              titulo: "Quem compra financia;",
+              destaque: "venda pensando nele.",
+              esquema: {
+                tipo: "passos",
+                itens: [
+                  { titulo: "Documentos", texto: "Matrícula atualizada e certidões antes do anúncio." },
+                  { titulo: "Preço", texto: "Que caiba na avaliação do banco do comprador." },
+                  { titulo: "Contrato", texto: "Sinal, prazos e o que acontece se o crédito não sair." },
+                  { titulo: "Imposto", texto: "Ganho de capital e as isenções." },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    ],
+    faq: [
+      { q: "Quando o vendedor recebe o dinheiro?", a: "No financiamento, depois do registro do contrato no cartório: em geral até 30 dias depois da assinatura." },
+      { q: "Dá para vender imóvel ainda financiado?", a: "Dá. O mais comum é quitar o seu saldo com o dinheiro da venda, no mesmo processo." },
+    ],
   },
   atalhos: {
     intro: "Os links que todo mundo procura e ninguém acha de primeira — com o passo a passo e o que fazer com cada resultado.",
     descricao: "Atalhos para os sites difíceis: Registrato, saldo do FGTS, boleto da Caixa, certidão de matrícula e tempo de carteira.",
+    secoes: [
+      {
+        titulo: "Por que estes atalhos",
+        blocos: [
+          { p: "São os serviços que mais travam quem vai financiar: o relatório de dívidas no Banco Central ([Registrato](#registrato)), o [saldo do FGTS](#consultar-fgts), o [tempo de carteira](#carteira-trabalho), a [certidão de matrícula](#certidao-matricula) e a [2ª via do boleto](#boleto-habitacao). Todos com o link oficial e o que fazer com o resultado." },
+          { aviso: { titulo: "Só links oficiais", texto: "Nenhum destes serviços exige pagamento a intermediários. Desconfie de quem cobra para tirar relatório ou liberar FGTS.", tom: "bad" } },
+        ],
+      },
+    ],
+    faq: [
+      { q: "Esses serviços são pagos?", a: "O Registrato, o app FGTS, a Carteira de Trabalho Digital e a 2ª via do boleto são gratuitos. A certidão de matrícula tem a taxa do cartório." },
+    ],
   },
   ferramentas: {
     intro: "Calculadoras que respondem com o seu número, usando as mesmas regras do simulador da Caixa.",
     descricao: "Ferramentas gratuitas: simulador de financiamento, simulador do Minha Casa Minha Vida, calculadora de ITBI e de imposto na venda.",
+    secoes: [
+      {
+        titulo: "Qual ferramenta usar",
+        blocos: [
+          {
+            lista: [
+              "**Quer saber quanto pode comprar?** Use o [simulador](#simulador).",
+              "**Quer comparar cidades?** Veja [quanto a sua renda compra em cada capital](#quanto-minha-renda-compra).",
+              "**Já tem um valor em mente?** Veja [quanto precisa ganhar](#quanto-preciso-ganhar).",
+              "**Vai pagar o ITBI?** Use a [calculadora de ITBI](#calculadora-itbi).",
+              "**Vai vender?** Estime o imposto na [calculadora de ganho de capital](#calculadora-ganho-capital).",
+            ],
+          },
+        ],
+      },
+    ],
+    faq: [
+      { q: "As ferramentas são gratuitas?", a: "Sim, sem cadastro. Os números usam as regras da Caixa conferidas no simulador oficial e dados públicos de mercado." },
+    ],
   },
 };

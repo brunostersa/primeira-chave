@@ -7,6 +7,29 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
     resposta: "Quase todo comprador financia, e o banco dele vai **avaliar o seu imóvel**. Se a [avaliação](g:avaliacao) vier abaixo do preço, o comprador precisa cobrir a diferença — ou o negócio trava. Você recebe **depois do [registro](g:registro)**.",
     secoes: [
       {
+        titulo: "A conta do comprador",
+        blocos: [
+          {
+            figura: {
+              id: "avaliacao-abaixo",
+              alt: "Vender para quem vai financiar: com a avaliação abaixo do preço, o banco empresta menos e o comprador precisa de mais entrada",
+              etiqueta: "Vender para quem financia",
+              titulo: "Avaliação abaixo,",
+              destaque: "entrada maior para o comprador.",
+              esquema: {
+                tipo: "divisao",
+                total: "preço R$ 300 mil · avaliação R$ 280 mil",
+                partes: [
+                  { rotulo: "o banco empresta (80% de R$ 280 mil)", valor: 224000, texto: "R$ 224 mil", tom: "planta" },
+                  { rotulo: "entrada do comprador", valor: 76000, texto: "R$ 76 mil", tom: "mark" },
+                ],
+              },
+              legenda: "Se a avaliação viesse em R$ 300 mil, a entrada seria de R$ 60 mil: R$ 16 mil a menos. Preço que cabe na avaliação vende mais rápido.",
+            },
+          },
+        ],
+      },
+      {
         titulo: "Como a avaliação mexe no seu preço",
         blocos: [
           {
@@ -36,7 +59,10 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Posso entregar as chaves antes de receber?", a: "Não é recomendado. Combine a entrega das chaves para depois do pagamento." }],
+    faq: [{ q: "Posso entregar as chaves antes de receber?", a: "Não é recomendado. Combine a entrega das chaves para depois do pagamento." },
+      { q: "Quem pede a avaliação, eu ou o comprador?", a: "O comprador, no banco dele, e é ele quem paga a tarifa. Você só precisa liberar a visita do engenheiro e os documentos do imóvel." },
+      { q: "O comprador pode usar FGTS?", a: "Pode, se cumprir as regras do FGTS. O dinheiro entra na compra junto com o financiamento." },
+    ],
   },
 
   "vender-financiado": {

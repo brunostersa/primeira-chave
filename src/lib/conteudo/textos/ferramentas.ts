@@ -7,6 +7,8 @@ import type { Texto } from "../tipos";
 const r300 = rendaMinimaPara(300000)!;
 const mil = (v: number) => `R$ ${Math.round(v / 1000)} mil`;
 const custos300 = (300000 * (PARAMS.itbi + PARAMS.cartorio + PARAMS.avaliacao)) / 100;
+// Renda mínima para cada valor de imóvel, pelo motor validado (pessoa de 30 anos, sem dívidas).
+const rendasPorValor = [150000, 200000, 300000, 400000, 500000].map((v) => ({ v, r: rendaMinimaPara(v)! }));
 
 export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
   // Lido pela página própria do simulador (fora da rota única): regras e perguntas abaixo da ferramenta.
@@ -189,6 +191,30 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
     descricao: "A renda para financiar imóvel de 300 mil, 500 mil e até 1 milhão em 2026, com parcela, entrada e linha de crédito, pelas regras da Caixa.",
     resposta: `Para financiar um **imóvel de 300 mil**, a renda bruta da família precisa ser de pelo menos **${brl(r300.renda)}** (${r300.programa.curto}, parcela de ${brl(r300.parcela)}): a parcela tem de caber em **30% da sua [renda bruta](g:renda-bruta)**. Na tabela, a renda para financiar cada valor, de R$ 150 mil a R$ 1 milhão, pelas regras da Caixa de 2026.`,
     secoes: [
+      {
+        titulo: "A renda para cada valor de imóvel",
+        blocos: [
+          {
+            figura: {
+              id: "renda-por-valor",
+              alt: "Renda para financiar imóvel de 150 mil a 500 mil em 2026, incluindo a renda para financiar imóvel de 300 mil, pelas regras da Caixa",
+              etiqueta: "Quanto preciso ganhar?",
+              titulo: "A renda mínima",
+              destaque: "para cada imóvel.",
+              esquema: {
+                tipo: "barras",
+                itens: rendasPorValor.map(({ v, r }) => ({
+                  rotulo: `imóvel de ${mil(v)}`,
+                  valor: r.renda,
+                  texto: `${brl(r.renda)} por mês`,
+                  tom: v === 300000 ? ("mark" as const) : ("planta" as const),
+                })),
+              },
+              legenda: "Renda bruta da família, para quem tem 30 anos e nenhuma outra dívida, com 20% de entrada. Calculado com as regras da Caixa de 2026.",
+            },
+          },
+        ],
+      },
       { titulo: "A tabela", blocos: [{ calculo: "renda-por-valor" }] },
       {
         titulo: "O que muda a conta",
@@ -205,7 +231,10 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "Posso somar a renda do meu parceiro?", a: "Sim. A renda familiar de quem compra junto é somada." }],
+    faq: [{ q: "Posso somar a renda do meu parceiro?", a: "Sim. A renda familiar de quem compra junto é somada." },
+      { q: "Qual a renda para financiar um imóvel de 300 mil?", a: `Pelas regras da Caixa de 2026, a partir de ${brl(r300.renda)} de renda bruta da família (${r300.programa.curto}), com 20% de entrada e sem outras dívidas. A sua idade e as suas parcelas atuais mudam a conta.` },
+      { q: "A entrada muda a renda necessária?", a: "Muda: quanto maior a entrada, menor o valor financiado e menor a parcela, então a renda pedida cai." },
+    ],
   },
 
   "calculadora-ganho-capital": {

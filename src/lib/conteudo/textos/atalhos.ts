@@ -305,7 +305,34 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
           { p: "Depois, veja [como usar o FGTS na compra](#usar-fgts-comprar) e o [saldo no app FGTS](#consultar-fgts)." },
         ],
       },
+      {
+        titulo: "Como somar os 3 anos",
+        blocos: [
+          {
+            figura: {
+              id: "somar-tempo",
+              alt: "Como somar o tempo de carteira assinada para usar o FGTS: períodos de empregos diferentes somam até completar 3 anos",
+              etiqueta: "Tempo de carteira assinada",
+              titulo: "Não precisa ser seguido:",
+              destaque: "o tempo soma.",
+              esquema: {
+                tipo: "numeros",
+                itens: [
+                  { valor: "14 meses", rotulo: "no primeiro emprego" },
+                  { valor: "10 meses", rotulo: "no segundo" },
+                  { valor: "12 meses", rotulo: "no emprego atual" },
+                  { valor: "= 3 anos", rotulo: "de FGTS: já pode usar na compra", tom: "mark" },
+                ],
+              },
+              legenda: "Exemplo. Contam os períodos com carteira assinada (e FGTS recolhido), em qualquer empresa.",
+            },
+          },
+        ],
+      },
     ],
-    faq: [{ q: "Estágio conta?", a: "Não: estágio não recolhe FGTS. Contam os períodos com carteira assinada." }],
+    faq: [{ q: "Estágio conta?", a: "Não: estágio não recolhe FGTS. Contam os períodos com carteira assinada." },
+      { q: "Empregada doméstica com carteira conta?", a: "Conta. Desde 2015 o FGTS é obrigatório para o trabalho doméstico com carteira assinada." },
+      { q: "MEI conta para os 3 anos?", a: "Não: o MEI não recolhe FGTS para si. Contam só os períodos como empregado com carteira assinada." },
+    ],
   },
 };
