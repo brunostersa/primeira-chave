@@ -17,6 +17,8 @@ const ORG_JSON_LD = {
       url: SITE.url,
       description: SITE.descricao,
       sameAs: [SITE.instagram],
+      logo: { "@type": "ImageObject", url: `${SITE.url}/logo.png`, width: 512, height: 512 },
+      founder: { "@type": "Person", name: "Bruno", description: "Compra imóveis usados, reforma e revende; arremata imóveis em leilão." },
       parentOrganization: { "@type": "Organization", name: "CustomerHub", url: "https://customerhub.com.br" },
     },
     {
@@ -45,8 +47,13 @@ export const metadata: Metadata = {
     url: SITE.url,
     title: "Primeira Chave · Financiamento do primeiro imóvel, explicado",
     description: SITE.descricao,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Primeira Chave: financiamento do primeiro imóvel, explicado" }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
+  // Prévia grande de imagem e trecho completo: é o que o Google usa no Discover e nos resultados ricos.
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
+  applicationName: SITE.nome,
+  category: "finance",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -5,6 +5,9 @@ import { SITE } from "./site-config";
 export const TITULO_MAX = 62;
 const SUFIXO = ` · ${SITE.nome}`;
 
+/** Capa padrão nas redes para a página sem figura própria (molde "compartilhamento"). */
+export const CAPA_PADRAO = { url: "/og.png", alt: "Primeira Chave: financiamento do primeiro imóvel, explicado", width: 1200, height: 630 };
+
 /** O <title> final: com " · Primeira Chave" só quando ainda cabe inteiro. */
 export const tituloFinal = (titulo: string) => (titulo.length + SUFIXO.length <= TITULO_MAX ? titulo + SUFIXO : titulo);
 
@@ -34,8 +37,8 @@ export function metadadosPagina({
       url: slug,
       title: titulo,
       description: descricao,
-      ...(capa && { images: [capa] }),
+      images: [capa ?? CAPA_PADRAO],
     },
-    twitter: { card: "summary_large_image", title: titulo, description: descricao, ...(capa && { images: [capa.url] }) },
+    twitter: { card: "summary_large_image", title: titulo, description: descricao, images: [(capa ?? CAPA_PADRAO).url] },
   };
 }

@@ -92,5 +92,23 @@ if ((!so || so === "cartas") && existsSync(join(OUT, "carta"))) {
     for (const ext of ["webp", "jpg"]) copyFileSync(join(cartas, `${id}.${ext}`), join(OUT, "cartas", `${id}.${ext}`));
   }
 }
+// Imagens da marca a partir dos moldes: capa padrão das redes, logo e ícones de app.
+if (!so || so === "marca") {
+  const MARCA = [
+    { molde: "compartilhamento", w: 1200, h: 630, destinos: [join(RAIZ, "public", "og.png")] },
+    { molde: "icone", w: 512, h: 512, destinos: [join(RAIZ, "public", "logo.png"), join(RAIZ, "public", "icone-512.png")] },
+  ];
+  for (const m of MARCA) {
+    const png = join(tmp, `${m.molde}.png`);
+    await rodar(CHROME, ["--headless=new", `--user-data-dir=${perfil}`, "--no-first-run", "--no-default-browser-check", "--disable-gpu", "--hide-scrollbars", `--window-size=${m.w},${m.h}`, "--virtual-time-budget=3000", `--screenshot=${png}`, `http://localhost:${PORTA}/molde/${m.molde}/`], { timeout: 60_000 });
+    for (const d of m.destinos) copyFileSync(png, d);
+    feitas++;
+    console.log(`  ${m.molde} → ${m.destinos.map((d) => d.split("/").pop()).join(", ")}`);
+  }
+  // Ícones menores, redimensionados do de 512 (Apple e Android).
+  await rodar("sips", ["-z", "180", "180", join(RAIZ, "public", "icone-512.png"), "--out", join(RAIZ, "src", "app", "apple-icon.png")]);
+  await rodar("sips", ["-z", "192", "192", join(RAIZ, "public", "icone-512.png"), "--out", join(RAIZ, "public", "icone-192.png")]);
+}
+
 servidor.close();
 console.log(`${feitas} imagem(ns) em public/figuras/ e public/cartas/`);

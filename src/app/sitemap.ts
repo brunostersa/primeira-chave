@@ -1,10 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import type { MetadataRoute } from "next";
 import { CARTAS } from "@/lib/conteudo/duvide";
 import { PERSONAS } from "@/lib/conteudo/personas";
 import { ARVORE, type No } from "@/lib/conteudo/arvore";
 import { naRotaUnica } from "@/lib/conteudo/textos";
+import { arquivoFigura, figurasDe } from "@/lib/conteudo/figuras";
 import { SITE } from "@/lib/site-config";
 
 export const dynamic = "force-static";
@@ -18,9 +19,9 @@ const arquivo = (slug: string) => `src/app/(site)${slug.replace(/\/$/, "")}/page
  * Data do último commit que mexeu na página. Usar a data do build faria todo
  * deploy anunciar ao Google que todas as páginas mudaram.
  */
-function ultimaAlteracao(slug: string): Date | undefined {
+function ultimaAlteracao(caminho: string): Date | undefined {
   try {
-    const iso = execFileSync("git", ["log", "-1", "--format=%cI", "--", arquivo(slug)], {
+    const iso = execFileSync("git", ["log", "-1", "--format=%cI", "--", caminho], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     }).trim();
@@ -29,6 +30,11 @@ function ultimaAlteracao(slug: string): Date | undefined {
     return undefined;
   }
 }
+
+/** Páginas da rota única: o texto mora em src/lib/conteudo/textos/<arquivo>.ts. */
+const PASTA_TEXTOS = "src/lib/conteudo/textos";
+const TEXTOS_FONTE = readdirSync(PASTA_TEXTOS).map((f) => ({ f: `${PASTA_TEXTOS}/${f}`, s: readFileSync(`${PASTA_TEXTOS}/${f}`, "utf8") }));
+const fonteDoTexto = (id: string) => TEXTOS_FONTE.find(({ s }) => new RegExp(`\\n  "?${id.replace(/^g-/, "")}"?: \\{`).test(s))?.f;
 
 const FREQUENCIA: Record<No["tipo"], Frequencia> = {
   inicio: "weekly",
@@ -62,11 +68,27 @@ const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] 
 export default function sitemap(): MetadataRoute.Sitemap {
   // As rotas fixas existem por construção (página própria ou rota dinâmica com generateStaticParams).
   const daArvore = ARVORE.filter((n) => n.status === "publicado").filter((n) => existsSync(arquivo(n.slug)) || naRotaUnica(n));
-  return [...daArvore, ...FIXAS].map((n) => ({
-    // trailingSlash: true no next.config — a URL canônica termina em "/".
-    url: `${SITE.url}${n.slug}`,
-    lastModified: ultimaAlteracao(n.slug),
-    changeFrequency: FREQUENCIA[n.tipo],
-    priority: prioridade(n),
-  }));
+  const absoluta = (url: string) => `${SITE.url}${url}`;
+  return [
+    ...daArvore.map((n) => ({
+      // trailingSlash: true no next.config — a URL canônica termina em "/".
+      url: absoluta(n.slug),
+      lastModified: ultimaAlteracao(existsSync(arquivo(n.slug)) ? arquivo(n.slug) : (fonteDoTexto(n.id) ?? arquivo(n.slug))),
+      changeFrequency: FREQUENCIA[n.tipo],
+      priority: prioridade(n),
+      // Infográficos da página: entram no Google Imagens ligados a ela.
+      images: figurasDe(n.id).map((f) => absoluta(arquivoFigura(n.id, f.id))),
+    })),
+    ...FIXAS.map((n) => {
+      const carta = n.slug.match(/^\/duvide\/([\w-]+)\/$/)?.[1];
+      const ehCarta = carta && carta !== "corretor";
+      return {
+        url: absoluta(n.slug),
+        lastModified: ultimaAlteracao(ehCarta ? "src/lib/conteudo/duvide.ts" : n.slug.startsWith("/para/") ? "src/lib/conteudo/personas.ts" : arquivo(n.slug)),
+        changeFrequency: FREQUENCIA[n.tipo],
+        priority: prioridade(n),
+        images: ehCarta ? [absoluta(`/cartas/${carta}.jpg`)] : n.slug === "/duvide/corretor/" ? CARTAS.map((c) => absoluta(`/cartas/${c.id}.jpg`)) : [],
+      };
+    }),
+  ];
 }

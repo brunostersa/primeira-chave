@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { LogoAssinatura, LogoNome } from "@/components/brand/Logo";
+import { Icone, LogoAssinatura, LogoNome } from "@/components/brand/Logo";
 import { Ilustracao } from "@/components/brand/ilustracoes";
 import { IconeLinha, type NomeIcone } from "@/components/brand/icones";
 import { JoaoDeBarro, Ninho } from "@/components/brand/JoaoDeBarro";
@@ -196,6 +196,15 @@ function Avatar() {
   );
 }
 
+/** O ícone da marca (chave no círculo) em 512 px: logo do Google e ícone de app. */
+function IconeApp() {
+  return (
+    <Moldura w={512} h={512} grade={false} className="items-center justify-center">
+      <Icone className="w-[512px]" />
+    </Moldura>
+  );
+}
+
 export const MOLDES = [
   { slug: "post-segredo", nome: "Post · O segredo", formato: "Feed 1080×1350", w: 1080, h: 1350, Componente: PostSegredo },
   { slug: "post-quanto-ganhar", nome: "Post · Quanto preciso ganhar", formato: "Feed 1080×1350 (números do motor)", w: 1080, h: 1350, Componente: PostNumero },
@@ -204,6 +213,7 @@ export const MOLDES = [
   { slug: "story", nome: "Story · Pergunta do dia", formato: "Story 1080×1920", w: 1080, h: 1920, Componente: Story },
   { slug: "compartilhamento", nome: "Imagem de compartilhamento", formato: "OG 1200×630", w: 1200, h: 630, Componente: Compartilhamento },
   { slug: "avatar", nome: "Avatar", formato: "1080×1080", w: 1080, h: 1080, Componente: Avatar },
+  { slug: "icone", nome: "Ícone do app", formato: "512×512", w: 512, h: 512, Componente: IconeApp },
 ] as const;
 
 export type Molde = (typeof MOLDES)[number];

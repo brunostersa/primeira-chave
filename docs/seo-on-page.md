@@ -55,3 +55,14 @@ Faz o build, abre cada `/figura/<pagina>/<id>/` (rota `noindex`, bloqueada no ro
 - **Lote 5**: vender para quem financia, carteira de trabalho (o tempo soma), quanto preciso ganhar (renda por valor, pelo motor) e os hubs Comprar (cinco fases), Vender (quatro passos), Atalhos e Ferramentas (seções e FAQ).
 
 Fila: os 23 termos do glossário (molde próprio, `TermoPagina`) e os mapas (renda × capitais, m² em SP), que já são ferramentas visuais.
+
+## SEO técnico e IA (27/10/2026)
+
+| Arquivo | O que faz |
+|---|---|
+| `/robots.txt` (`src/app/robots.ts`) | Libera tudo, menos as rotas de produção de imagem. Robôs de IA (OAI-SearchBot, ChatGPT-User, GPTBot, PerplexityBot, ClaudeBot, Claude-SearchBot, Google-Extended, Applebot-Extended, CCBot…) liberados de propósito e listados um a um: para bloquear o treino de um deles, mover para um bloco com `disallow: "/"`. |
+| `/sitemap.xml` | 103 URLs, com **imagens** (infográficos e cards: Google Imagens) e `lastmod` real pelo git, inclusive das páginas da rota única (pelo arquivo de texto). |
+| `/llms.txt` e `/llms-full.txt` (`src/lib/llms.ts`) | O mapa do site para assistentes de IA (padrão llmstxt.org) e as respostas curtas + perguntas de cada página em texto puro. Gerados da árvore: publicou, entrou. Testados (`llms.test.ts`). |
+| Metadados globais | `max-image-preview: large` (Discover), capa padrão `/og.png` em toda página sem figura, `logo` e `founder` no `Organization`, `manifest.webmanifest` e ícones (`npm run figuras` gera `og.png`, `logo.png`, ícones 192/512 e `apple-icon.png` dos moldes). |
+
+Quando o domínio estiver no ar: enviar o sitemap no Google Search Console e no Bing Webmaster Tools (o Bing alimenta o ChatGPT e o Copilot).
