@@ -88,6 +88,14 @@ Dois produtos, mesmo formato: página de vendas + PDF/área simples + checklist.
 - [ ] Parcerias: correspondentes Caixa recebem leads qualificados (simulação + documentos em ordem) — possível receita por lead
 - [ ] "Selo Primeira Chave" para imóveis e parceiros
 - [ ] Vídeos curtos com o João-de-barro reaproveitando os guias
+- [ ] **"Pergunta pro João"**: tela de conversa que responde qualquer dúvida do caminho até a chave, com o João-de-barro como personagem principal
+  - Responde só com base no nosso core: guias, Duvide, personas, glossário e motor do simulador (o mesmo conteúdo do `llms-full.txt`). Quando o core não cobre, diz que não sabe e aponta o guia ou o profissional certo
+  - Tom próprio da marca (`docs/marca.md`), linguagem fácil, frases curtas, sem juridiquês
+  - Toda resposta vem com uma ilustração: pose/humor do João-de-barro conforme o assunto (assustado na faixa estourada, piscando no segredo…) e, quando houver, o infográfico da página de origem
+  - Cita a fonte: link do guia usado na resposta, para continuar lendo
+  - Números sempre do motor (renda, parcela, faixa MCMV), nunca inventados pelo modelo
+  - Guardrails: nunca se passar por Caixa/banco, nada de "preço por fora" ou atalho fora da regra, sem aconselhamento jurídico/financeiro individual; ao fim, convite para simular ou falar com um parceiro (gancho de lead)
+  - Técnico: o site é estático, então precisa de um backend pequeno (função serverless) chamando a API do Claude com o conteúdo como contexto; limite de uso por pessoa e registro das perguntas para virar pauta de SEO
 
 ## Ideias de mercado a avaliar
 

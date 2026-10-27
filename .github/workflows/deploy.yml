@@ -15,7 +15,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60 # o primeiro envio leva todos os arquivos; os seguintes, só o que mudou
     steps:
       - uses: actions/checkout@v4
         with:
@@ -53,3 +53,11 @@ jobs:
           local-dir: ./out/
           # Envia só o que mudou (guarda o estado no servidor) e não apaga o que não é do build.
           dangerous-clean-slate: false
+          # Rotas internas que só existem para gerar imagens e o guia de marca (fora do robots.txt).
+          exclude: |
+            **/.git*
+            **/.git*/**
+            figura/**
+            carta/**
+            molde/**
+            marca/**
