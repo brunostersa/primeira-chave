@@ -1,7 +1,9 @@
-// Gera os infográficos das páginas como WebP 1200x675 (public/figuras/<pagina>-<id>.webp).
+// Gera os infográficos das páginas como WebP 1200x675 (public/figuras/<pagina>-<id>.webp)
+// e as cartas do "Duvide." como post 1080x1350 (public/cartas/<id>.webp e .jpg).
 //
-//   npm run figuras            # build + todas as figuras
+//   npm run figuras            # build + todas as imagens
 //   node scripts/gerar-figuras.mjs simulador   # só as de uma página (precisa de out/ atualizado)
+//   node scripts/gerar-figuras.mjs cartas      # só as cartas
 //
 // Cada figura tem uma rota /figura/<pagina>/<id>/ no build estático (noindex). O script serve
 // a pasta out/, tira o print com o Chrome sem janela e converte com o cwebp. Também copia o
@@ -47,30 +49,48 @@ mkdirSync(tmp, { recursive: true });
 const perfil = join(tmpdir(), "pc-figuras-perfil");
 
 let feitas = 0;
+
+/** Tira o print de uma rota e converte para WebP (e, nas cartas, JPG para baixar e postar). */
+async function exportar(rota, w, h, webp, jpg) {
+  const png = join(tmp, "atual.png");
+  await rodar(CHROME, [
+    "--headless=new",
+    `--user-data-dir=${perfil}`,
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-gpu",
+    "--hide-scrollbars",
+    `--window-size=${w},${h}`,
+    "--virtual-time-budget=3000",
+    `--screenshot=${png}`,
+    `http://localhost:${PORTA}${rota}`,
+  ], { timeout: 60_000 });
+  await rodar("cwebp", ["-quiet", "-q", "82", png, "-o", webp]);
+  if (jpg) await rodar("sips", ["-s", "format", "jpeg", "-s", "formatOptions", "86", png, "--out", jpg]);
+  rmSync(png);
+  feitas++;
+  console.log(`  ${webp.split("/").pop()}  ${Math.round(statSync(webp).size / 1024)} KB`);
+}
+
+// Infográficos das páginas: 1200x675.
 for (const pagina of readdirSync(join(OUT, "figura"))) {
   if (so && pagina !== so) continue;
   for (const id of readdirSync(join(OUT, "figura", pagina))) {
-    const nome = `${pagina}-${id}`;
-    const png = join(tmp, `${nome}.png`);
-    const webp = join(DESTINO, `${nome}.webp`);
-    await rodar(CHROME, [
-      "--headless=new",
-      `--user-data-dir=${perfil}`,
-      "--no-first-run",
-      "--no-default-browser-check",
-      "--disable-gpu",
-      "--hide-scrollbars",
-      "--window-size=1200,675",
-      "--virtual-time-budget=3000",
-      `--screenshot=${png}`,
-      `http://localhost:${PORTA}/figura/${pagina}/${id}/`,
-    ], { timeout: 60_000 });
-    await rodar("cwebp", ["-quiet", "-q", "82", png, "-o", webp]);
-    copyFileSync(webp, join(OUT, "figuras", `${nome}.webp`));
-    rmSync(png);
-    feitas++;
-    console.log(`  ${nome}.webp  ${Math.round(statSync(webp).size / 1024)} KB`);
+    const nome = `${pagina}-${id}.webp`;
+    await exportar(`/figura/${pagina}/${id}/`, 1200, 675, join(DESTINO, nome));
+    copyFileSync(join(DESTINO, nome), join(OUT, "figuras", nome));
+  }
+}
+
+// Cartas do "Duvide.": 1080x1350 (post do Instagram), em WebP e JPG.
+if ((!so || so === "cartas") && existsSync(join(OUT, "carta"))) {
+  const cartas = join(RAIZ, "public", "cartas");
+  mkdirSync(cartas, { recursive: true });
+  mkdirSync(join(OUT, "cartas"), { recursive: true });
+  for (const id of readdirSync(join(OUT, "carta"))) {
+    await exportar(`/carta/${id}/`, 1080, 1350, join(cartas, `${id}.webp`), join(cartas, `${id}.jpg`));
+    for (const ext of ["webp", "jpg"]) copyFileSync(join(cartas, `${id}.${ext}`), join(OUT, "cartas", `${id}.${ext}`));
   }
 }
 servidor.close();
-console.log(`${feitas} figura(s) em public/figuras/`);
+console.log(`${feitas} imagem(ns) em public/figuras/ e public/cartas/`);

@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import type { MetadataRoute } from "next";
+import { CARTAS } from "@/lib/conteudo/duvide";
 import { ARVORE, type No } from "@/lib/conteudo/arvore";
 import { naRotaUnica } from "@/lib/conteudo/textos";
 import { SITE } from "@/lib/site-config";
@@ -50,10 +51,15 @@ const prioridade = (n: Pick<No, "tipo" | "prioridade">) => (n.tipo === "inicio" 
 const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] = [
   { slug: "/mapa/", tipo: "hub", prioridade: 3 },
   { slug: "/sobre/", tipo: "hub", prioridade: 3 },
+  { slug: "/duvide/", tipo: "hub", prioridade: 2 },
+  { slug: "/duvide/corretor/", tipo: "hub", prioridade: 3 },
+  ...CARTAS.map((c) => ({ slug: `/duvide/${c.id}/`, tipo: "guia" as const, prioridade: 2 as const })),
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [...ARVORE.filter((n) => n.status === "publicado"), ...FIXAS].filter((n) => existsSync(arquivo(n.slug)) || ("id" in n && naRotaUnica(n as No))).map((n) => ({
+  // As rotas fixas existem por construção (página própria ou rota dinâmica com generateStaticParams).
+  const daArvore = ARVORE.filter((n) => n.status === "publicado").filter((n) => existsSync(arquivo(n.slug)) || naRotaUnica(n));
+  return [...daArvore, ...FIXAS].map((n) => ({
     // trailingSlash: true no next.config — a URL canônica termina em "/".
     url: `${SITE.url}${n.slug}`,
     lastModified: ultimaAlteracao(n.slug),
