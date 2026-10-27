@@ -58,6 +58,7 @@ const linkDe = (id: string) => (publicado(no(id)) ? no(id).slug : null);
 
 const MAPA: ItemNav = { id: "mapa", titulo: "Mapa do site", resumo: "Todas as páginas, conectadas.", href: "/mapa/" };
 const DUVIDE: ItemNav = { id: "duvide", titulo: "Duvide: armadilhas e segredos", resumo: "Contrato de gaveta, ágio, preço por fora e mais.", href: "/duvide/" };
+const PROFISSIONAIS: ItemNav = { id: "para", titulo: "Para profissionais", resumo: "Corretor, correspondente, investidor, construtor e imobiliária.", href: "/para/" };
 const SOBRE: ItemNav = { id: "sobre", titulo: "Sobre a Primeira Chave", resumo: "Quem faz, por quê e como trabalhamos.", href: "/sobre/" };
 
 export function secoesMenu(): SecaoNav[] {
@@ -88,7 +89,7 @@ export function secoesMenu(): SecaoNav[] {
       resumo: "Os links difíceis de achar, os termos do banco e o mapa de tudo.",
       href: linkDe("atalhos"),
       itens: paginasDoHub("atalhos").slice(0, MAX_ITENS).map(item),
-      extras: [DUVIDE, atalho("glossario", "Glossário"), atalho("guias", "Todos os guias"), MAPA, SOBRE],
+      extras: [DUVIDE, PROFISSIONAIS, atalho("glossario", "Glossário"), atalho("guias", "Todos os guias"), MAPA, SOBRE],
     },
   ];
 }

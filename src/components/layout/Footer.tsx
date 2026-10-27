@@ -67,6 +67,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/para/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+                Para profissionais
+              </Link>
+            </li>
+            <li>
               <Link href="/sobre/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                 Sobre
               </Link>

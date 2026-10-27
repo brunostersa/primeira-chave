@@ -30,6 +30,13 @@ export default function CorretorPage() {
             Cliente que entende financiamento fecha mais rápido. Baixe o card (1080×1350, no formato do Instagram), copie a legenda e poste. Pode usar à vontade: a
             marca no card leva o cliente às explicações completas.
           </p>
+          <p className="text-[15px]">
+            Veja também{" "}
+            <Link href="/para/corretor/" className="font-semibold underline underline-offset-4">
+              o que mais a Primeira Chave tem para o corretor
+            </Link>
+            .
+          </p>
           <ul className="flex flex-wrap gap-2 font-mono text-[13px]">
             {["Formato 4:5 do feed", "Legenda pronta", "Grátis, sem cadastro"].map((t) => (
               <li key={t} className="rounded-full border border-line bg-surface px-3 py-1.5">

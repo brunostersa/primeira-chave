@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import type { MetadataRoute } from "next";
 import { CARTAS } from "@/lib/conteudo/duvide";
+import { PERSONAS } from "@/lib/conteudo/personas";
 import { ARVORE, type No } from "@/lib/conteudo/arvore";
 import { naRotaUnica } from "@/lib/conteudo/textos";
 import { SITE } from "@/lib/site-config";
@@ -54,6 +55,8 @@ const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] 
   { slug: "/duvide/", tipo: "hub", prioridade: 2 },
   { slug: "/duvide/corretor/", tipo: "hub", prioridade: 3 },
   ...CARTAS.map((c) => ({ slug: `/duvide/${c.id}/`, tipo: "guia" as const, prioridade: 2 as const })),
+  { slug: "/para/", tipo: "hub", prioridade: 2 },
+  ...PERSONAS.map((p) => ({ slug: `/para/${p.id}/`, tipo: "guia" as const, prioridade: 3 as const })),
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
