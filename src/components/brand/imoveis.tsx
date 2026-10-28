@@ -7,7 +7,9 @@ import { cn } from "@/components/ui/utils";
  *
  * Desenhadas no quadro das cenas (240×160, chão em y=150) para compor com o pássaro.
  * Pontos de pouso do pássaro: casa = laje de cima (x 66–172, y 62); apartamento = varandas
- * (y 48, 72, 96) e laje do topo (y 22).
+ * (y 48, 72, 96) e laje do topo (y 22). As lajes de cima têm `data-poleiro`: o João de
+ * passagem (PassaroDePassagem) pousa nelas quando a casa está à vista, na ponta que as
+ * cenas `casa` e `apartamento` deixam livre (o João delas fica no meio da laje).
  */
 
 const TINTA = "var(--ink)";
@@ -23,7 +25,7 @@ export function CasaForma({ transform }: { transform?: string }) {
       {/* volume de cima, em balanço */}
       <rect x="66" y="66" width="102" height="34" fill="var(--surface)" {...S} />
       {/* lajes finas */}
-      <rect x="62" y="61" width="111" height="5" rx="1" {...LAJE} />
+      <rect x="62" y="61" width="111" height="5" rx="1" {...LAJE} data-poleiro="0.9" />
       <rect x="34" y="100" width="139" height="4.5" rx="1" {...LAJE} />
       {/* pilar da garagem */}
       <path d="M169 104 V150" {...S} strokeWidth={2.8} fill="none" />
@@ -57,7 +59,7 @@ export function ApartamentoForma({ transform }: { transform?: string }) {
       {/* bloco */}
       <rect x="62" y="24" width="88" height="126" fill="var(--surface)" {...S} />
       {/* lajes e varandas */}
-      <rect x="56" y="20" width="98" height="5" rx="1" {...LAJE} />
+      <rect x="56" y="20" width="98" height="5" rx="1" {...LAJE} data-poleiro="0.1" />
       {andares.slice(1).map((y) => (
         <g key={y}>
           <rect x="56" y={y} width="98" height="4" rx="1" {...LAJE} />

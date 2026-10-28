@@ -30,7 +30,10 @@ export function Footer() {
             <Link href={simulador.slug} className="w-fit font-semibold underline underline-offset-4">
               Simular quanto você pode comprar
             </Link>
-            <JoaoDeBarro pose="barro" className="mt-2 hidden w-20 md:block" />
+            {/* Easter egg: cinco cliques rápidos aqui (ou no ©) soltam a revoada (RevoadaSurpresa). */}
+            <span data-revoada className="mt-2 hidden w-20 md:block">
+              <JoaoDeBarro pose="barro" className="w-full" />
+            </span>
           </div>
 
           <nav aria-label="Rodapé" className="border-t border-line md:border-0">
@@ -84,7 +87,9 @@ export function Footer() {
               </a>
             </li>
           </ul>
-          <p className="font-mono text-xs text-muted">© {new Date().getFullYear()} Primeira Chave</p>
+          <p data-revoada className="select-none font-mono text-xs text-muted">
+            © {new Date().getFullYear()} Primeira Chave
+          </p>
         </div>
       </div>
     </footer>

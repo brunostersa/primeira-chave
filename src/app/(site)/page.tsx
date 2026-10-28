@@ -48,7 +48,9 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Button asChild size="lg">
-                <Link href="/simulador-financiamento-caixa/">Simular agora, de graça</Link>
+                <Link href="/simulador-financiamento-caixa/" data-poleiro="0.82">
+                  Simular agora, de graça
+                </Link>
               </Button>
               <Link href="#segredo" className="font-semibold underline underline-offset-4">
                 Dá pra comprar sem entrada?
@@ -97,7 +99,9 @@ export default function Home() {
             <div className="flex justify-between border-b border-ink/30 pb-3"><span>banco empresta 80%</span><span className="whitespace-nowrap">R$ 100.000</span></div>
             <div className="flex items-center justify-between">
               <span>sua entrada</span>
-              <span className="rounded bg-ink px-2 py-0.5 font-display text-2xl font-semibold text-mark">R$ 0</span>
+              <span data-poleiro="0.5" className="rounded bg-ink px-2 py-0.5 font-display text-2xl font-semibold text-mark">
+                R$ 0
+              </span>
             </div>
           </div>
         </Card>

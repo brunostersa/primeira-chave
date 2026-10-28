@@ -33,16 +33,35 @@ const BOCA: P = { x: C, y: C - 6 };
 /* ---------------------------------------------------------------- desenho */
 
 /** Asas por quadro, presas no ombro (≈ 2, -3) com o corpo centrado em (0, 0). */
-const ASAS: Record<Quadro, string> = {
+export const ASAS: Record<Quadro, string> = {
   cima: "M3 -4 C0 -15 -8 -24 -19 -27 C-14 -18 -10 -9 -5 -1 Z",
   meio: "M3 -3 C-5 -9 -15 -11 -26 -9 C-18 -4 -10 0 -4 1 Z",
   baixo: "M3 -2 C-2 5 -8 13 -16 19 C-15 11 -10 4 -6 0 Z",
   plana: "M3 -3 C-6 -7 -18 -8 -30 -5 C-20 -1 -11 1 -4 1 Z",
   dobrada: "M-9 -1 C-3 -5 6 -3 9 2 C3 5 -4 4 -9 -1 Z",
 };
-type Quadro = "cima" | "meio" | "baixo" | "plana" | "dobrada";
-const QUADROS = Object.keys(ASAS) as Quadro[];
-const BATIDA: Quadro[] = ["cima", "meio", "baixo", "meio"];
+export type Quadro = "cima" | "meio" | "baixo" | "plana" | "dobrada";
+export const QUADROS = Object.keys(ASAS) as Quadro[];
+export const BATIDA: Quadro[] = ["cima", "meio", "baixo", "meio"];
+
+/** Pescoço do João: a cabeça (`data-cabeca`) gira em volta deste ponto. */
+export const PESCOCO = { x: 7, y: -3 };
+
+/** Corpo do João em silhueta (sem asas nem pernas), com o corpo centrado em (0, 0). Também usado no PassaroDePassagem. */
+export function CorpoSilhueta() {
+  return (
+    <>
+      <path d="M-14 2 L-27 -4 L-24 3 L-28 9 L-13 7 Z" fill="var(--ink)" />
+      <path d="M-16 4 C-12 -6 0 -9 9 -6 C14 -4 16 0 14 5 C10 11 -6 12 -16 4 Z" fill="var(--ink)" />
+      <g data-cabeca>
+        <circle cx="11" cy="-8" r="6.6" fill="var(--ink)" />
+        <path d="M16.5 -10 L25 -7.6 L16.5 -5 Z" fill="var(--ink)" />
+        <path d="M15 -3.5 C14 1 10 4 5 4.5" fill="none" stroke="var(--surface)" strokeWidth="1.6" strokeLinecap="round" />
+        <circle cx="13" cy="-9.2" r="1.9" fill="var(--surface)" />
+      </g>
+    </>
+  );
+}
 
 /** O João em silhueta, desenhado para ficar legível com 20px. Origem nos pés. */
 function Ave({ i }: { i: number }) {
@@ -51,12 +70,7 @@ function Ave({ i }: { i: number }) {
     <g data-ave transform={`translate(${p.x} ${p.y}) scale(${i === 0 ? -ESCALA : ESCALA} ${ESCALA})`}>
       <g data-corpo>
         <g transform="translate(0 -15)">
-          <path d="M-14 2 L-27 -4 L-24 3 L-28 9 L-13 7 Z" fill="var(--ink)" />
-          <path d="M-16 4 C-12 -6 0 -9 9 -6 C14 -4 16 0 14 5 C10 11 -6 12 -16 4 Z" fill="var(--ink)" />
-          <circle cx="11" cy="-8" r="6.6" fill="var(--ink)" />
-          <path d="M16.5 -10 L25 -7.6 L16.5 -5 Z" fill="var(--ink)" />
-          <path d="M15 -3.5 C14 1 10 4 5 4.5" fill="none" stroke="var(--surface)" strokeWidth="1.6" strokeLinecap="round" />
-          <circle cx="13" cy="-9.2" r="1.9" fill="var(--surface)" />
+          <CorpoSilhueta />
           {QUADROS.map((q) => (
             <path key={q} data-q={q} d={ASAS[q]} fill="var(--ink)" stroke="var(--surface)" strokeWidth="1.3" strokeLinejoin="round" display={q === "dobrada" ? undefined : "none"} />
           ))}

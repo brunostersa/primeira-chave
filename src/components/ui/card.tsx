@@ -20,8 +20,11 @@ const cardVariants = cva("rounded-[var(--radius-card)] p-5 sm:p-6", {
   defaultVariants: { variant: "default" },
 });
 
+/** Os cartões de destaque são poleiro do João de passagem (ver PassaroDePassagem). */
+const POLEIRO = new Set(["strong", "mark"]);
+
 function Card({ className, variant, ...props }: React.ComponentProps<"div"> & VariantProps<typeof cardVariants>) {
-  return <div data-slot="card" className={cn(cardVariants({ variant }), className)} {...props} />;
+  return <div data-slot="card" data-poleiro={variant && POLEIRO.has(variant) ? "" : undefined} className={cn(cardVariants({ variant }), className)} {...props} />;
 }
 
 export { Card, cardVariants };
