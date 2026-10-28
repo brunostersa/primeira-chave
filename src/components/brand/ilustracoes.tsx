@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/components/ui/utils";
+import { ApartamentoForma, CasaForma } from "./imoveis";
 import { NinhoForma, Passaro } from "./JoaoDeBarro";
 
 /**
@@ -231,6 +232,49 @@ export const CENAS = {
           <circle cx="194" cy="128" r="8" fill="none" stroke="var(--mark)" strokeWidth="3" />
         </g>
         <Passaro pose="bicando" humor="curioso" transform={pe(8)} />
+      </>
+    ),
+  },
+  casa: {
+    titulo: "A casa",
+    uso: "Financiar casa, sobrado, casa nova ou usada.",
+    Desenho: () => (
+      <>
+        <Chao />
+        <CasaForma transform="translate(30 0)" />
+        <Passaro pose="chave" humor="feliz" transform={pe(118, 0.46, 61)} />
+      </>
+    ),
+  },
+  apartamento: {
+    titulo: "O apartamento",
+    uso: "Financiar apartamento, condomínio, imóvel na planta.",
+    Desenho: () => (
+      <>
+        <Chao />
+        <ApartamentoForma transform="translate(34 18) scale(0.88)" />
+        <Passaro pose="chave" humor="gentil" transform={pe(108, 0.4, 35)} />
+      </>
+    ),
+  },
+  "sem-entrada": {
+    titulo: "Avaliado acima do preço",
+    uso: "Sem entrada, avaliação × preço, a cota de 80%.",
+    Desenho: () => (
+      <>
+        <Chao />
+        <CasaForma transform="translate(4 12) scale(0.92)" />
+        <g stroke="var(--muted)" strokeWidth="1.4" fill="none" strokeLinecap="round">
+          <path d="M36 30 H152 M36 25 V35 M152 25 V35" />
+          <path d="M36 50 H182 M36 45 V55 M182 45 V55" />
+        </g>
+        <text x="36" y="21" fontFamily="var(--font-mono)" fontSize="9" fill={TINTA}>preço</text>
+        <text x="36" y="42" fontFamily="var(--font-mono)" fontSize="9" fill={TINTA}>avaliação +25%</text>
+        <g transform="rotate(-6 210 112)">
+          <rect x="188" y="100" width="44" height="24" rx="5" fill="var(--mark)" {...S} strokeWidth={1.8} />
+          <text x="210" y="116" textAnchor="middle" fontFamily="var(--font-display)" fontWeight="600" fontSize="12" fill={TINTA}>R$ 0</text>
+        </g>
+        <Passaro pose="comemora" humor="feliz" transform={pe(186, 0.42, 100)} />
       </>
     ),
   },

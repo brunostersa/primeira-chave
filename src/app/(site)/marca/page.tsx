@@ -7,6 +7,7 @@ import { Cota, Icone, LogoAssinatura, LogoNome } from "@/components/brand/Logo";
 import { JoaoDeBarro, Ninho } from "@/components/brand/JoaoDeBarro";
 import { CENAS, Ilustracao, type NomeCena } from "@/components/brand/ilustracoes";
 import { IconeLinha, NOMES_ICONES } from "@/components/brand/icones";
+import { Imovel } from "@/components/brand/imoveis";
 import { MOLDES } from "@/components/moldes/moldes";
 import { DemosCampos } from "./Demos";
 
@@ -258,6 +259,22 @@ export default function MarcaPage() {
               <span className="font-mono text-xs text-muted">nome=&quot;{nome}&quot;</span>
             </Card>
           ))}
+        </div>
+        <div className="flex flex-col gap-3 pt-4">
+          <h3 className="font-display text-2xl font-semibold">Os imóveis</h3>
+          <p className="max-w-2xl text-ink-2">
+            Fachadas modernas, no traço do pássaro: laje plana, volumes retos, ripado. Nada de casinha de telhado. Azul planta = a casa; amarelo só no
+            puxador e na etiqueta de preço. Em <code className="font-mono text-sm">src/components/brand/imoveis.tsx</code>: <code className="font-mono text-sm">&lt;Imovel tipo=&quot;casa&quot; /&gt;</code> sozinho, ou{" "}
+            <code className="font-mono text-sm">CasaForma</code> e <code className="font-mono text-sm">ApartamentoForma</code> para compor cenas com o João.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {(["casa", "apartamento"] as const).map((tipo) => (
+              <Card key={tipo} className="flex flex-col items-center gap-3">
+                <Imovel tipo={tipo} className="max-w-xs" titulo={tipo === "casa" ? "Casa moderna" : "Prédio de apartamentos"} />
+                <span className="font-mono text-xs text-muted">tipo=&quot;{tipo}&quot;</span>
+              </Card>
+            ))}
+          </div>
         </div>
       </Secao>
 
