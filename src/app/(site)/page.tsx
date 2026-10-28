@@ -5,6 +5,9 @@ import { Eyebrow } from "@/components/ui/badge";
 import { Organismo } from "@/components/conteudo/Organismo";
 import { DuvideFaixa, Ferramentas, GuiasDestaque, LinhaDoTempo, Numeros, Portas, QuemEQuem, QuemFaz } from "@/components/home/secoes";
 import { estatisticas } from "@/lib/conteudo/links";
+import { FaixaFotoOnda } from "@/components/brand/FotoRecorte";
+import { Ilustracao } from "@/components/brand/ilustracoes";
+import { FOTO_HOME } from "@/lib/conteudo/fotos";
 
 const FAQ = [
   {
@@ -99,6 +102,21 @@ export default function Home() {
           </div>
         </Card>
       </section>
+
+      <FaixaFotoOnda foto={FOTO_HOME} id="home" className="mb-16">
+        <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-10 sm:px-6">
+          <Ilustracao nome="casa" className="absolute -top-8 right-4 w-56 sm:right-10 sm:w-72 md:-top-12 md:w-80" />
+          <Card className="relative max-w-md bg-paper">
+            <p className="font-mono text-xs uppercase tracking-[0.07em]">Barro por barro</p>
+            <p className="mt-2 font-display text-3xl font-light leading-tight">
+              A casa própria não vem de uma vez. <span className="marca-texto font-semibold">Vem da conta certa.</span>
+            </p>
+            <Link href="/simulador-financiamento-caixa/" className="mt-4 inline-block font-semibold underline underline-offset-4">
+              Fazer a minha conta
+            </Link>
+          </Card>
+        </div>
+      </FaixaFotoOnda>
 
       <LinhaDoTempo />
       <Ferramentas />

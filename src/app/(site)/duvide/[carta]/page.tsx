@@ -60,7 +60,9 @@ export default async function CartaDuvide({ params }: Props) {
           <li aria-current="page">{c.pergunta}</li>
         </ol>
       </nav>
-      <article className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-10 px-4 pb-10 pt-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_420px]">
+      <article className="mx-auto flex max-w-6xl flex-col gap-10 px-4 pb-10 pt-8 sm:px-6">
+        {/* Texto e carta numa grade só deles: assim a carta fixa não invade o "Duvide também". */}
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_420px]">
         <div className="flex min-w-0 flex-col gap-8">
           <header className="flex flex-col gap-4">
             <span className={cn("-rotate-2 self-start rounded-md border-2 border-ink px-3 py-1 font-display font-semibold uppercase", CARIMBO[c.veredito])}>{v.rotulo}</span>
@@ -104,9 +106,10 @@ export default async function CartaDuvide({ params }: Props) {
           <p className="text-sm font-semibold">Mande para quem precisa ver:</p>
           <Compartilhar url={`/duvide/${c.id}/`} texto={`${c.pergunta} ${v.rotulo}.`} imagem={`/cartas/${c.id}.jpg`} nome={`primeira-chave-${c.id}`} />
         </aside>
+        </div>
 
         {outras.length > 0 && (
-          <section className="flex flex-col gap-4 lg:col-span-2">
+          <section className="flex flex-col gap-4">
             <h2 className="font-display text-[clamp(26px,3.4vw,34px)] font-light">Duvide também</h2>
             <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {outras.map((o) => (

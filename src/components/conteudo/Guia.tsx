@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { Ilustracao } from "@/components/brand/ilustracoes";
+import { TopoDaPagina } from "@/components/brand/FotoRecorte";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -86,7 +86,7 @@ export function Guia({
               <p className="font-mono text-xs text-muted">Regras de {mes(PARAMS_ATUALIZADOS_EM)} · conferidas no simulador da Caixa</p>
             )}
           </div>
-          {n.ilustracao && <Ilustracao nome={n.ilustracao} className="max-w-md justify-self-center" />}
+          <TopoDaPagina id={n.id} ilustracao={n.ilustracao} className="max-w-md justify-self-center" />
         </header>
 
         <div className="grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_300px]">

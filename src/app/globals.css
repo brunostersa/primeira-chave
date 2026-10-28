@@ -97,6 +97,18 @@ body {
   background-size: 28px 28px;
 }
 
+/* Ladrilho hidráulico (referência: parede de ladrilho e cobogó). Discreto: tom sobre tom, peça pequena.
+   bg-ladrilho = suave, para chão e faixas; bg-ladrilho-forte = amarelo, só em quebras. */
+@utility bg-ladrilho {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23ffffff'/%3E%3Cg fill='none' stroke='%23ddd5ad' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='5' width='170' height='170' rx='3' stroke-width='2'/%3E%3Cg transform='translate(90 90)'%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(0)' /%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(90)' /%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(180)' /%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(270)' /%3E%3Ccircle r='9' fill='%23fbf1bc'/%3E%3C/g%3E%3Cpath d='M0 30 Q22 22 30 0 M150 0 Q158 22 180 30 M180 150 Q158 158 150 180 M30 180 Q22 158 0 150'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 56px 56px;
+}
+
+@utility bg-ladrilho-forte {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23F4D23F'/%3E%3Cg fill='none' stroke='%23121418' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='6' width='168' height='168' rx='3' stroke-width='1.6' opacity='.5'/%3E%3Cg transform='translate(90 90)'%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(0)' fill='%23f2f3f1'/%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(90)' fill='%23f2f3f1'/%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(180)' fill='%23f2f3f1'/%3E%3Cpath d='M0 -12 C18 -30 18 -56 0 -66 C-18 -56 -18 -30 0 -12 Z' transform='rotate(270)' fill='%23f2f3f1'/%3E%3Cg transform='rotate(45)'%3E%3Cpath d='M0 -14 C8 -22 8 -34 0 -40 C-8 -34 -8 -22 0 -14 Z' transform='rotate(0)' fill='%23121418' stroke='none'/%3E%3Cpath d='M0 -14 C8 -22 8 -34 0 -40 C-8 -34 -8 -22 0 -14 Z' transform='rotate(90)' fill='%23121418' stroke='none'/%3E%3Cpath d='M0 -14 C8 -22 8 -34 0 -40 C-8 -34 -8 -22 0 -14 Z' transform='rotate(180)' fill='%23121418' stroke='none'/%3E%3Cpath d='M0 -14 C8 -22 8 -34 0 -40 C-8 -34 -8 -22 0 -14 Z' transform='rotate(270)' fill='%23121418' stroke='none'/%3E%3C/g%3E%3Ccircle r='9' fill='%23f2f3f1'/%3E%3Ccircle r='3' fill='%23121418' stroke='none'/%3E%3C/g%3E%3Cpath d='M0 30 Q22 22 30 0 M150 0 Q158 22 180 30 M180 150 Q158 158 150 180 M30 180 Q22 158 0 150' fill='%23f2f3f1'/%3E%3Cpath d='M0 52 Q38 38 52 0 M128 0 Q142 38 180 52 M180 128 Q142 142 128 180 M52 180 Q38 142 0 128' stroke-width='1.6' opacity='.7'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 72px 72px;
+}
+
 /* Grifo de marca-texto: o destaque do "seu dinheiro" nos títulos. */
 @utility marca-texto {
   background: linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 92%, transparent 92%);

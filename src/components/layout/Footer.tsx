@@ -15,7 +15,9 @@ export function Footer() {
   const simulador = nucleo();
 
   return (
-    <footer className="mt-24 border-t border-line">
+    <footer className="mt-24">
+      {/* O piso: uma faixa de ladrilho hidráulico, tom sobre tom. */}
+      <div aria-hidden="true" className="h-14 bg-ladrilho" />
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,3fr)]">
           <div className="flex flex-col gap-4">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { Ilustracao } from "@/components/brand/ilustracoes";
+import { TopoDaPagina } from "@/components/brand/FotoRecorte";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/badge";
 import { ETAPAS } from "@/lib/conteudo/arvore";
@@ -64,7 +64,7 @@ export function HubPagina({ id, texto, extra }: { id: string; texto: TextoHub; e
               <Link href={tool.slug}>{tool.id === "simulador" ? "Simular agora" : tool.titulo}</Link>
             </Button>
           </div>
-          {n.ilustracao && <Ilustracao nome={n.ilustracao} className="max-w-md justify-self-center" />}
+          <TopoDaPagina id={n.id} ilustracao={n.ilustracao} className="max-w-md justify-self-center" />
         </header>
         {secoes.length >= 2 && (
           <nav aria-label="Nesta página" className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-line p-5">

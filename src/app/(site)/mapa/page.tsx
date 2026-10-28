@@ -4,13 +4,45 @@ import { Eyebrow } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Organismo } from "@/components/conteudo/Organismo";
 import { ARVORE, ETAPAS, HUBS, type No } from "@/lib/conteudo/arvore";
-import { doHub, estatisticas, no } from "@/lib/conteudo/links";
+import { doHub, estatisticas, no, usamTermo } from "@/lib/conteudo/links";
+import { TecidoGlossario, type FioTecido, type TermoTecido } from "@/components/conteudo/TecidoGlossario";
 
 export const metadata: Metadata = {
   title: "Mapa do site",
   description: "Todos os assuntos da Primeira Chave, organizados pela jornada do primeiro imóvel: do quanto posso comprar até a chave.",
   alternates: { canonical: "/mapa/" },
 };
+
+/**
+ * Dados do "tecido conectivo": cada termo com as páginas no ar que o usam, e um fio entre
+ * dois termos para cada página em que aparecem juntos. A roda segue uma ordem gulosa
+ * (o próximo é o mais ligado ao anterior), o que encurta os fios e reduz cruzamentos.
+ */
+function tecido(termos: No[]): { termos: TermoTecido[]; fios: FioTecido[] } {
+  const dados = termos.map((t) => {
+    const paginas = usamTermo(t.id.replace(/^g-/, "")).filter((p) => p.status === "publicado");
+    return { id: t.id, titulo: t.titulo, resumo: t.resumo, slug: t.slug, paginas: paginas.map((p) => ({ titulo: p.titulo, slug: p.slug })), ids: new Set(paginas.map((p) => p.id)) };
+  });
+  const peso = (a: number, b: number) => [...dados[a].ids].filter((id) => dados[b].ids.has(id)).length;
+  const ordem: number[] = [];
+  const resta = new Set(dados.map((_, i) => i));
+  let atual = dados.reduce((m, d, i) => (d.ids.size > dados[m].ids.size ? i : m), 0);
+  while (resta.size) {
+    ordem.push(atual);
+    resta.delete(atual);
+    let prox = -1;
+    for (const j of resta) if (prox < 0 || peso(atual, j) > peso(atual, prox) || (peso(atual, j) === peso(atual, prox) && dados[j].ids.size > dados[prox].ids.size)) prox = j;
+    atual = prox;
+  }
+  const ordenados = ordem.map((i) => dados[i]);
+  const fios: FioTecido[] = [];
+  for (let a = 0; a < ordenados.length; a++)
+    for (let b = a + 1; b < ordenados.length; b++) {
+      const w = [...ordenados[a].ids].filter((id) => ordenados[b].ids.has(id)).length;
+      if (w > 0) fios.push([a, b, w]);
+    }
+  return { termos: ordenados.map((t) => ({ id: t.id, titulo: t.titulo, resumo: t.resumo, slug: t.slug, paginas: t.paginas })), fios };
+}
 
 function ItemPagina({ n }: { n: No }) {
   const pub = n.status === "publicado";
@@ -119,15 +151,9 @@ export default function MapaPage() {
         <div className="flex flex-col gap-2">
           <Eyebrow>O tecido conectivo</Eyebrow>
           <h2 className="font-display text-4xl font-light">Glossário</h2>
-          <p className="max-w-2xl text-ink-2">Cada termo de banco tem uma explicação só, sempre a mesma, a um clique de qualquer página que o use.</p>
+          <p className="max-w-2xl text-ink-2">Cada termo de banco tem uma explicação só, sempre a mesma, a um clique de qualquer página que o use. Os fios mostram quais termos andam juntos.</p>
         </div>
-        <ul className="flex flex-wrap gap-2">
-          {termos.map((t) => (
-            <li key={t.id} className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm" title={t.resumo}>
-              {t.titulo}
-            </li>
-          ))}
-        </ul>
+        <TecidoGlossario {...tecido(termos)} />
       </section>
     </div>
   );
