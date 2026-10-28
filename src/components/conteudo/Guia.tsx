@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { TopoDaPagina } from "@/components/brand/FotoRecorte";
-import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
+import { Poupando } from "@/components/brand/Poupando";
+import { FOTO_HOME } from "@/lib/conteudo/fotos";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/badge";
@@ -118,13 +119,27 @@ export function Guia({
           </div>
 
           <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
-            <Card variant="mark" className="flex flex-col gap-3">
-              <JoaoDeBarro pose="frente" humor="feliz" className="h-20 w-auto self-start" />
-              <b className="font-display text-xl leading-tight">Faça a sua conta</b>
-              <span className="text-[15px]">{tool.resumo}</span>
-              <Button asChild className="h-auto min-h-11 self-start whitespace-normal py-2.5 text-left">
-                <Link href={tool.slug}>{tool.id === "simulador" ? "Abrir o simulador" : tool.titulo}</Link>
-              </Button>
+            {/* Duas colunas quando o card tem espaço (no celular); na coluna estreita, a foto vai em cima. */}
+            <Card variant="mark" className="@container overflow-hidden p-0 sm:p-0">
+              <div className="grid @md:grid-cols-2">
+                <div className="flex flex-col gap-3 p-5 sm:p-6">
+                  <Poupando className="h-28 w-auto max-w-full self-start" />
+                  <b className="font-display text-xl leading-tight">{tool.id === "simulador" ? "Simule o seu financiamento" : "Calcule o seu caso"}</b>
+                  <span className="text-[15px]">{tool.resumo}</span>
+                  <Button asChild className="h-auto min-h-11 self-start whitespace-normal py-2.5 text-left">
+                    <Link href={tool.slug}>{tool.id === "simulador" ? "Abrir o simulador" : tool.titulo}</Link>
+                  </Button>
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element -- export estático, imagens já otimizadas em webp */}
+                <img
+                  src={FOTO_HOME.src}
+                  alt={FOTO_HOME.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="-order-1 aspect-[16/9] w-full object-cover @md:order-none @md:aspect-auto @md:h-full"
+                  style={{ objectPosition: FOTO_HOME.pos ?? "center" }}
+                />
+              </div>
             </Card>
             {termos.length > 0 && (
               <Card className="flex flex-col gap-2">

@@ -146,8 +146,8 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
   "documentos-financiamento": {
     tituloSeo: "Documentos para financiar imóvel na Caixa: checklist completo",
     h1: "Documentos para financiamento na Caixa: o checklist",
-    descricao: "O checklist dos documentos do comprador, do vendedor e do imóvel para o financiamento na Caixa, com dica de como entregar tudo de uma vez.",
-    resposta: "Os documentos para financiamento na Caixa formam três grupos: **seus documentos** (identidade, renda e imposto de renda), **os do vendedor** (identidade e estado civil) e **os do imóvel** (a [matrícula](g:matricula) atualizada). Entregue tudo de uma vez.",
+    descricao: "O checklist dos documentos para financiamento na Caixa: do comprador (CLT, autônomo, MEI ou dono de empresa), do vendedor e do imóvel.",
+    resposta: "Os documentos para financiamento na Caixa formam três grupos: **seus documentos** (identidade, estado civil, renda e carteira de trabalho), **os do vendedor** e **os do imóvel** (a [matrícula](g:matricula) atualizada). O que muda de pessoa para pessoa é a **prova de renda**: CLT leva holerite; MEI e dono de empresa levam extratos e os papéis da empresa.",
     secoes: [
       {
         titulo: "Os três grupos de documentos",
@@ -177,14 +177,39 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         blocos: [
           {
             lista: [
-              "Documento de identidade com foto e CPF (de todos que vão compor a renda).",
-              "Comprovante de estado civil (certidão de nascimento ou casamento).",
-              "Comprovante de residência atual.",
-              "Comprovante de renda: holerites recentes; autônomo, extratos e declaração.",
-              "Última declaração de imposto de renda com o recibo (se retificou fora do prazo, leve as duas).",
-              "Extrato do FGTS, se for usar.",
+              "RG e CPF, ou CNH.",
+              "Certidão de nascimento (solteiro) ou de casamento. **Casado:** leve também RG e CPF (ou CNH) e o comprovante de renda do cônjuge.",
+              "Comprovante de endereço recente, de até 60 dias.",
+              "Comprovante de renda recente, de até 2 meses. O que vale como prova muda conforme o seu trabalho: veja a tabela abaixo.",
+              "Declaração do imposto de renda do ano, com o recibo, se você declara.",
+              "Carteira de trabalho: a página da foto, a da qualificação e **todas** as páginas com contratos registrados, inclusive os antigos.",
+              "Número do PIS.",
+              "Extrato do FGTS (obrigatório para quem é CLT), dizendo se vai usar o saldo.",
+              "Se já tem conta corrente na Caixa: agência, operação e número da conta.",
+              "Telefone, e-mail e grau de escolaridade, que vão para o cadastro.",
             ],
           },
+          { aviso: { titulo: "De onde vem esta lista", texto: "É a lista que um correspondente Caixa Aqui pede hoje (outubro de 2026). Agência ou correspondente podem pedir algo a mais no seu caso: confirme antes de juntar tudo.", tom: "planta" } },
+        ],
+      },
+      {
+        titulo: "Comprovante de renda: o que levar em cada caso",
+        blocos: [
+          { p: "O banco só conta a renda que você consegue provar. Quem tem carteira assinada prova com o holerite. Quem é dono do próprio negócio prova com os extratos da conta e com os papéis da empresa." },
+          {
+            tabela: {
+              cabecalho: ["Como você ganha", "O que levar"],
+              linhas: [
+                ["CLT (carteira assinada)", "Holerites recentes (até 2 meses), carteira de trabalho e extrato do FGTS."],
+                ["MEI", "Certificado do MEI e comprovantes do DAS-MEI, mais os extratos bancários dos últimos 6 meses."],
+                ["Empresa no Simples Nacional", "Contrato social, extrato do PGDAS e a DEFIS, mais os extratos bancários dos últimos 6 meses."],
+                ["Empresa no Lucro Presumido ou Real", "Contrato social e a ECF, mais os extratos bancários dos últimos 6 meses."],
+                ["Autônomo ou informal", "Extratos bancários dos últimos 6 meses e a declaração do imposto de renda. Confirme com o correspondente o que mais ele aceita no seu caso."],
+              ],
+            },
+          },
+          { aviso: { titulo: "Dica para quem tem negócio próprio", texto: "Peça ao contador o PGDAS, a DEFIS ou a ECF já em PDF. E faça o dinheiro passar pela sua conta: renda que entra em espécie e não aparece no extrato **não conta** para o banco." } },
+          { p: "Quem é MEI ou autônomo e quer usar o FGTS precisa de saldo de empregos com carteira e de 3 anos somados de registro. Veja [como usar o FGTS](#usar-fgts-comprar)." },
         ],
       },
       {
@@ -213,8 +238,9 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
     faq: [
       { q: "Precisa de certidões negativas do vendedor?", a: "Depende do banco e do caso. É comum pedirem certidões de ações e de débitos para avaliar o risco do negócio." },
       { q: "Quanto tempo vale a certidão da matrícula?", a: "Em geral, os bancos aceitam certidões emitidas há até 30 dias." },
-      { q: "Autônomo consegue financiar?", a: "Consegue, comprovando renda com extratos bancários, declaração do imposto de renda e, às vezes, pró-labore ou declaração do contador." },
-      { q: "Quanto tempo vale a certidão de matrícula?", a: "Em geral, o banco pede certidão emitida há até 30 dias. Peça perto da data de entregar os documentos." },
+      { q: "Autônomo consegue financiar?", a: "Pode, se provar a renda: extratos bancários dos últimos 6 meses e declaração do imposto de renda. Renda que não aparece no extrato não conta." },
+      { q: "MEI consegue financiar?", a: "Pode, se provar a renda. Leve o certificado do MEI, os comprovantes do DAS-MEI e os extratos bancários dos últimos 6 meses, além dos documentos pessoais." },
+      { q: "Casado precisa levar os documentos do cônjuge?", a: "Precisa: RG e CPF (ou CNH) e o comprovante de renda do cônjuge, além da certidão de casamento." },
     ],
   },
 
