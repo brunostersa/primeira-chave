@@ -4,7 +4,8 @@ import { PARAMS } from "@/lib/financiamento/params";
 import { mipRate, rendaMinimaPara, tabela } from "@/lib/financiamento/engine";
 import { brl, pct } from "@/lib/format";
 import type { NomeCalculo } from "@/lib/conteudo/tipos";
-import { CalculadoraGanhoCapital, CalculadoraItbi } from "./calculadoras";
+import { CalculadoraCustos, CalculadoraGanhoCapital, CalculadoraItbi } from "./calculadoras";
+import { TABELAS_REGISTRO, type Uf } from "@/lib/financiamento/custos";
 import { MapaCapitais, MapaSaoPaulo } from "@/components/mercado/sob-demanda";
 import { Termometro } from "@/components/mercado/Termometro";
 
@@ -91,6 +92,29 @@ function CustosDaCompra() {
   );
 }
 
+/** A tabela oficial de registro de um estado, das faixas de imóvel residencial (até R$ 1,6 mi). */
+function TabelaRegistro({ uf }: { uf: Uf }) {
+  const t = TABELAS_REGISTRO[uf];
+  const faixas = t.faixas.filter(([ate]) => ate > 100_000 && ate <= 1_600_000);
+  const anterior = (i: number) => t.faixas[t.faixas.indexOf(faixas[i]) - 1][0];
+  return (
+    <div className="flex flex-col gap-2">
+      <Tabela
+        cabecalho={["Valor do título", "Registro (tabela)", `Com acréscimos (${String(t.acrescimoPct).replace(".", ",")}%)`]}
+        destaque={2}
+        linhas={faixas.map(([ate, v], i) => [
+          `${brl(anterior(i))} a ${brl(ate)}`,
+          brl(v),
+          brl(v * (1 + t.acrescimoPct / 100)),
+        ])}
+      />
+      <p className="text-sm text-muted">
+        Fonte: {t.fonte}. Acréscimos: {t.acrescimoNota}. Prenotação: {brl(t.prenotacao)}.
+      </p>
+    </div>
+  );
+}
+
 function SacXPrice() {
   const P = 200_000;
   const V = 250_000;
@@ -154,6 +178,12 @@ export function Calculo({ nome }: { nome: NomeCalculo }) {
       return <CalculadoraItbi aliquotaPadrao={PARAMS.itbi} />;
     case "calculadora-ganho-capital":
       return <CalculadoraGanhoCapital />;
+    case "calculadora-custos":
+      return <CalculadoraCustos />;
+    case "tabela-registro-sp":
+      return <TabelaRegistro uf="SP" />;
+    case "tabela-registro-go":
+      return <TabelaRegistro uf="GO" />;
     case "simulador":
       return (
         <div className="rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface">

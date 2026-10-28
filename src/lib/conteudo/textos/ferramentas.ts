@@ -145,7 +145,7 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
               "Algumas cidades dão desconto para [primeiro imóvel ou MCMV](#primeiro-imovel-desconto).",
             ],
           },
-          { p: "Veja todos os custos da compra em [registro e chaves](#registro-do-imovel)." },
+          { p: "Some ITBI, cartório e avaliação na [calculadora de custos da compra](#custos-compra)." },
         ],
       },
       {
@@ -182,6 +182,44 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
     faq: [{ q: "Quem paga o ITBI, comprador ou vendedor?", a: "Por lei, o comprador, salvo acordo diferente no contrato." },
       { q: "O ITBI pode ser financiado?", a: "Não. O financiamento cobre só o imóvel. Separe perto de 5% do valor para ITBI e cartório." },
       { q: "Qual a alíquota do ITBI na minha cidade?", a: "Está na lei municipal, e muitas prefeituras mostram no site da guia. Em geral fica entre 2% e 3%." },
+    ],
+  },
+
+  "custos-compra": {
+    tituloSeo: "Calculadora de registro de imóveis e custos da compra",
+    h1: "Calculadora de registro de imóveis: quanto custa comprar além da entrada",
+    descricao: "Calculadora de registro de imóveis e ITBI pela tabela oficial de 2026 de SP e GO, com a avaliação do banco e o desconto de 50% do primeiro imóvel financiado.",
+    resposta: "Esta calculadora de registro de imóveis soma o que você paga **além da entrada**: [ITBI](g:itbi), [registro](g:registro) no cartório e avaliação do banco. Num imóvel de R$ 300 mil financiado, o cartório fica perto de **R$ 5,4 mil em SP** e **R$ 7,8 mil em Goiás**, e cai pela metade no primeiro imóvel pelo SFH.",
+    secoes: [
+      { titulo: "Calcule", blocos: [{ calculo: "calculadora-custos" }] },
+      {
+        titulo: "O que entra na conta",
+        blocos: [
+          {
+            lista: [
+              "**ITBI**: imposto da prefeitura, em geral de 2% a 3%. Veja a [calculadora de ITBI](#calculadora-itbi).",
+              "**Registro da compra**: valor fixo por faixa do preço, pela tabela do estado.",
+              "**Registro da alienação fiduciária**: a garantia do banco, pela mesma tabela, sobre o valor financiado.",
+              "**Avaliação do banco**: a tarifa do engenheiro, cobrada no início do processo.",
+              "**Escritura**: no financiamento, o contrato do banco já vale como [escritura](g:escritura). Não há tabelião a pagar.",
+            ],
+          },
+          { aviso: { titulo: "O FGTS não paga esses custos", texto: "Nem o financiamento. Esse dinheiro sai do seu bolso, antes da chave.", tom: "mark" } },
+        ],
+      },
+      {
+        titulo: "Desconto de 50% no primeiro imóvel",
+        blocos: [
+          { p: "A primeira compra de imóvel residencial financiada pelo Sistema Financeiro da Habitação tem **metade dos emolumentos** do cartório (Lei 6.015/73, art. 290). O desconto **não é automático**: peça por escrito ao levar o contrato. Detalhes em [primeiro imóvel tem desconto?](#primeiro-imovel-desconto)." },
+        ],
+      },
+      { titulo: "Tabela de registro de imóveis de São Paulo (2026)", blocos: [{ calculo: "tabela-registro-sp" }] },
+      { titulo: "Tabela de registro de imóveis de Goiás (2026)", blocos: [{ calculo: "tabela-registro-go" }] },
+    ],
+    faq: [
+      { q: "Quanto custa o registro de um imóvel de 300 mil?", a: "Com financiamento de R$ 240 mil, os dois registros ficam perto de R$ 5,4 mil em São Paulo e R$ 7,8 mil em Goiás, já com taxas e ISS. No primeiro imóvel financiado pelo SFH, metade disso." },
+      { q: "Quanto custa a documentação de um apartamento?", a: "Some ITBI (2% a 3%), registro no cartório (perto de 2% do valor sem desconto) e avaliação do banco. Para um imóvel de R$ 300 mil, fica entre R$ 12 mil e R$ 17 mil." },
+      { q: "O registro tem o mesmo preço em todo o Brasil?", a: "Não. Cada estado tem a sua tabela, reajustada todo ano. Aqui estão as de SP e GO; nos demais estados mostramos uma estimativa. Confirme no cartório de registro de imóveis da cidade." },
     ],
   },
 

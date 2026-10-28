@@ -11,9 +11,10 @@ import { doHub, hubDe, no, trilha } from "@/lib/conteudo/links";
  */
 
 export type ItemNav = { id: string; titulo: string; resumo?: string; href: string | null };
+export type ColunaNav = { id: string; rotulo: string; itens: ItemNav[] };
 export type GrupoNav = { id: string; rotulo: string; pergunta: string; href: string; itens: ItemNav[]; total: number };
 export type SecaoNav = {
-  id: "comprar" | "ferramentas" | "leilao" | "vender" | "ajuda";
+  id: "comprar" | "ferramentas" | "vender" | "ajuda";
   rotulo: string;
   resumo: string;
   /** Página da seção ("Ver tudo"), se publicada. */
@@ -21,6 +22,8 @@ export type SecaoNav = {
   /** Só "Comprar": o 2º nível são as fases; o 3º, as páginas da fase. */
   grupos?: GrupoNav[];
   itens: ItemNav[];
+  /** Só "Ferramentas": as páginas separadas pelo que a pessoa quer fazer (simular, calcular, comparar). */
+  colunas?: ColunaNav[];
   /** Atalhos laterais da seção (ex.: Minha Casa Minha Vida dentro de Comprar). */
   extras: ItemNav[];
 };
@@ -43,7 +46,11 @@ const FASES: { id: string; rotulo: string; pergunta: string; etapas: EtapaId[] }
   { id: "depois", rotulo: "Depois da chave", pergunta: "Como pago menos?", etapas: ["depois"] },
 ];
 
-/** Leilão tem porta própria no menu: não repete dentro de "Comprar". (Venda já fica fora: é outra etapa.) */
+/**
+ * Leilão é público específico (quem arremata para revender): fica fora do menu, do rodapé e da
+ * home, para não confundir quem compra o primeiro imóvel. As páginas seguem no ar, ligadas pelas
+ * páginas vizinhas, pelo mapa do site e pelo sitemap. (Venda já fica fora de "Comprar": é outra etapa.)
+ */
 const FORA_DE_COMPRAR: (HubId | null)[] = ["leilao"];
 
 function fase(f: (typeof FASES)[number]): GrupoNav {
@@ -61,8 +68,24 @@ const DUVIDE: ItemNav = { id: "duvide", titulo: "Duvide: armadilhas e segredos",
 const PROFISSIONAIS: ItemNav = { id: "para", titulo: "Para profissionais", resumo: "Corretor, correspondente, investidor, construtor e imobiliária.", href: "/para/" };
 const SOBRE: ItemNav = { id: "sobre", titulo: "Sobre a Primeira Chave", resumo: "Quem faz, por quê e como trabalhamos.", href: "/sobre/" };
 
+/**
+ * Ferramentas por família. Simulador = responde com o seu plano (renda, parcela, entrada);
+ * calculadora = uma conta fechada (um imposto); mapa = compara preços de mercado.
+ * Padrão pelo tipo do nó; a exceção vai em FAMILIA_POR_ID.
+ */
+const FAMILIAS = [
+  { id: "simular", rotulo: "Simuladores" },
+  { id: "calcular", rotulo: "Calculadoras" },
+  { id: "comparar", rotulo: "Preços e mapas" },
+] as const;
+type FamiliaId = (typeof FAMILIAS)[number]["id"];
+const FAMILIA_POR_TIPO: Partial<Record<No["tipo"], FamiliaId>> = { nucleo: "simular", ferramenta: "calcular", programatica: "comparar" };
+const FAMILIA_POR_ID: Record<string, FamiliaId> = { "quanto-preciso-ganhar": "simular", "quanto-minha-renda-compra": "comparar" };
+const familia = (n: No) => FAMILIA_POR_ID[n.id] ?? FAMILIA_POR_TIPO[n.tipo];
+
 export function secoesMenu(): SecaoNav[] {
-  const ferramentas = ARVORE.filter((n) => ["nucleo", "ferramenta", "programatica"].includes(n.tipo)).sort(porRelevancia);
+  const ferramentas = ARVORE.filter((n) => familia(n)).sort(porRelevancia);
+  const colunas = FAMILIAS.map((f) => ({ id: f.id, rotulo: f.rotulo, itens: ferramentas.filter((n) => familia(n) === f.id).map(item) })).filter((c) => c.itens.length);
   return [
     {
       id: "comprar",
@@ -76,12 +99,12 @@ export function secoesMenu(): SecaoNav[] {
     {
       id: "ferramentas",
       rotulo: "Ferramentas",
-      resumo: "Calculadoras e mapas que respondem com o seu número.",
+      resumo: "Simuladores, calculadoras e mapas que respondem com o seu número.",
       href: linkDe("ferramentas"),
       itens: ferramentas.slice(0, MAX_ITENS).map(item),
+      colunas,
       extras: [],
     },
-    { id: "leilao", rotulo: "Leilão", resumo: no("leilao-caixa").resumo, href: linkDe("leilao-caixa"), itens: paginasDoHub("leilao").slice(0, MAX_ITENS).map(item), extras: [] },
     { id: "vender", rotulo: "Vender", resumo: no("vender").resumo, href: linkDe("vender"), itens: paginasDoHub("vender").slice(0, MAX_ITENS).map(item), extras: [] },
     {
       id: "ajuda",

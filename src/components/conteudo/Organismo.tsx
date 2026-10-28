@@ -1,4 +1,4 @@
-import { ARVORE, HUBS, type No } from "@/lib/conteudo/arvore";
+import { ARVORE, HUBS, type HubId, type No } from "@/lib/conteudo/arvore";
 import { no, saindo } from "@/lib/conteudo/links";
 import { Revoada, type Alvo } from "./Revoada";
 
@@ -18,10 +18,10 @@ const polar = (r: number, a: number) => ({ x: C + r * Math.cos(a), y: C + r * Ma
 const volume = (n: No) => n.termos.reduce((s, [, v]) => s + v, 0);
 const raio = (n: No) => 4 + Math.min(14, Math.log10(volume(n) + 10) * 2.6);
 
-function layout(): Map<string, Ponto> {
+function layout(sem: HubId[]): Map<string, Ponto> {
   const pos = new Map<string, Ponto>();
   pos.set("simulador", { x: C, y: C, n: no("simulador") });
-  const hubs = HUBS.filter((h) => h.id !== "glossario");
+  const hubs = HUBS.filter((h) => h.id !== "glossario" && !sem.includes(h.id));
   const passo = (2 * Math.PI) / hubs.length;
   hubs.forEach((h, i) => {
     const a = -Math.PI / 2 + i * passo;
@@ -40,9 +40,12 @@ function layout(): Map<string, Ponto> {
   return pos;
 }
 
-/** `vivo`: o núcleo pulsa e as pontes entre assuntos correm (uso no hero da home). */
-export function Organismo({ className, vivo = false }: { className?: string; vivo?: boolean }) {
-  const pos = layout();
+/**
+ * `vivo`: o núcleo pulsa e as pontes entre assuntos correm (uso no hero da home).
+ * `sem`: hubs que ficam fora do desenho (a home esconde o leilão, que é público específico).
+ */
+export function Organismo({ className, vivo = false, sem = [] }: { className?: string; vivo?: boolean; sem?: HubId[] }) {
+  const pos = layout(sem);
   const arestas: { a: Ponto; b: Ponto; cruza: boolean }[] = [];
   const vistas = new Set<string>();
   for (const n of ARVORE) {

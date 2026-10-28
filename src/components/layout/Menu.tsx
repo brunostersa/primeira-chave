@@ -8,7 +8,7 @@ import { LogoNome } from "@/components/brand/Logo";
 import { EmBreve } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/ui/utils";
-import type { GrupoNav, ItemNav, SecaoNav } from "@/lib/navegacao";
+import type { ColunaNav, GrupoNav, ItemNav, SecaoNav } from "@/lib/navegacao";
 
 type Props = { secoes: SecaoNav[]; simular: { href: string; titulo: string } };
 
@@ -51,6 +51,22 @@ function VerTodos({ href, children }: { href: string; children: ReactNode }) {
       {children}
       <ArrowRight aria-hidden strokeWidth={1.75} className="size-4" />
     </Link>
+  );
+}
+
+/** Um grupo com título curto (ex.: "Calculadoras") e as suas páginas. */
+function Coluna({ coluna }: { coluna: ColunaNav }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <p className="px-3 pb-1 font-mono text-xs uppercase tracking-[0.07em] text-muted">{coluna.rotulo}</p>
+      <ul>
+        {coluna.itens.map((i) => (
+          <li key={i.id}>
+            <LinkPagina i={i} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -185,13 +201,21 @@ function PainelLista({ secao }: { secao: SecaoNav }) {
         )}
       </div>
       <div className="flex flex-col gap-3 border-l border-line pl-8">
-        <ul className="grid grid-cols-2 gap-x-4">
-          {secao.itens.map((i) => (
-            <li key={i.id}>
-              <LinkPagina i={i} />
-            </li>
-          ))}
-        </ul>
+        {secao.colunas ? (
+          <div className="grid grid-cols-3 gap-x-4">
+            {secao.colunas.map((c) => (
+              <Coluna key={c.id} coluna={c} />
+            ))}
+          </div>
+        ) : (
+          <ul className="grid grid-cols-2 gap-x-4">
+            {secao.itens.map((i) => (
+              <li key={i.id}>
+                <LinkPagina i={i} />
+              </li>
+            ))}
+          </ul>
+        )}
         {secao.extras.length > 0 && (
           <ul className="flex flex-wrap gap-2 border-t border-line pt-3">
             {secao.extras.map((i) =>
@@ -362,6 +386,12 @@ function MenuMobile({ secoes, simular }: Props) {
                         </li>
                       ))}
                     </ol>
+                  ) : nivel.secao.colunas ? (
+                    <div className="-mx-3 flex flex-col gap-5">
+                      {nivel.secao.colunas.map((c) => (
+                        <Coluna key={c.id} coluna={c} />
+                      ))}
+                    </div>
                   ) : (
                     <ul className="-mx-3">
                       {nivel.secao.itens.map((i) => (

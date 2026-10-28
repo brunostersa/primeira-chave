@@ -1,6 +1,6 @@
 import { ARVORE, type No } from "./conteudo/arvore";
 import { CARTAS, VEREDITOS } from "./conteudo/duvide";
-import { no } from "./conteudo/links";
+import { doHub, no } from "./conteudo/links";
 import { PERSONAS } from "./conteudo/personas";
 import { GLOSSARIO_TEXTOS, HUBS_TEXTOS, TEXTOS } from "./conteudo/textos";
 import { PARAMS_ATUALIZADOS_EM } from "./financiamento/params";
@@ -21,7 +21,7 @@ const publicado = (n: No) => n.status === "publicado";
 const linha = (n: No) => `- [${n.titulo}](${url(n.slug)}): ${n.resumo}`;
 
 export function llmsTxt() {
-  const [comprar, ferramentas, leilao, vender, ajuda] = secoesMenu();
+  const [comprar, ferramentas, vender, ajuda] = secoesMenu();
   const fases = comprar.grupos!;
   const pub = (ids: string[]) => ids.map(no).filter(publicado);
   const blocos: string[] = [
@@ -41,7 +41,7 @@ export function llmsTxt() {
       })
       .join("\n\n")}`,
     `## Por assunto\n\n${pub(["financiamento-imobiliario", "minha-casa-minha-vida", "mcmv-faixas", "comprar", "guias"]).map(linha).join("\n")}`,
-    `## Leilão e imóveis da Caixa\n\n${[no("leilao-caixa"), ...leilao.itens.map((i) => no(i.id))].filter(publicado).map(linha).join("\n")}`,
+    `## Leilão e imóveis da Caixa\n\n${[no("leilao-caixa"), ...doHub("leilao").filter((n) => n.id !== "leilao-caixa")].filter(publicado).map(linha).join("\n")}`,
     `## Vender\n\n${[no("vender"), ...vender.itens.map((i) => no(i.id))].filter(publicado).map(linha).join("\n")}`,
     `## Atalhos para serviços oficiais\n\n${ajuda.itens.map((i) => no(i.id)).filter(publicado).map(linha).join("\n")}`,
     `## Duvide: armadilhas e segredos\n\n- [Duvide](${url("/duvide/")}): as frases que todo mundo repete na compra e venda de imóvel, com o veredito.\n${CARTAS.map((c) => `- [${c.pergunta}](${url(`/duvide/${c.id}/`)}): ${VEREDITOS[c.veredito].rotulo}. ${c.resumo}`).join("\n")}`,

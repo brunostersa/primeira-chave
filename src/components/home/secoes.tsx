@@ -10,7 +10,7 @@ import { Termometro } from "@/components/mercado/Termometro";
 import { CartaMini } from "@/components/duvide/Grade";
 import { AvatarPersona } from "@/components/personas/Avatar";
 import { CARTAS } from "@/lib/conteudo/duvide";
-import { capaDe } from "@/lib/conteudo/figuras";
+import { Ilustracao } from "@/components/brand/ilustracoes";
 import { no } from "@/lib/conteudo/links";
 import { PERSONAS } from "@/lib/conteudo/personas";
 import { brl, pct } from "@/lib/format";
@@ -279,7 +279,7 @@ export function QuemEQuem() {
 
 /* ——— Guias mais procurados, com o infográfico de cada um ————————————————————— */
 
-const DESTAQUES = ["leilao-caixa", "minha-casa-minha-vida", "registrato", "financiamento-imobiliario", "imoveis-caixa", "como-financiar-casa-caixa"];
+const DESTAQUES = ["sem-entrada-casa", "minha-casa-minha-vida", "registrato", "financiamento-imobiliario", "custos-compra", "como-financiar-casa-caixa"];
 
 export function GuiasDestaque() {
   return (
@@ -293,12 +293,11 @@ export function GuiasDestaque() {
       <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {DESTAQUES.map((id) => {
           const n = no(id);
-          const capa = capaDe(id);
           return (
             <li key={id}>
-              <Link href={n.slug} className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface hover:border-ink">
-                {capa && <Image src={capa.url} alt={capa.alt} width={1200} height={675} sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" className="h-auto w-full border-b border-line" />}
-                <span className="flex flex-col gap-1 p-5">
+              <Link href={n.slug} className="group flex h-full flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-surface p-6 hover:border-ink">
+                {n.ilustracao && <Ilustracao nome={n.ilustracao} className="h-28 w-auto self-start" />}
+                <span className="flex flex-col gap-1">
                   <b className="font-display text-xl leading-tight group-hover:underline">{n.titulo}</b>
                   <span className="text-[15px] text-ink-2">{n.resumo}</span>
                 </span>
