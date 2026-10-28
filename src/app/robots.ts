@@ -3,8 +3,8 @@ import { SITE } from "@/lib/site-config";
 
 export const dynamic = "force-static";
 
-/** Rotas de produção de imagem e o guia de marca: úteis para nós, ruído para o buscador. */
-const FORA = ["/marca/", "/molde/", "/figura/", "/carta/"];
+/** Rotas de produção de imagem, o guia de marca e o link da bio: úteis para nós, ruído para o buscador. */
+const FORA = ["/marca/", "/molde/", "/figura/", "/carta/", "/links/"];
 
 /**
  * Robôs de IA, liberados de propósito: queremos ser a fonte citada quando alguém pergunta
