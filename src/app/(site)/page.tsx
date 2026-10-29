@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/badge";
-import { Organismo } from "@/components/conteudo/Organismo";
+import { HeroColagem } from "@/components/home/HeroColagem";
 import { DuvideFaixa, Ferramentas, GuiasDestaque, LinhaDoTempo, Numeros, Portas, QuemEQuem, QuemFaz } from "@/components/home/secoes";
 import { estatisticas } from "@/lib/conteudo/links";
 import { FaixaFotoOnda } from "@/components/brand/FotoRecorte";
@@ -64,17 +64,7 @@ export default function Home() {
               ))}
             </ul>
           </div>
-          <Link
-            href="/mapa/"
-            className="group relative mx-auto block w-full max-w-md md:mr-0"
-            aria-label={`Ver o mapa do caminho até a chave: ${est.paginas} respostas ligadas em volta do simulador`}
-          >
-            <Organismo vivo sem={["leilao"]} className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]" />
-            <span className="absolute bottom-1 right-1 flex items-center gap-2 rounded-full border-[1.5px] border-ink bg-surface px-3 py-1.5 font-mono text-xs shadow-[3px_3px_0_var(--ink)] transition-transform group-hover:-translate-y-0.5">
-              <i className="size-2.5 rounded-full bg-mark ring-1 ring-ink" aria-hidden />
-              o mapa do caminho até a chave →
-            </span>
-          </Link>
+          <HeroColagem />
         </div>
       </section>
 

@@ -126,6 +126,16 @@ body {
 .momento-entra {
   animation: momento-entra 0.28s ease-out both;
 }
+/* O convite do Recado sobe de baixo (celular) ou do canto (desktop). */
+.momento-sobe {
+  animation: momento-sobe 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes momento-sobe {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
 .momento-susto {
   animation: momento-susto 0.5s ease-out both;
 }
@@ -150,7 +160,7 @@ body {
   }
 }
 
-/* Organismo vivo (hero): o simulador pulsa, as pontes entre assuntos correm. */
+/* Organismo vivo (/mapa/): o simulador pulsa, as pontes entre assuntos correm. */
 .organismo-pulso {
   transform-box: fill-box;
   transform-origin: center;

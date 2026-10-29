@@ -41,7 +41,7 @@ function layout(sem: HubId[]): Map<string, Ponto> {
 }
 
 /**
- * `vivo`: o núcleo pulsa e as pontes entre assuntos correm (uso no hero da home).
+ * `vivo`: o núcleo pulsa e as pontes entre assuntos correm (uso no topo do /mapa/).
  * `sem`: hubs que ficam fora do desenho (a home esconde o leilão, que é público específico).
  */
 export function Organismo({ className, vivo = false, sem = [] }: { className?: string; vivo?: boolean; sem?: HubId[] }) {

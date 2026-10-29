@@ -8,6 +8,8 @@ import { CalculadoraCustos, CalculadoraGanhoCapital, CalculadoraItbi } from "./c
 import { TABELAS_REGISTRO, type Uf } from "@/lib/financiamento/custos";
 import { MapaCapitais, MapaSaoPaulo } from "@/components/mercado/sob-demanda";
 import { Termometro } from "@/components/mercado/Termometro";
+import { GatilhoUso } from "@/components/recado/GatilhoUso";
+import { TITULOS } from "@/lib/recado/convite";
 
 /** Tabelas e ferramentas que os textos citam por nome. Todo número sai do motor validado. */
 
@@ -175,11 +177,23 @@ export function Calculo({ nome }: { nome: NomeCalculo }) {
     case "prazos":
       return <Prazos />;
     case "calculadora-itbi":
-      return <CalculadoraItbi aliquotaPadrao={PARAMS.itbi} />;
+      return (
+        <GatilhoUso origem="calculadora:itbi" titulo={TITULOS.calculadora} fase="juntando">
+          <CalculadoraItbi aliquotaPadrao={PARAMS.itbi} />
+        </GatilhoUso>
+      );
     case "calculadora-ganho-capital":
-      return <CalculadoraGanhoCapital />;
+      return (
+        <GatilhoUso origem="calculadora:ganho-capital" titulo={TITULOS.calculadora} fase="vender">
+          <CalculadoraGanhoCapital />
+        </GatilhoUso>
+      );
     case "calculadora-custos":
-      return <CalculadoraCustos />;
+      return (
+        <GatilhoUso origem="calculadora:custos" titulo={TITULOS.calculadora} fase="juntando">
+          <CalculadoraCustos />
+        </GatilhoUso>
+      );
     case "tabela-registro-sp":
       return <TabelaRegistro uf="SP" />;
     case "tabela-registro-go":
@@ -191,9 +205,17 @@ export function Calculo({ nome }: { nome: NomeCalculo }) {
         </div>
       );
     case "mapa-capitais":
-      return <MapaCapitais />;
+      return (
+        <GatilhoUso origem="mapa:capitais" titulo={TITULOS.mapa}>
+          <MapaCapitais />
+        </GatilhoUso>
+      );
     case "mapa-sp":
-      return <MapaSaoPaulo />;
+      return (
+        <GatilhoUso origem="mapa:sao-paulo" titulo={TITULOS.mapa}>
+          <MapaSaoPaulo />
+        </GatilhoUso>
+      );
     case "termometro":
       return <Termometro />;
   }

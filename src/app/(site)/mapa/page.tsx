@@ -95,7 +95,7 @@ export default function MapaPage() {
           </p>
         </div>
         <Card className="bg-planta-grid p-2 sm:p-4">
-          <Organismo className="h-auto w-full" />
+          <Organismo vivo className="h-auto w-full" />
         </Card>
       </header>
 

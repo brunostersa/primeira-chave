@@ -1,12 +1,16 @@
 # Marca
 
+> **Design system oficial (29/10/2026):** https://claude.ai/artifact/9DKX8Dp5FoZw6tsJMGZtv9
+> Tokens, tipografia com as fontes reais, logos, mascote, ícones, componentes e o brand book, num link só para ilustrador, designer, parceiro ou outra sessão do Claude.
+> O código continua sendo a fonte da verdade (`src/app/globals.css`, este arquivo, `src/components/ui` e `brand`). Mudou cor, fonte, componente ou regra de marca aqui? Atualize o design system também: ele não se atualiza sozinho. Versão atual feita a partir do commit `99013af`.
+
 ## Nome
 
 **Primeira Chave** · domínio único `primeirachave.com.br` (comprado em 26/10/2026). Tudo vira página do mesmo domínio: `/vender`, `/imoveis`, `/parceiros`. Sem domínios extras.
 
 Descartados: nomes com "Claro" (lembra a operadora), portmanteaus ("finimovel"), nomes com Caixa/MCMV (marca do banco/governo, parece site oficial).
 
-Pendente: conferir @primeirachave no Instagram e busca no INPI.
+Instagram: **@primeirachavebr**. Pendente: busca no INPI.
 
 ## Tom de voz
 

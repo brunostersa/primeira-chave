@@ -1,6 +1,8 @@
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/badge";
+import { GatilhoUso } from "@/components/recado/GatilhoUso";
+import { TITULOS } from "@/lib/recado/convite";
 import { preencherTexto, type Trecho } from "@/lib/modelos/documento";
 import { urlArquivo } from "@/lib/modelos/modelos";
 import type { Modelo } from "@/lib/modelos/tipos";
@@ -13,20 +15,22 @@ import type { Modelo } from "@/lib/modelos/tipos";
 
 export function BaixarModelo({ modelo, compacto = false }: { modelo: Modelo; compacto?: boolean }) {
   return (
-    <div className="flex flex-wrap gap-2">
-      <Button asChild size={compacto ? "sm" : "default"}>
-        <a href={urlArquivo(modelo, "docx")} download>
-          <Download aria-hidden />
-          Baixar em Word
-        </a>
-      </Button>
-      <Button asChild variant="outline" size={compacto ? "sm" : "default"}>
-        <a href={urlArquivo(modelo, "pdf")} download>
-          <Download aria-hidden />
-          Baixar em PDF
-        </a>
-      </Button>
-    </div>
+    <GatilhoUso modo="baixou" origem={`modelo:${modelo.id}`} titulo={TITULOS.modelo}>
+      <div className="flex flex-wrap gap-2">
+        <Button asChild size={compacto ? "sm" : "default"}>
+          <a href={urlArquivo(modelo, "docx")} download>
+            <Download aria-hidden />
+            Baixar em Word
+          </a>
+        </Button>
+        <Button asChild variant="outline" size={compacto ? "sm" : "default"}>
+          <a href={urlArquivo(modelo, "pdf")} download>
+            <Download aria-hidden />
+            Baixar em PDF
+          </a>
+        </Button>
+      </div>
+    </GatilhoUso>
   );
 }
 

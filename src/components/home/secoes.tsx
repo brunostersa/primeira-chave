@@ -45,10 +45,10 @@ function VerMais({ href, children }: { href: string; children: ReactNode }) {
 
 /* ——— Por onde começar: três portas, pela intenção ———————————————————————————— */
 
-const PORTAS: { titulo: string; texto: string; href: string; cta: string; pose: Pose; humor?: Humor; carga?: Carga; fundo: string }[] = [
-  { titulo: "Vou comprar", texto: "Quanto posso, quanto falta de entrada e a ordem de tudo, do CPF à chave.", href: "/comprar/", cta: "Começar pela compra", pose: "voando", carga: "barro", fundo: "bg-mark" },
-  { titulo: "Vou vender", texto: "Documentos, preço que cabe na avaliação do comprador e o imposto da venda.", href: "/vender/", cta: "Ver como vender", pose: "comemora", fundo: "bg-mark-soft" },
-  { titulo: "Trabalho com imóvel", texto: "Corretor, correspondente, investidor, construtor: o que tem aqui para você.", href: "/para/", cta: "Quem é quem", pose: "chave", humor: "piscando", fundo: "bg-planta" },
+const PORTAS: { titulo: string; texto: string; href: string; cta: string; foto: string; pos?: string; icone: NomeIcone; fundo: string }[] = [
+  { titulo: "Vou comprar", texto: "Quanto posso, quanto falta de entrada e a ordem de tudo, do CPF à chave.", href: "/comprar/", cta: "Começar pela compra", foto: "/fotos/casa-isolada.webp", pos: "center 40%", icone: "chave", fundo: "bg-mark" },
+  { titulo: "Vou vender", texto: "Documentos, preço que cabe na avaliação do comprador e o imposto da venda.", href: "/vender/", cta: "Ver como vender", foto: "/fotos/beiral-laranja.webp", pos: "center 30%", icone: "moeda", fundo: "bg-mark-soft" },
+  { titulo: "Trabalho com imóvel", texto: "Corretor, correspondente, investidor, construtor: o que tem aqui para você.", href: "/para/", cta: "Quem é quem", foto: "/fotos/grade-de-janelas.webp", icone: "documento", fundo: "bg-planta" },
 ];
 
 export function Portas() {
@@ -61,10 +61,17 @@ export function Portas() {
         {PORTAS.map((p) => (
           <li key={p.href}>
             <Link href={p.href} className="group flex h-full flex-col gap-4 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-6 shadow-[4px_4px_0_var(--ink)] transition-transform hover:-translate-y-0.5">
-              <span className={cn("flex h-32 items-end justify-center rounded-xl border border-ink/15", p.fundo)}>
-                <JoaoDeBarro pose={p.pose} humor={p.humor} carga={p.carga} className="h-24 w-auto" />
+              {/* Foto de fachada (o tom de realidade) com o ícone do caminho num selo da cor da porta. */}
+              <span className="relative block">
+                <span className="block h-36 overflow-hidden rounded-xl border-[1.5px] border-ink">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- export estático, imagens já otimizadas em webp */}
+                  <img src={p.foto} alt="" loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" style={{ objectPosition: p.pos ?? "center" }} />
+                </span>
+                <span className={cn("absolute -bottom-5 left-4 flex size-14 items-center justify-center rounded-full border-[1.5px] border-ink", p.fundo)}>
+                  <IconeLinha nome={p.icone} className="size-8" />
+                </span>
               </span>
-              <b className="font-display text-2xl">{p.titulo}</b>
+              <b className="mt-4 font-display text-2xl">{p.titulo}</b>
               <span className="text-ink-2">{p.texto}</span>
               <span className="mt-auto inline-flex items-center gap-1.5 font-semibold underline underline-offset-4">
                 {p.cta} <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />

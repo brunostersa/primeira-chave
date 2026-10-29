@@ -8,6 +8,8 @@ import { cn } from "@/components/ui/utils";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import { Cota } from "@/components/brand/Logo";
 import { Relatar } from "@/components/conteudo/Relatar";
+import { ConvidarAoVer } from "@/components/recado/ConvidarAoVer";
+import { faseDoSimulador, perfilDoSimulador } from "@/lib/recado/inscrever";
 import {
   calcular,
   previaPrecoAvaliacao,
@@ -119,6 +121,8 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
           Quero a trilha completa
         </Button>
       </Card>
+
+      {!exemplo && <ConvidarAoVer origem="simulador:resultado" tipo="simulador" fase={faseDoSimulador(perfil)} perfil={perfilDoSimulador(perfil)} />}
 
       <p className="text-sm text-muted">
         Simulação educativa, não é aprovação de crédito. Não inclui a correção pela TR. Usa regras médias de mercado (referência {"out/2026"}) e não

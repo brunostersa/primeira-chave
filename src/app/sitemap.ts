@@ -63,6 +63,8 @@ const prioridade = (n: Pick<No, "tipo" | "prioridade">) => (n.tipo === "inicio" 
 const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] = [
   { slug: "/mapa/", tipo: "hub", prioridade: 3 },
   { slug: "/sobre/", tipo: "hub", prioridade: 3 },
+  ...(SITE.recado ? [{ slug: "/recado/", tipo: "hub" as const, prioridade: 2 as const }] : []),
+  { slug: "/privacidade/", tipo: "glossario", prioridade: 3 },
   { slug: "/duvide/", tipo: "hub", prioridade: 2 },
   { slug: "/duvide/corretor/", tipo: "hub", prioridade: 3 },
   ...CARTAS.map((c) => ({ slug: `/duvide/${c.id}/`, tipo: "guia" as const, prioridade: 2 as const })),

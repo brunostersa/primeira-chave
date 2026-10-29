@@ -3,6 +3,7 @@ import { LogoNome } from "@/components/brand/Logo";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import { EmailJoao } from "@/components/brand/EmailJoao";
 import { Relatar } from "@/components/conteudo/Relatar";
+import { RecadoRodape } from "@/components/recado/RecadoRodape";
 import { EmBreve } from "@/components/ui/badge";
 import { colunasRodape, nucleo, type ItemNav } from "@/lib/navegacao";
 import { SITE } from "@/lib/site-config";
@@ -21,6 +22,7 @@ export function Footer() {
       {/* O piso: uma faixa de ladrilho hidráulico, tom sobre tom. */}
       <div aria-hidden="true" className="h-14 bg-ladrilho" />
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6">
+        <RecadoRodape />
         <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,3fr)]">
           <div className="flex flex-col gap-4">
             <span className="text-[26px]">
@@ -76,7 +78,7 @@ export function Footer() {
             </li>
             <li>
               <Link href="/para/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
-                Para profissionais
+                Quem é quem
               </Link>
             </li>
             <li>
@@ -87,6 +89,18 @@ export function Footer() {
             <li>
               <Link href="/sobre/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                 Sobre
+              </Link>
+            </li>
+            {SITE.recado && (
+              <li>
+                <Link href="/recado/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+                  Recado do João
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link href="/privacidade/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+                Privacidade
               </Link>
             </li>
             <li>

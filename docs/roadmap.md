@@ -34,7 +34,7 @@ Base da pesquisa: `docs/pesquisa/como-as-pessoas-buscam.md`.
 - [ ] Simulador: gráfico SAC × PRICE e parâmetros editáveis (estavam no protótipo, ainda não portados)
 - [ ] Medição: GA4 + Search Console ligados no hub de relatórios do Bruno; evento de "simulação concluída" e "lead"
 - [ ] Captura de lead no resultado do simulador (e-mail/WhatsApp para receber o plano)
-- [ ] Instagram @primeirachave com o avatar do João-de-barro
+- [ ] Instagram @primeirachavebr com o avatar do João-de-barro
 
 ## Fase 1 — Lowtickets (semanas 2–6) · curto prazo
 
