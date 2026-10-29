@@ -3,6 +3,8 @@ import Link from "next/link";
 import { LogoNome } from "@/components/brand/Logo";
 import { Poupando } from "@/components/brand/Poupando";
 import { IconeLinha } from "@/components/brand/icones";
+import { EmailJoao } from "@/components/brand/EmailJoao";
+import { Relatar } from "@/components/conteudo/Relatar";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/components/ui/utils";
 import { metadadosPagina } from "@/lib/seo";
@@ -71,9 +73,14 @@ export default function LinksPage() {
         ))}
       </nav>
 
+      <Relatar contexto="links" tipos={["sugestao"]} className="justify-center" />
+
       <footer className="mt-auto flex flex-col items-center gap-1 pt-4 text-center font-mono text-xs text-muted">
         <span>Conteúdo educativo. Não somos banco nem correspondente bancário.</span>
-        <a href={SITE.instagram} className="underline underline-offset-2">@primeirachavebr</a>
+        <span className="flex gap-3">
+          <EmailJoao className="underline underline-offset-2" />
+          <a href={SITE.instagram} className="underline underline-offset-2">@primeirachavebr</a>
+        </span>
       </footer>
     </main>
   );

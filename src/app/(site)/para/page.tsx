@@ -59,6 +59,18 @@ export default function ParaPage() {
             </li>
           ))}
         </ul>
+        <Link
+          href="/midia-kit/"
+          className="group flex flex-col gap-2 rounded-[var(--radius-card)] bg-mark p-5 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <span>
+            <b className="block font-display text-2xl leading-tight">Quer divulgar a Primeira Chave?</b>
+            <span className="text-[15px]">Pegue o seu link de parceiro, os logos, o João e os posts prontos no mídia kit.</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 font-semibold underline underline-offset-4">
+            Abrir o mídia kit <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
+          </span>
+        </Link>
       </div>
     </>
   );

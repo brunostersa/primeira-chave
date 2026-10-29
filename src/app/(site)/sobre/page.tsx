@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import { Ilustracao } from "@/components/brand/ilustracoes";
+import { EmailJoao } from "@/components/brand/EmailJoao";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/badge";
@@ -161,7 +162,7 @@ export default function SobrePage() {
           </Card>
 
           <p className="text-sm text-muted">
-            Fale com a gente pelo{" "}
+            Fale com a gente: escreva para o João, <EmailJoao className="underline" />, ou chame no{" "}
             <a href={SITE.instagram} rel="noopener" className="underline underline-offset-4">
               Instagram
             </a>

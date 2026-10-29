@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { LogoNome } from "@/components/brand/Logo";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
+import { EmailJoao } from "@/components/brand/EmailJoao";
+import { Relatar } from "@/components/conteudo/Relatar";
 import { EmBreve } from "@/components/ui/badge";
 import { colunasRodape, nucleo, type ItemNav } from "@/lib/navegacao";
 import { SITE } from "@/lib/site-config";
@@ -30,6 +32,7 @@ export function Footer() {
             <Link href={simulador.slug} className="w-fit font-semibold underline underline-offset-4">
               Simular quanto você pode comprar
             </Link>
+            <Relatar contexto="rodape" tipos={["sugestao"]} className="max-w-sm" />
             {/* Easter egg: cinco cliques rápidos aqui (ou no ©) soltam a revoada (RevoadaSurpresa). */}
             <span data-revoada className="mt-2 hidden w-20 md:block">
               <JoaoDeBarro pose="barro" className="w-full" />
@@ -77,9 +80,17 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/midia-kit/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+                Mídia kit
+              </Link>
+            </li>
+            <li>
               <Link href="/sobre/" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                 Sobre
               </Link>
+            </li>
+            <li>
+              <EmailJoao className="inline-flex min-h-11 items-center" />
             </li>
             <li>
               <a href={SITE.instagram} rel="noopener" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">

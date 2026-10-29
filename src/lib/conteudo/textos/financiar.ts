@@ -369,7 +369,7 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
           },
         ],
       },
-      { titulo: "Faça a conta", blocos: [{ p: "Compare a parcela do consórcio com a do [simulador](#simulador) e com o aluguel que você paga hoje: veja também [alugar ou financiar](#alugar-ou-financiar)." }] },
+      { titulo: "Compare as parcelas", blocos: [{ p: "Compare a parcela do consórcio com a do [simulador](#simulador) e com o aluguel que você paga hoje: veja também [alugar ou financiar](#alugar-ou-financiar)." }] },
     ],
     faq: [{ q: "Dá para usar FGTS no consórcio?", a: "Sim, em situações previstas nas regras do FGTS, como para dar lance ou complementar a carta." },
       { q: "Consórcio tem juros?", a: "Não. O custo é a taxa de administração, mais fundo de reserva e seguros, e as parcelas são corrigidas por um índice." },

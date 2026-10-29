@@ -83,7 +83,7 @@ export function momentoDaRenda(renda: number): Momento {
     return { id: "nao-cabe", puxador: "triste", passaro: "triste", texto: "Com essa renda, a parcela ainda não cabe. Somar a renda de quem compra junto costuma resolver." };
   }
   if (renda >= RENDA.max) {
-    return { id: "maximo", puxador: "feliz", passaro: "feliz", texto: `Ganha mais de ${brl(RENDA.max)}? Faça a conta exata no simulador: ele aceita qualquer renda.`, simulador: true };
+    return { id: "maximo", puxador: "feliz", passaro: "feliz", texto: `Ganha mais de ${brl(RENDA.max)}? Simule o valor exato: o simulador aceita qualquer renda.`, simulador: true };
   }
 
   // Degrau: a renda passou de um limite de faixa e o banco financia MENOS do que no limite.

@@ -43,7 +43,7 @@ export const GLOSSARIO_TEXTOS: Record<string, TextoTermo> = {
       "Imposto sobre Transmissão de Bens Imóveis. A prefeitura cobra quando o imóvel muda de dono. A alíquota varia por cidade, em geral entre 2% e 3%.",
       "A base é o maior valor entre o preço do negócio e o valor que a prefeitura atribui ao imóvel.",
     ],
-    cuidado: "O FGTS não paga o ITBI. Faça a conta na [calculadora de ITBI](#calculadora-itbi).",
+    cuidado: "O FGTS não paga o ITBI. Calcule o valor na [calculadora de ITBI](#calculadora-itbi).",
   },
   fgts: {
     explicacao: [

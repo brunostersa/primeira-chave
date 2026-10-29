@@ -90,7 +90,7 @@ export const TEXTOS_MERCADO: Record<string, Texto> = {
             ],
           },
           { calculo: "termometro" },
-          { p: "Veja quanto a sua renda compra em [cada capital](#quanto-minha-renda-compra) e faça a conta completa no [simulador](#simulador)." },
+          { p: "Veja quanto a sua renda compra em [cada capital](#quanto-minha-renda-compra) e simule o seu caso completo no [simulador](#simulador)." },
         ],
       },
     ],

@@ -223,7 +223,7 @@ export const HUBS_TEXTOS: Record<string, TextoHub> = {
                 itens: [
                   { titulo: "Ache o imóvel", texto: "Filtre por cidade e modalidade no site oficial da Caixa." },
                   { titulo: "Leia edital e matrícula", texto: "Ocupação, dívidas e quem paga o quê." },
-                  { titulo: "Faça a conta", texto: "Lance + custos + reforma + desocupação." },
+                  { titulo: "Calcule o lance", texto: "Lance + custos + reforma + desocupação." },
                   { titulo: "Lance e registro", texto: "Pague no prazo do edital e registre no cartório." },
                 ],
               },

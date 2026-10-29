@@ -116,6 +116,28 @@ Dois produtos, mesmo formato: página de vendas + PDF/área simples + checklist.
 - **Antes e depois**: anúncio comparando a explicação do banco com a da Primeira Chave.
 - **PR digital (avaliar depois)**: virar fonte de jornalista com dado próprio — "m² pago (ITBI) × m² anunciado", "quanto precisa ganhar em cada capital", termômetro mensal do IVG-R — numa página `/dados/` com metodologia + release. Links de portal valem mais que meses de conteúdo.
 
+### Microrrelatórios pagos ("pague para ver o resultado") — ideia de 28/10/2026
+
+Referência: um site que mostra o processo judicial com as respostas travadas ("O que já aconteceu? Qual a situação atual? Próximos passos?") e libera o resumo por IA num Pix de R$ 9,90. Ele consome uma API de dados públicos e fica com a diferença entre o preço e o custo da consulta. O formato combina com a Primeira Chave: a pessoa já está ansiosa com uma decisão grande, o resultado parcial aparece de graça e o detalhe custa pouco.
+
+O que o João poderia vender no nosso ecossistema (do mais encaixado para o menos):
+
+| Ideia | O que a pessoa recebe | Fonte de dados | Por que encaixa |
+|---|---|---|---|
+| **Raio-X do imóvel de leilão** | Resumo do processo de onde o imóvel saiu: fase, ocupação, dívidas, recursos pendentes, riscos de anulação | Processo pelo número (DataJud, a API pública do CNJ) + edital | É o print de referência aplicado ao leilão. Bruno arremata e conhece os riscos; já temos o guia de leilão Caixa |
+| **Avaliação provável do imóvel** | Faixa em que o banco deve avaliar, com vendas reais da região e o efeito na entrada ("o segredo") | ITBI pago (já usamos em SP), dados de anúncio | Liga direto ao simulador: avaliação ≥ preço ÷ 0,8 zera a entrada |
+| **Raio-X da matrícula** | A pessoa sobe a certidão de matrícula; a IA traduz ônus, penhoras, usufruto e o que travaria o financiamento | PDF que a própria pessoa envia (sem API) | Custo quase zero; resolve a dúvida nº 1 antes do sinal |
+| **Checagem do vendedor** | Processos em andamento contra o vendedor que podem ameaçar a venda (fraude contra credores) | APIs de tribunais/consulta por nome (avaliar fornecedor e custo) | Complementa o checklist de documentos; alto valor percebido |
+| **Plano até a chave em PDF** | O resultado do simulador vira um plano mês a mês (quanto guardar, o que regularizar, quando pedir o crédito) | O nosso motor | É o lowtick mais simples: não depende de terceiro |
+
+Modelo: R$ 9,90 a R$ 29,90 por relatório, Pix único, prévia grátis com os tópicos travados (como no print). Margem = preço − custo da API/IA − taxa do Pix. Os pedidos e os pagamentos entram no Hub como os leads (channel próprio), o que também mede a conversão.
+
+Cuidados antes de lançar (validar com o advogado e o contador, ver `docs/pesquisa/amparo-tecnico-juridico-caixa.md`):
+- Resumo de processo não pode virar consultoria jurídica: aviso "não substitui advogado nem a certidão/autos", sem recomendação de "compre/não compre".
+- Consulta por nome de pessoa (vendedor) é tratamento de dado pessoal: base legal da LGPD, finalidade clara e não guardar além do necessário.
+- Venda online exige CNPJ, endereço e contato visíveis (Decreto 7.962/2013), política de reembolso e nota fiscal.
+- Conferir custo e termos de uso de cada API (DataJud é gratuita, mas tem limite e regras de uso; fornecedores de consulta por nome são pagos).
+
 ## Regras do jogo
 
 - Nunca parecer site oficial da Caixa/governo; sempre "como funciona", nunca "faça aqui".

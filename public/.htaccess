@@ -1,2 +1,12 @@
 # Hostinger (Apache): página de erro do próprio site.
 ErrorDocument 404 /404.html
+
+# Link curto de parceiro (mídia kit): /p/<parceiro> e /p/<parceiro>/<destino>
+# viram a página certa com as UTMs que o GA4 lê. O gerador fica em src/components/conteudo/LinkParceiro.tsx.
+RewriteEngine On
+RewriteRule ^p/([a-z0-9-]+)/?$ /simulador-financiamento-caixa/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=simulador [R=302,L]
+RewriteRule ^p/([a-z0-9-]+)/inicio/?$ /?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=home [R=302,L]
+RewriteRule ^p/([a-z0-9-]+)/documentos/?$ /documentos-para-financiar-imovel/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=documentos [R=302,L]
+RewriteRule ^p/([a-z0-9-]+)/mcmv/?$ /minha-casa-minha-vida/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=mcmv [R=302,L]
+RewriteRule ^p/([a-z0-9-]+)/sem-entrada/?$ /financiar-casa-sem-entrada/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=sem-entrada [R=302,L]
+RewriteRule ^p/([a-z0-9-]+)/quanto-ganhar/?$ /quanto-preciso-ganhar-para-financiar/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=quanto-ganhar [R=302,L]

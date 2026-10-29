@@ -28,7 +28,7 @@ export const TEXTOS_ATALHOS: Record<string, Texto> = {
               "**Algo que você não reconhece?** Conteste com o banco que informou.",
             ],
           },
-          { p: "Depois, refaça a conta no [simulador](#simulador)." },
+          { p: "Depois, simule de novo no [simulador](#simulador)." },
         ],
       },
       {

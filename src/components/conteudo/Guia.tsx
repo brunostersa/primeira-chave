@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { TopoDaPagina } from "@/components/brand/FotoRecorte";
 import { Poupando } from "@/components/brand/Poupando";
+import { Relatar } from "./Relatar";
 import { FOTO_HOME } from "@/lib/conteudo/fotos";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -116,6 +117,7 @@ export function Guia({
             {children}
 
             <Perguntas faq={faq} />
+            <Relatar contexto={`guia:${n.id}`} className="border-t border-line pt-4" />
           </div>
 
           <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">

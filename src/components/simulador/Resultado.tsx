@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/components/ui/utils";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import { Cota } from "@/components/brand/Logo";
+import { Relatar } from "@/components/conteudo/Relatar";
 import {
   calcular,
   previaPrecoAvaliacao,
@@ -123,6 +124,7 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
         Simulação educativa, não é aprovação de crédito. Não inclui a correção pela TR. Usa regras médias de mercado (referência {"out/2026"}) e não
         substitui a análise do banco, que considera seu histórico, os documentos e a avaliação do imóvel. Seguros e taxas são estimados.
       </p>
+      <Relatar contexto="simulador:resultado" />
     </section>
   );
 }
@@ -332,12 +334,13 @@ function QuemPaga({ r, perfil }: { r: R; perfil: Perfil }) {
   const fr = (x: number) => Math.max(x, 1);
   return (
     <>
-      <div className="flex flex-col gap-1 overflow-x-auto">
+      {/* pt-2: o rótulo da cota sobe acima da linha, e o overflow-x cortaria o topo dele. */}
+      <div className="flex flex-col gap-1 overflow-x-auto pt-2">
         <Cota rotulo={`preço do imóvel · ${brl(r.V)}`} className="mb-2 min-w-[460px]" />
         <div className="flex h-16 min-w-[460px] gap-1 text-sm font-semibold" style={{ display: "grid", gridTemplateColumns: `${fr(r.entrada)}fr ${fr(r.P)}fr ${fr(r.custos)}fr` }}>
-          <div className="flex min-w-20 flex-col justify-center rounded-l-lg bg-mark px-3">Entrada<span className="font-normal tabular-nums">{brl(r.entrada)}</span></div>
-          <div className="flex min-w-24 flex-col justify-center bg-planta px-3">Banco empresta<span className="font-normal tabular-nums">{brl(r.P)}</span></div>
-          <div className="bg-hachura ml-2 flex min-w-20 flex-col justify-center rounded-r-lg px-3"><span className="w-fit bg-mark-soft px-1">Custos</span><span className="w-fit bg-mark-soft px-1 font-normal tabular-nums">{brl(r.custos)}</span></div>
+          <div className="flex min-w-24 flex-col justify-center whitespace-nowrap rounded-l-lg bg-mark px-3">Entrada<span className="font-normal tabular-nums">{brl(r.entrada)}</span></div>
+          <div className="flex min-w-28 flex-col justify-center whitespace-nowrap bg-planta px-3">Banco empresta<span className="font-normal tabular-nums">{brl(r.P)}</span></div>
+          <div className="bg-hachura ml-2 flex min-w-24 flex-col justify-center whitespace-nowrap rounded-r-lg px-2"><span className="w-fit bg-mark-soft px-1">Custos</span><span className="w-fit bg-mark-soft px-1 font-normal tabular-nums">{brl(r.custos)}</span></div>
         </div>
       </div>
       <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-[15px]">

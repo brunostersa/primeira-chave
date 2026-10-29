@@ -15,6 +15,7 @@ Pendente: conferir @primeirachave no Instagram e busca no INPI.
 - Número primeiro, explicação depois. Uma ideia por tela.
 - Honesto: diz o que é estimativa e o que precisa confirmar no banco. Nunca promete aprovação.
 - "Não sei" é resposta válida.
+- **Nunca "criar conta".** Não existe conta de usuário: o convite é aprender e simular ("Simule o seu financiamento", "Faça a simulação", "Aprenda como funciona"). Evite "Faça a sua conta" em botão ou título, que soa como cadastro; dentro da frase, com contexto de cálculo ("a conta do lance"), pode.
 
 ## Sistema visual — direção A "Planta" (escolhida em 27/10/2026)
 

@@ -357,7 +357,7 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         titulo: "Quando tentar de novo",
         blocos: [
           { p: "Assim que o motivo estiver resolvido. Pedir de novo sem mudar nada tende a dar o mesmo resultado — e várias consultas seguidas pesam no [score](#score)." },
-          { p: "Refaça a conta no [simulador](#simulador) com os números novos antes de voltar ao banco." },
+          { p: "Simule de novo no [simulador](#simulador) com os números novos antes de voltar ao banco." },
         ],
       },
     ],
@@ -477,7 +477,7 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
     ],
-    faq: [{ q: "O condomínio entra nos 30% da renda?", a: "Não na conta do banco, mas entra no seu bolso todo mês. Faça a conta com ele." },
+    faq: [{ q: "O condomínio entra nos 30% da renda?", a: "Não na conta do banco, mas entra no seu bolso todo mês. Inclua ele no seu orçamento." },
       { q: "Funciona com apartamento na planta?", a: "Em geral não: na planta você paga a construtora durante a obra. A regra da avaliação vale para o imóvel pronto financiado." },
       { q: "A renda precisa aguentar a parcela maior?", a: "Sim. Sem entrada, você financia mais, e a parcela tem de caber em 30% da renda." },
     ],
