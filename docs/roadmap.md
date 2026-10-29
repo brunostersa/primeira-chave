@@ -100,6 +100,13 @@ Dois produtos, mesmo formato: página de vendas + PDF/área simples + checklist.
   - Números sempre do motor (renda, parcela, faixa MCMV), nunca inventados pelo modelo
   - Guardrails: nunca se passar por Caixa/banco, nada de "preço por fora" ou atalho fora da regra, sem aconselhamento jurídico/financeiro individual; ao fim, convite para simular ou falar com um parceiro (gancho de lead)
   - Técnico: o site é estático, então precisa de um backend pequeno (função serverless) chamando a API do Claude com o conteúdo como contexto; limite de uso por pessoa e registro das perguntas para virar pauta de SEO
+- [ ] **Link da compra (acompanhar junto)** — ideia de 28/10/2026: qualquer pessoa gera um link da própria compra e a jornada fica viva nele (fase, checklist feito, números do simulador, documentos que faltam, próximos passos)
+  - Sem conta nem senha: o link é a chave, como um documento compartilhado; recupera pelo e-mail. O convite é "guardar e compartilhar a sua compra", nunca "criar conta"
+  - Gente junto desde o início: cônjuge, quem compõe renda, os pais que ajudam com a entrada. Todos abrem o mesmo link e veem o mesmo plano
+  - Chamar ajuda depois: a pessoa convida um consultor (corretor, correspondente, advogado, despachante) para acompanhar a jornada inteira ou só um trecho, e escolhe o que ele vê
+  - Reunir na hora: botão "chamar para conversar agora" abre uma conversa ao vivo (vídeo ou chat) com quem está no link, com a tela da compra aberta para todos
+  - Liga com o que já existe: o Recado do João manda o e-mail da fase em que o link está; os consultores convidados viram a porta das Parcerias acima (receita por lead ou plano do consultor)
+  - Cuidados: só o mínimo de dado pessoal (renda e documentos são sensíveis, LGPD); o dono do link decide quem entra e pode tirar o acesso; link longo e imprevisível, com prazo e PIN opcional; deixar claro quem é quem (o consultor convidado não é a Primeira Chave, e não somos banco nem correspondente)
 
 ## Ideias de mercado a avaliar
 
