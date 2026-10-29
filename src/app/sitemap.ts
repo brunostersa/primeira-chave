@@ -7,6 +7,7 @@ import { ARVORE, type No } from "@/lib/conteudo/arvore";
 import { naRotaUnica } from "@/lib/conteudo/textos";
 import { arquivoFigura, figurasDe } from "@/lib/conteudo/figuras";
 import { SITE } from "@/lib/site-config";
+import { MODELOS } from "@/lib/modelos/modelos";
 
 export const dynamic = "force-static";
 
@@ -36,6 +37,9 @@ const PASTA_TEXTOS = "src/lib/conteudo/textos";
 const TEXTOS_FONTE = readdirSync(PASTA_TEXTOS).map((f) => ({ f: `${PASTA_TEXTOS}/${f}`, s: readFileSync(`${PASTA_TEXTOS}/${f}`, "utf8") }));
 const fonteDoTexto = (id: string) => TEXTOS_FONTE.find(({ s }) => new RegExp(`\\n  "?${id.replace(/^g-/, "")}"?: \\{`).test(s))?.f;
 
+/** Modelos de contrato: uma rota dinâmica (modelos-de-contrato/[modelo]) monta cada um. */
+const ehModelo = (n: No) => n.tipo === "modelo" && MODELOS.some((m) => m.id === n.id);
+
 const FREQUENCIA: Record<No["tipo"], Frequencia> = {
   inicio: "weekly",
   nucleo: "monthly",
@@ -46,6 +50,7 @@ const FREQUENCIA: Record<No["tipo"], Frequencia> = {
   programatica: "monthly",
   local: "monthly",
   glossario: "yearly",
+  modelo: "monthly",
 };
 
 const prioridade = (n: Pick<No, "tipo" | "prioridade">) => (n.tipo === "inicio" ? 1 : n.tipo === "nucleo" ? 0.9 : { 1: 0.8, 2: 0.6, 3: 0.4 }[n.prioridade]);
@@ -67,13 +72,13 @@ const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] 
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // As rotas fixas existem por construção (página própria ou rota dinâmica com generateStaticParams).
-  const daArvore = ARVORE.filter((n) => n.status === "publicado").filter((n) => existsSync(arquivo(n.slug)) || naRotaUnica(n));
+  const daArvore = ARVORE.filter((n) => n.status === "publicado").filter((n) => existsSync(arquivo(n.slug)) || naRotaUnica(n) || ehModelo(n));
   const absoluta = (url: string) => `${SITE.url}${url}`;
   return [
     ...daArvore.map((n) => ({
       // trailingSlash: true no next.config — a URL canônica termina em "/".
       url: absoluta(n.slug),
-      lastModified: ultimaAlteracao(existsSync(arquivo(n.slug)) ? arquivo(n.slug) : (fonteDoTexto(n.id) ?? arquivo(n.slug))),
+      lastModified: ultimaAlteracao(ehModelo(n) ? "src/lib/modelos/modelos.ts" : existsSync(arquivo(n.slug)) ? arquivo(n.slug) : (fonteDoTexto(n.id) ?? arquivo(n.slug))),
       changeFrequency: FREQUENCIA[n.tipo],
       priority: prioridade(n),
       // Infográficos da página: entram no Google Imagens ligados a ela.

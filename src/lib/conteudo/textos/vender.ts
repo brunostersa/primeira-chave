@@ -319,6 +319,21 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
         ],
       },
       { titulo: "E a escritura?", blocos: [{ p: "No financiamento, o contrato do banco faz o papel da [escritura](g:escritura). O contrato particular vem antes, para amarrar o negócio até lá." }] },
+      {
+        titulo: "Modelos para baixar",
+        blocos: [
+          { p: "Em Word e PDF, grátis, com os campos a preencher grifados e cada cláusula explicada:" },
+          {
+            lista: [
+              "[Compra e venda com financiamento](#modelo-compra-venda-financiada): com a cláusula que devolve o sinal se o banco negar.",
+              "[Compra e venda à vista](#modelo-compra-venda-a-vista): sinal agora, saldo na escritura.",
+              "[Recibo de sinal](#modelo-recibo-de-sinal): quando o sinal sai antes do contrato completo.",
+              "[Distrato](#modelo-distrato): para desfazer o negócio de comum acordo.",
+            ],
+          },
+          { p: "Todos os modelos, inclusive aluguel e declaração de primeiro imóvel, em [modelos de contrato](#modelos-de-contrato)." },
+        ],
+      },
     ],
     faq: [{ q: "Preciso de advogado?", a: "Para negócios de valor alto ou com pendências, sim. Um contrato bem feito custa menos que um problema." },
       { q: "Preciso de advogado para fazer o contrato?", a: "Não é obrigatório, mas é recomendável numa compra desse tamanho, principalmente se houver sinal alto ou prazos longos." },

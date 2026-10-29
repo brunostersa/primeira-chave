@@ -1,5 +1,6 @@
 import type { No } from "../arvore";
 import type { Texto } from "../tipos";
+import { MODELOS } from "../../modelos/modelos";
 import { TEXTOS_ATALHOS } from "./atalhos";
 import { TEXTOS_COMPRAR } from "./comprar";
 import { TEXTOS_FERRAMENTAS } from "./ferramentas";
@@ -27,7 +28,7 @@ export const TEXTOS: Record<string, Texto> = {
 };
 
 /** Páginas com rota própria escrita à mão (fora da rota única). */
-export const PAGINAS_PROPRIAS = new Set(["inicio", "simulador", "guias", "sem-entrada-casa"]);
+export const PAGINAS_PROPRIAS = new Set(["inicio", "simulador", "guias", "sem-entrada-casa", "modelos-de-contrato", ...MODELOS.map((m) => m.id)]);
 
 /** A página é montada pela rota única (conteúdo como dados)? */
 export function naRotaUnica(n: No) {

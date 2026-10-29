@@ -9,6 +9,7 @@ Base da pesquisa: `docs/pesquisa/como-as-pessoas-buscam.md`.
 - [x] Nome e domínio: primeirachave.com.br
 - [x] Direção visual A "Planta" + João-de-barro + explorações de logo (canvas)
 - [x] Pesquisa de como as pessoas buscam
+- [x] Modelos de contrato para baixar (`/modelos-de-contrato/`): compra e venda financiada e à vista, recibo de sinal, aluguel, distrato e declaração de primeiro imóvel, em Word e PDF, com notas por cláusula e prompt para preencher com IA
 
 ## Os 4 pilares do site
 
@@ -71,6 +72,9 @@ Dois produtos, mesmo formato: página de vendas + PDF/área simples + checklist.
 
 **c) Atalhos (links difíceis)** — curtos, um por intenção, ótimos para ranquear rápido:
 - [ ] Consultar saldo do FGTS · Registrato (consultar CPF no Banco Central) · Simulador da Caixa (e como ler o resultado) · 2ª via do boleto Habitação Caixa · Certidão de matrícula online · Ônus × matrícula × inteiro teor (é a mesma coisa?)
+
+**d) Modelos de contrato: editor no navegador**
+- [ ] Formulário com os campos de cada modelo (nomes, CPF, endereço, valores, datas) que preenche o modelo e gera o .docx e o PDF no próprio navegador, sem enviar nada a servidor. Esforço estimado: meio dia (3 a 5 h): os geradores de `src/lib/modelos/` já aceitam os valores. Falta o formulário por grupo, as máscaras de CPF, valor e data, o valor por extenso, a prévia ao vivo e o rascunho salvo no navegador.
 
 ## Fase 3 — Vendedor + local (mês 3–6)
 

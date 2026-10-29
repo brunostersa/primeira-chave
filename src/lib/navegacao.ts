@@ -67,6 +67,8 @@ const MAPA: ItemNav = { id: "mapa", titulo: "Mapa do site", resumo: "Todas as p�
 const DUVIDE: ItemNav = { id: "duvide", titulo: "Duvide: armadilhas e segredos", resumo: "Contrato de gaveta, ágio, preço por fora e mais.", href: "/duvide/" };
 const PROFISSIONAIS: ItemNav = { id: "para", titulo: "Para profissionais", resumo: "Corretor, correspondente, investidor, construtor e imobiliária.", href: "/para/" };
 const SOBRE: ItemNav = { id: "sobre", titulo: "Sobre a Primeira Chave", resumo: "Quem faz, por quê e como trabalhamos.", href: "/sobre/" };
+/** Modelos de contrato para baixar: servem a quem compra e a quem vende, então aparecem nas duas portas. */
+const MODELOS_CONTRATO: ItemNav = atalho("modelos-de-contrato", "Modelos de contrato");
 
 /**
  * Ferramentas por família. Simulador = responde com o seu plano (renda, parcela, entrada);
@@ -103,9 +105,9 @@ export function secoesMenu(): SecaoNav[] {
       href: linkDe("ferramentas"),
       itens: ferramentas.slice(0, MAX_ITENS).map(item),
       colunas,
-      extras: [],
+      extras: [MODELOS_CONTRATO],
     },
-    { id: "vender", rotulo: "Vender", resumo: no("vender").resumo, href: linkDe("vender"), itens: paginasDoHub("vender").slice(0, MAX_ITENS).map(item), extras: [] },
+    { id: "vender", rotulo: "Vender", resumo: no("vender").resumo, href: linkDe("vender"), itens: paginasDoHub("vender").slice(0, MAX_ITENS).map(item), extras: [MODELOS_CONTRATO] },
     {
       id: "ajuda",
       rotulo: "Ajuda",

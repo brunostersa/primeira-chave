@@ -83,7 +83,7 @@ export function Guia({
             </Eyebrow>
             <h1 className="font-display text-[clamp(34px,5.4vw,58px)] font-light leading-[1.02]">{h1 ?? n.titulo}</h1>
             <p className="text-lg text-ink-2">{n.resumo}</p>
-            {n.tipo !== "atalho" && (
+            {n.tipo !== "atalho" && n.tipo !== "modelo" && (
               <p className="font-mono text-xs text-muted">Regras de {mes(PARAMS_ATUALIZADOS_EM)} · conferidas no simulador da Caixa</p>
             )}
           </div>
