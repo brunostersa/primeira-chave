@@ -53,6 +53,9 @@ jobs:
           local-dir: ./out/
           # Envia só o que mudou (guarda o estado no servidor) e não apaga o que não é do build.
           dangerous-clean-slate: false
+          # Estado novo: o antigo (parado em 27/10) apontava para uma pasta que já não existe e
+          # todo deploy quebrava ao tentar apagá-la ("550 No such file"), sem gravar o estado.
+          state-name: .ftp-deploy-sync-state-v2.json
           # Rotas internas que só existem para gerar imagens e o guia de marca (fora do robots.txt).
           exclude: |
             **/.git*
