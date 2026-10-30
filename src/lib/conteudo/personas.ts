@@ -52,6 +52,7 @@ export const PERSONAS: Persona[] = [
       { titulo: "Posts prontos", texto: "Cards 1080×1350 com legenda para copiar.", href: "/duvide/corretor/" },
       { titulo: "Guias para mandar no WhatsApp", texto: "Cada dúvida do cliente tem uma página com resposta curta.", href: "/guias/" },
       { titulo: "Preço do m² real", texto: "Mapa de preço pago por distrito, para conversar com dados.", href: "/metro-quadrado-sao-paulo/" },
+      { titulo: "Comunidade no WhatsApp", texto: "Um card pronto por semana e um grupo para tirar dúvida de financiamento.", href: "/grupo/" },
     ],
     passos: [
       { titulo: "Antes da visita", texto: "Mande o simulador: o cliente chega sabendo o teto dele." },
@@ -117,6 +118,7 @@ export const PERSONAS: Persona[] = [
       { titulo: "Registrato e score", texto: "O cliente vê antes o que o banco vai ver.", href: "/atalhos/registrato/" },
       { titulo: "Checklist de documentos", texto: "Comprador, vendedor e imóvel, para entregar de uma vez.", href: "/documentos-para-financiar-imovel/" },
       { titulo: "FGTS", texto: "As três regras para o FGTS entrar na compra.", href: "/usar-fgts-para-comprar-imovel/" },
+      { titulo: "Comunidade no WhatsApp", texto: "Um card pronto por semana e um grupo para tirar dúvida de financiamento.", href: "/grupo/" },
     ],
     passos: [
       { titulo: "No primeiro contato", texto: "Mande o simulador e o Registrato." },

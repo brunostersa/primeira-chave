@@ -4,7 +4,7 @@ import { CARTAS } from "./duvide";
 import { PERSONAS } from "./personas";
 
 /** As personas só apontam para páginas que existem (árvore publicada ou rotas fixas). */
-const FIXAS = ["/duvide/", "/duvide/corretor/", "/sobre/", "/mapa/", ...CARTAS.map((c) => `/duvide/${c.id}/`)];
+const FIXAS = ["/duvide/", "/duvide/corretor/", "/sobre/", "/mapa/", "/grupo/", ...CARTAS.map((c) => `/duvide/${c.id}/`)];
 const existe = (href: string) => FIXAS.includes(href) || ARVORE.some((n) => n.slug === href && n.status === "publicado");
 
 describe("personas", () => {

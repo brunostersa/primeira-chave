@@ -106,7 +106,7 @@ export default function Home() {
               A casa própria não vem de uma vez. <span className="marca-texto font-semibold">Vem da conta certa.</span>
             </p>
             <Link href="/simulador-financiamento-caixa/" className="mt-4 inline-block font-semibold underline underline-offset-4">
-              Fazer a minha conta
+              Simular o meu financiamento
             </Link>
           </Card>
         </div>

@@ -111,6 +111,11 @@ export function Footer() {
                 Instagram
               </a>
             </li>
+            <li>
+              <a href={SITE.canalWhatsapp} rel="noopener" className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+                Canal no WhatsApp
+              </a>
+            </li>
           </ul>
           <p data-revoada className="select-none font-mono text-xs text-muted">
             © {new Date().getFullYear()} Primeira Chave

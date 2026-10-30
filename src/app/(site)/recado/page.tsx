@@ -4,6 +4,7 @@ import { JoaoCarteiro } from "@/components/brand/JoaoCarteiro";
 import { InscricaoRecado } from "@/components/recado/InscricaoRecado";
 import { feedRecado } from "@/lib/recado/feed";
 import { FASES } from "@/lib/recado/sequencias";
+import { Button } from "@/components/ui/button";
 import { metadadosPagina } from "@/lib/seo";
 import { SITE } from "@/lib/site-config";
 
@@ -29,9 +30,20 @@ export default function RecadoPage() {
         <h1 className="font-display text-[clamp(38px,7vw,60px)] font-light leading-[1.02]">
           O primeiro imóvel, <span className="marca-texto font-semibold">de bico em bico.</span>
         </h1>
-        <p className="max-w-lg text-lg text-ink-2">Um e-mail curto por semana: um número, uma armadilha e um atalho. Sem economês e sem ninguém tentando te vender nada.</p>
+        <p className="max-w-lg text-lg text-ink-2">
+          {SITE.recado ? "Um e-mail curto por semana" : "Uma dica curta por semana, no canal do WhatsApp"}: um número, uma armadilha e um atalho. Sem economês e sem ninguém tentando te vender nada.
+        </p>
         {/* O mesmo cartão do rodapé (com o bando pousado na borda), sem repetir o título. */}
         {SITE.recado && <InscricaoRecado origem="recado" compacto cabecalho={false} className="mt-6 w-full text-left" />}
+        {/* O canal do WhatsApp: o mesmo recado, curto, para quem prefere não dar o e-mail. */}
+        <div className="mt-2 flex flex-col items-center gap-2">
+          <Button asChild variant={SITE.recado ? "outline" : "default"} size="lg">
+            <a href={SITE.canalWhatsapp} rel="noopener">
+              Seguir o Recado no WhatsApp
+            </a>
+          </Button>
+          <p className="text-sm text-muted">{SITE.recado ? "Prefere WhatsApp? " : ""}É um canal: só chega o recado, e ninguém vê o seu número.</p>
+        </div>
       </header>
 
       <section aria-labelledby="exemplo" className="flex flex-col gap-4">
@@ -73,6 +85,7 @@ export default function RecadoPage() {
         </dl>
       </section>
 
+      {SITE.recado && (
       <p className="text-center text-sm text-muted">
         Só o e-mail e a fase. Nada de telefone nem ligação, e você sai com um clique.{" "}
         <Link href="/privacidade/" className="underline underline-offset-2">
@@ -80,6 +93,7 @@ export default function RecadoPage() {
         </Link>
         .
       </p>
+      )}
     </article>
   );
 }
