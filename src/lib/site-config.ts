@@ -11,7 +11,7 @@ export const SITE = {
   /** Google Tag Manager: só carrega no domínio de produção (nunca no localhost nem nos moldes). */
   gtm: "GTM-PBFSV29H",
   /** Recado do João: false esconde formulários e convites até a API do Hub estar no ar. */
-  recado: false,
+  recado: true,
 } as const;
 
 /** Quem está por trás. Só fatos confirmados pelo Bruno (bio pública em customerhub.com.br/sobre). */
