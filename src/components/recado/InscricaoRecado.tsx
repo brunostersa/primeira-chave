@@ -142,8 +142,8 @@ export function InscricaoRecado({
               )}
             </h2>
           </div>
-          <div className={cn("flex flex-col gap-2", !convite && "sm:flex-row")}>
-            <label className={cn("relative", !convite && "sm:w-56")}>
+          <div className={cn("flex flex-col gap-2", !convite && "lg:flex-row")}>
+            <label className={cn("relative", !convite && "lg:w-56")}>
               <span className="sr-only">Em que fase você está?</span>
               <select
                 required
