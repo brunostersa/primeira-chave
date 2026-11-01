@@ -27,6 +27,29 @@ painel /leads/envios ───────────────────�
 - Cada pessoa recebe o próprio e-mail (link de sair pessoal), com `List-Unsubscribe` de um clique (exigência do Gmail/Yahoo) e UTM `utm_source=recado` em todos os links.
 - Quem tem e-mail devolvido de vez ou marca como spam sai da lista sozinho (webhook).
 
+## A régua de boas-vindas (10 e-mails)
+
+Quem se inscreve recebe duas trilhas ao mesmo tempo, além do recado de quinta:
+
+| # | Quando | E-mail | Onde está o texto |
+|---|---|---|---|
+| 1 | na hora | boas-vindas da fase | `FASES[].sequencia` dia 0 |
+| 2 | dia 1, se não clicou no simulador | "Você já sabe o seu número?" | `TRILHA` lembrete-simulador |
+| 3 | dia 3 | 2º da fase | `FASES[].sequencia` dia 3 |
+| 4 | dia 5 | a armadilha da fase (carta do Duvide) | `FASES[].sequencia` dia 5 |
+| 5 | dia 7 | 3º da fase | `FASES[].sequencia` dia 7 |
+| 6 | 2 dias depois de clicar no simulador | "Tenho o meu número. E agora?" | `TRILHA` depois-do-simulador |
+| 7 | dia 10 (menos juntando e vender) | os custos da compra | `TRILHA` custos |
+| 8 | dia 14 | "Em que fase você está agora?" (botões que levam a `/recado/fase/`) | `TRILHA` trocar-fase |
+| 9 | 4 e-mails seguidos sem clique, depois de 21 dias | "Ainda quer receber?"; sem clique em 7 dias, sai da lista | `TRILHA` sumiu |
+| 10 | dia 30 | um mês de recado | `TRILHA` um-mes |
+
+- **Regras do Hub:** no máximo um e-mail por dia por pessoa e nada além das boas-vindas no dia do recado. O que não cabe hoje sai no dia seguinte.
+- **Cliques:** todo link passa por `customerhub.com.br/api/newsletter/ir`, que grava o clique e redireciona (só para o site ou um convite do feed). Clique nos primeiros 2 minutos é de antivírus e é ignorado. O click tracking da Resend fica desligado.
+- **Trocar de fase:** cancela o que faltava da fase antiga e recomeça a nova pelo e-mail do dia 3 (as boas-vindas não se repetem).
+- **Convites do fim (CTAs):** o catálogo fica em `src/lib/recado/ctas.ts`. Cada e-mail declara `cta: "<id>"` (ou `"proximo"`, o próximo passo da fase). Mudou o texto ou o destino de um convite? Mude só lá. O teste garante que o convite existe e não leva ao mesmo lugar que o botão do e-mail.
+- **Aprovação:** a versão de cada e-mail sai só do texto (assunto, prévia, parágrafos e botão). Trocar o convite do fim ou o gatilho não pede novo ok. E-mail novo de fase entra no fim do array, para não mudar o índice (e a aprovação) dos que já existem.
+
 ## Onde a pessoa se inscreve
 
 - **Rodapé** (todas as páginas, menos as do Recado): o cartão compacto com o João carteiro e o bando na borda.

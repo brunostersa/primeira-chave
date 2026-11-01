@@ -1,27 +1,35 @@
 import { PARAMS } from "@/lib/financiamento/params";
 import { brl } from "@/lib/format";
+import type { CtaId } from "./ctas";
 
 /**
  * "Recado do João": a newsletter da Primeira Chave. Este arquivo é o TEXTO; quem envia é o
  * Hub da CustomerHub, que lê o feed (/recado/feed.json) e monta a fila de envios.
  *
- * Quem se inscreve escolhe a fase da compra e recebe a sequência daquela fase (dias 0, 3 e 7);
- * depois, o recado semanal. Os links apontam para ids da árvore e o teste garante que
- * todos estão publicados. Mudou um texto? O Hub pede de novo o ok antes de enviar.
+ * Quem se inscreve recebe duas trilhas ao mesmo tempo, além do recado semanal:
+ *   - a da FASE que escolheu (FASES[].sequencia: dias 0, 3, 5 e 7);
+ *   - a COMUM a todos (TRILHA): lembretes por dia e por gatilho (clicou ou não no simulador, sumiu).
+ * O Hub segura tudo em no máximo um e-mail por dia e nada no dia do recado.
+ *
+ * Os links apontam para ids da árvore ("duvide:<id>" para uma carta, "/slug/" para página fora
+ * da árvore) e o teste garante que todos existem. O convite do fim (`cta`) é um id de ctas.ts.
+ * Mudou um texto? O Hub pede de novo o ok antes de enviar.
  */
 
 export type FaseId = "pesquisando" | "juntando" | "banco" | "imovel" | "vender";
 
 export type Passo = {
-  /** Dias depois da inscrição (0 = na hora). */
+  /** Dias depois da inscrição (0 = na hora). Na troca de fase, conta a partir da troca. */
   dia: number;
   assunto: string;
   /** O texto cinza depois do assunto na caixa de entrada. */
   previa: string;
   paragrafos: string[];
-  /** Id do nó da árvore para onde o botão leva. */
+  /** Para onde o botão leva: id da árvore, "duvide:<id>" ou "/slug/". */
   link: string;
   botao: string;
+  /** O convite do fim do e-mail (ctas.ts). Não pode levar ao mesmo lugar que o botão. */
+  cta: CtaId;
 };
 
 export type Fase = {
@@ -29,9 +37,42 @@ export type Fase = {
   /** Como aparece no formulário. */
   rotulo: string;
   pergunta: string;
-  /** O "seu próximo passo" que vai no fim de todo recado semanal. */
+  /** O "seu próximo passo": fecha todo recado semanal e é o cta "proximo". */
   proximo: string;
+  /**
+   * A ordem do array é a identidade do e-mail no Hub (seq:<fase>:<índice>): e-mail novo entra
+   * no FIM, mesmo que saia antes, para não mudar o índice (e a aprovação) dos que já existem.
+   */
   sequencia: Passo[];
+};
+
+/**
+ * Quando um e-mail da trilha comum sai.
+ *   dia            → N dias depois da inscrição
+ *   sem-clique     → N dias depois da inscrição, só se a pessoa ainda não clicou no destino
+ *   depois-clique  → N dias depois do primeiro clique no destino
+ *   sumiu          → depois de N e-mails seguidos sem nenhum clique (uma vez só)
+ */
+export type Gatilho =
+  | { tipo: "dia"; dia: number }
+  | { tipo: "sem-clique"; dia: number; destino: string }
+  | { tipo: "depois-clique"; dias: number; destino: string }
+  | { tipo: "sumiu"; emails: number };
+
+/**
+ * Partes do e-mail que o Hub monta com o token de quem recebe:
+ *   fases     → um botão por fase, que leva a /recado/fase/ para trocar
+ *   continuar → o botão principal confirma que a pessoa quer continuar recebendo
+ */
+export type Especial = "fases" | "continuar";
+
+export type PassoTrilha = Omit<Passo, "dia"> & {
+  /** Identidade no Hub (trilha:<id>): não mude depois de publicado. */
+  id: string;
+  gatilho: Gatilho;
+  /** Fases que NÃO recebem (já têm um e-mail igual na sequência delas). */
+  exceto?: FaseId[];
+  especial?: Especial;
 };
 
 const comp = PARAMS.comp;
@@ -55,6 +96,7 @@ export const FASES: Fase[] = [
         ],
         link: "simulador",
         botao: "Simular quanto posso comprar",
+        cta: "caminho",
       },
       {
         dia: 3,
@@ -67,6 +109,7 @@ export const FASES: Fase[] = [
         ],
         link: "quanto-preciso-ganhar",
         botao: "Ver quanto preciso ganhar",
+        cta: "simular",
       },
       {
         dia: 7,
@@ -79,6 +122,20 @@ export const FASES: Fase[] = [
         ],
         link: "sem-entrada-casa",
         botao: "Entender a avaliação",
+        cta: "simular",
+      },
+      {
+        dia: 5,
+        assunto: "Score alto não aprova financiamento",
+        previa: "O que o banco olha antes da sua nota de crédito.",
+        paragrafos: [
+          "Muita gente acha que score alto é financiamento garantido. Não é.",
+          "O banco pesa mais a sua renda, as parcelas que você já paga e os atrasos do que a nota. Score alto com a renda apertada não aprova.",
+          "Antes de se preocupar com a nota, vale saber se a parcela cabe.",
+        ],
+        link: "duvide:score-alto-aprova",
+        botao: "Ler a explicação",
+        cta: "simular",
       },
     ],
   },
@@ -99,6 +156,7 @@ export const FASES: Fase[] = [
         ],
         link: "consultar-fgts",
         botao: "Consultar o meu FGTS",
+        cta: "simular",
       },
       {
         dia: 3,
@@ -110,6 +168,7 @@ export const FASES: Fase[] = [
         ],
         link: "usar-fgts-comprar",
         botao: "Ver as regras do FGTS",
+        cta: "simular",
       },
       {
         dia: 7,
@@ -121,6 +180,20 @@ export const FASES: Fase[] = [
         ],
         link: "custos-compra",
         botao: "Calcular os meus custos",
+        cta: "simular",
+      },
+      {
+        dia: 5,
+        assunto: "O FGTS não serve para qualquer imóvel",
+        previa: "As três condições, e as duas contas que ele nunca paga.",
+        paragrafos: [
+          "Dá para usar o FGTS em qualquer imóvel? Não.",
+          "Só em imóvel residencial, para você morar, com 3 anos de FGTS somados e sem outro imóvel na mesma cidade. E ele nunca paga o ITBI nem o cartório.",
+          "Conferir isso antes evita contar com um dinheiro que não vai entrar.",
+        ],
+        link: "duvide:fgts-qualquer-imovel",
+        botao: "Ler a explicação",
+        cta: "proximo",
       },
     ],
   },
@@ -140,6 +213,7 @@ export const FASES: Fase[] = [
         ],
         link: "documentos-financiamento",
         botao: "Ver o checklist",
+        cta: "simular",
       },
       {
         dia: 3,
@@ -151,6 +225,7 @@ export const FASES: Fase[] = [
         ],
         link: "registrato",
         botao: "Consultar o Registrato",
+        cta: "proximo",
       },
       {
         dia: 7,
@@ -162,6 +237,20 @@ export const FASES: Fase[] = [
         ],
         link: "financiamento-negado",
         botao: "Ver o que fazer",
+        cta: "simular",
+      },
+      {
+        dia: 5,
+        assunto: "Ninguém aprova crédito por fora",
+        previa: "Se alguém cobra para liberar o financiamento, desconfie.",
+        paragrafos: [
+          "Quem promete aprovar o seu financiamento em troca de uma taxa está mentindo.",
+          "Ninguém aprova crédito por fora do banco. Cobrança antecipada para liberar financiamento é sinal de golpe.",
+          "Na dúvida, fale direto com o banco, pelos canais oficiais.",
+        ],
+        link: "duvide:cobram-para-aprovar",
+        botao: "Ler a explicação",
+        cta: "duvide",
       },
     ],
   },
@@ -181,6 +270,7 @@ export const FASES: Fase[] = [
         ],
         link: "avaliacao-do-imovel",
         botao: "Entender a avaliação",
+        cta: "custos",
       },
       {
         dia: 3,
@@ -192,6 +282,7 @@ export const FASES: Fase[] = [
         ],
         link: "certidao-matricula",
         botao: "Como pedir a matrícula",
+        cta: "proximo",
       },
       {
         dia: 7,
@@ -203,6 +294,20 @@ export const FASES: Fase[] = [
         ],
         link: "contrato-compra-venda",
         botao: "Ver o modelo de contrato",
+        cta: "custos",
+      },
+      {
+        dia: 5,
+        assunto: "O sinal não garante a compra",
+        previa: "O que acontece com o seu dinheiro se o banco negar.",
+        paragrafos: [
+          "Pagou o sinal, o negócio está garantido? Não exatamente.",
+          "O sinal prende os dois lados ao negócio. Se o banco negar o crédito e o contrato não disser nada sobre isso, você pode perder o dinheiro.",
+          "Por isso vale escrever no contrato o que acontece se o financiamento não sair.",
+        ],
+        link: "duvide:sinal-garante",
+        botao: "Ler a explicação",
+        cta: "proximo",
       },
     ],
   },
@@ -222,6 +327,7 @@ export const FASES: Fase[] = [
         ],
         link: "quanto-vale",
         botao: "Ver os três preços",
+        cta: "proximo",
       },
       {
         dia: 3,
@@ -233,6 +339,7 @@ export const FASES: Fase[] = [
         ],
         link: "vender-para-quem-financia",
         botao: "Entender o lado do comprador",
+        cta: "caminho",
       },
       {
         dia: 7,
@@ -244,8 +351,114 @@ export const FASES: Fase[] = [
         ],
         link: "imposto-venda",
         botao: "Ver se pago imposto",
+        cta: "caminho",
+      },
+      {
+        dia: 5,
+        assunto: "Anunciar alto pode travar a venda",
+        previa: "Quem compra financia, e o banco dele avalia.",
+        paragrafos: [
+          "Anunciar acima do mercado, para negociar depois, parece esperto. Costuma travar.",
+          "Quem compra quase sempre financia, e o banco dele avalia o seu imóvel. Preço acima da avaliação pede mais entrada do comprador, e o negócio para.",
+        ],
+        link: "duvide:anuncio-alto",
+        botao: "Ler a explicação",
+        cta: "proximo",
       },
     ],
+  },
+];
+
+const custosTotal = (PARAMS.itbi + PARAMS.cartorio + PARAMS.avaliacao).toLocaleString("pt-BR");
+
+/** A trilha comum a todas as fases (os e-mails 2, 6, 7, 8, 9 e 10 da régua de boas-vindas). */
+export const TRILHA: PassoTrilha[] = [
+  {
+    id: "lembrete-simulador",
+    gatilho: { tipo: "sem-clique", dia: 1, destino: "simulador" },
+    exceto: ["vender"],
+    assunto: "Você já sabe o seu número?",
+    previa: "2 minutos, sem cadastro, e você sai com o valor que cabe.",
+    paragrafos: [
+      "Antes de olhar imóvel, vale ter um número na mão: quanto a sua renda compra.",
+      "É ele que separa o imóvel que dá do imóvel que só dá dor de cabeça. E evita se apaixonar pelo apartamento errado.",
+      "O simulador faz essa conta com as regras de hoje da Caixa. Você não precisa se cadastrar.",
+    ],
+    link: "simulador",
+    botao: "Simular agora",
+    cta: "caminho",
+  },
+  {
+    id: "depois-do-simulador",
+    gatilho: { tipo: "depois-clique", dias: 2, destino: "simulador" },
+    exceto: ["vender"],
+    assunto: "Tenho o meu número. E agora?",
+    previa: "Três coisas para fazer com o resultado do simulador.",
+    paragrafos: [
+      "Você simulou, e isso já te coloca na frente de muita gente. Agora, três coisas para fazer com o resultado.",
+      "Primeiro, confira se usou a renda bruta, a do holerite antes dos descontos. Depois, some à entrada os custos da compra, que não entram no financiamento. Por último, veja se o seu FGTS pode ajudar.",
+      "Eu juntei tudo isso num passo a passo do que arrumar antes de ir ao banco.",
+    ],
+    link: "preparar-a-casa",
+    botao: "Ver o que arrumar antes",
+    cta: "custos",
+  },
+  {
+    id: "custos",
+    gatilho: { tipo: "dia", dia: 10 },
+    exceto: ["juntando", "vender"],
+    assunto: "O dinheiro que não entra no financiamento",
+    previa: "ITBI, cartório e avaliação: quanto separar à vista.",
+    paragrafos: [
+      "Tem um dinheiro que pega muita gente de surpresa: os custos da compra.",
+      `ITBI, cartório e avaliação somam perto de ${custosTotal}% do preço, numa conta média. Eles saem do seu bolso, à vista, e o FGTS não paga.`,
+      "A calculadora mostra quanto fica no seu caso.",
+    ],
+    link: "custos-compra",
+    botao: "Calcular os custos da compra",
+    cta: "simular",
+  },
+  {
+    id: "trocar-fase",
+    gatilho: { tipo: "dia", dia: 14 },
+    especial: "fases",
+    assunto: "Em que fase você está agora?",
+    previa: "Um clique e eu ajusto os próximos recados.",
+    paragrafos: [
+      "Já faz duas semanas que a gente conversa. Muita coisa pode ter mudado.",
+      "Me conta em que fase você está agora. Com um clique eu ajusto os próximos e-mails para o que faz sentido pra você.",
+    ],
+    link: "/recado/",
+    botao: "Mudar a minha fase",
+    cta: "simular",
+  },
+  {
+    id: "sumiu",
+    gatilho: { tipo: "sumiu", emails: 4 },
+    especial: "continuar",
+    assunto: "Ainda quer receber o recado?",
+    previa: "Um clique para continuar. Sem resposta, eu paro de mandar.",
+    paragrafos: [
+      "Faz um tempo que você não abre um link dos recados. Tudo bem, a vida corre.",
+      "Se ainda quer receber, é só clicar no botão. Se não, não precisa fazer nada: daqui a uma semana eu paro de mandar.",
+    ],
+    link: "/recado/",
+    botao: "Quero continuar recebendo",
+    cta: "canal",
+  },
+  {
+    id: "um-mes",
+    gatilho: { tipo: "dia", dia: 30 },
+    assunto: "Um mês de recado",
+    previa: "O caminho do zero à chave, numa página só.",
+    paragrafos: [
+      "Um mês de recado! Obrigado por ler até aqui.",
+      "Se quiser ver o caminho inteiro da compra de uma vez, do primeiro número até a chave na mão, eu montei um mapa com todas as etapas.",
+      "E se preferir o recado no WhatsApp, o João também está por lá.",
+    ],
+    link: "/mapa/",
+    botao: "Ver o caminho completo",
+    cta: "canal",
   },
 ];
 

@@ -50,3 +50,9 @@ export async function sairDaLista(token: string) {
   const r = await fetch(`${API}/sair`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: token }) });
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Não deu agora. Tente de novo.");
 }
+
+/** Trocar de fase pelo link do e-mail "Em que fase você está agora?" (o Hub recomeça a trilha da fase nova). */
+export async function trocarFase(token: string, fase: FaseId) {
+  const r = await fetch(`${API}/fase`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: token, fase }) });
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Não deu agora. Tente de novo.");
+}

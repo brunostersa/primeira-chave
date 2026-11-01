@@ -4,7 +4,8 @@ import { no } from "@/lib/conteudo/links";
 import { PARAMS, PARAMS_ATUALIZADOS_EM } from "@/lib/financiamento/params";
 import { brl, pct } from "@/lib/format";
 import { SITE } from "@/lib/site-config";
-import { FASES } from "./sequencias";
+import { CTAS } from "./ctas";
+import { FASES, TRILHA, type Passo } from "./sequencias";
 
 /**
  * O feed do Recado do João (/recado/feed.json). É o contrato com o Hub da CustomerHub
@@ -22,6 +23,24 @@ export function linkDe(id: string): Link {
   if (n.status !== "publicado") throw new Error(`Recado: "${id}" ainda não está publicado`);
   return { titulo: n.titulo, url: url(n.slug) };
 }
+
+/**
+ * Destino de um e-mail ou convite: id da árvore, "duvide:<id>" (uma carta), "/slug/" (página
+ * fora da árvore) ou URL completa. Carta que não existe também falha no build.
+ */
+export function destinoDe(destino: string): Link {
+  if (/^https?:\/\//.test(destino)) return { titulo: destino, url: destino };
+  if (destino.startsWith("/")) return { titulo: destino, url: url(destino) };
+  if (destino.startsWith("duvide:")) {
+    const c = CARTAS.find((x) => x.id === destino.slice(7));
+    if (!c) throw new Error(`Recado: carta "${destino}" não existe`);
+    return { titulo: c.frase, url: url(`/duvide/${c.id}/`) };
+  }
+  return linkDe(destino);
+}
+
+/** O e-mail como o Hub recebe: link resolvido e o id do convite do fim (o cartão sai de `ctas`). */
+const passoDoFeed = <T extends Pick<Passo, "link" | "botao">>(p: T) => ({ ...p, link: { ...destinoDe(p.link), botao: p.botao } });
 
 /** Juros nominais ao ano → efetivos (o número que o banco mostra). */
 const efetivo = (nominal: number) => (Math.pow(1 + nominal / 1200, 12) - 1) * 100;
@@ -49,7 +68,8 @@ function numeros() {
 export function feedRecado() {
   const publicadas = ARVORE.filter((n) => n.status === "publicado");
   return {
-    versao: 1,
+    // 2: convites do fim (ctas), trilha comum com gatilhos e o e-mail "armadilha" de cada fase.
+    versao: 2,
     geradoEm: new Date().toISOString(),
     nome: "Recado do João",
     site: SITE.url,
@@ -59,8 +79,10 @@ export function feedRecado() {
       rotulo: f.rotulo,
       pergunta: f.pergunta,
       proximo: linkDe(f.proximo),
-      sequencia: f.sequencia.map((p) => ({ ...p, link: { ...linkDe(p.link), botao: p.botao } })),
+      sequencia: f.sequencia.map(passoDoFeed),
     })),
+    trilha: TRILHA.map((p) => ({ ...passoDoFeed(p), id: p.id, gatilho: { ...p.gatilho, ...("destino" in p.gatilho && { url: destinoDe(p.gatilho.destino).url }) } })),
+    ctas: Object.fromEntries(Object.entries(CTAS).map(([id, c]) => [id, { chamada: c.chamada, titulo: c.titulo, texto: c.texto, botao: c.botao, url: destinoDe(c.destino).url }])),
     numeros: numeros(),
     duvide: CARTAS.map((c) => ({
       id: c.id,
