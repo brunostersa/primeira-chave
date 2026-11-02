@@ -17,7 +17,7 @@ import { SITE } from "@/lib/site-config";
 
 const n = no("modelos-de-contrato");
 const DESCRICAO =
-  "Modelos grátis de contrato de compra e venda de imóvel (financiado e à vista), recibo de sinal, contrato de aluguel, distrato e declaração de primeiro imóvel, em Word e PDF.";
+  "Modelos grátis de contrato de compra e venda de imóvel (financiado e à vista), recibo de sinal, contrato de aluguel, termo de entrega de chaves e vistoria, distrato e declaração de primeiro imóvel, em Word e PDF.";
 
 export const metadata: Metadata = metadadosPagina({ titulo: "Modelos de contrato de imóvel para baixar", descricao: DESCRICAO, slug: n.slug });
 

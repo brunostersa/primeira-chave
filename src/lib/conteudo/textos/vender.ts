@@ -328,6 +328,7 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
               "[Compra e venda com financiamento](#modelo-compra-venda-financiada): com a cláusula que devolve o sinal se o banco negar.",
               "[Compra e venda à vista](#modelo-compra-venda-a-vista): sinal agora, saldo na escritura.",
               "[Recibo de sinal](#modelo-recibo-de-sinal): quando o sinal sai antes do contrato completo.",
+              "[Termo de entrega de chaves e vistoria](#modelo-termo-entrega-chaves): o estado do imóvel no dia das chaves.",
               "[Distrato](#modelo-distrato): para desfazer o negócio de comum acordo.",
             ],
           },

@@ -597,6 +597,97 @@ export const MODELOS: Modelo[] = [
       { q: "E o ITBI, tem desconto?", a: "O ITBI é da prefeitura e cada cidade tem a sua regra. A declaração serve para o cartório, não para o imposto." },
     ],
   },
+  // ——— 7. termo de entrega de chaves e vistoria (venda ou aluguel)
+  {
+    id: "modelo-termo-entrega-chaves",
+    arquivo: "termo-de-entrega-de-chaves-e-vistoria",
+    tituloDocumento: "Termo de entrega de chaves e vistoria do imóvel",
+    quando: "No dia em que as chaves trocam de mão, na venda ou no aluguel: registra o estado do imóvel, as leituras dos medidores e o que fica dentro.",
+    naoUse: "No lugar do contrato. O termo só registra a entrega; quem diz preço, prazo e multa é o contrato de compra e venda ou de locação.",
+    base: ["Código Civil, arts. 441 a 446 (vícios ocultos na compra)", "Lei 8.245/1991, arts. 22, V, e 23, III (vistoria e devolução no aluguel)"],
+    campos: [
+      { id: "entregante_nome", rotulo: "nome completo de quem entrega", tipo: "texto", grupo: "Quem entrega", ajuda: "O vendedor, na venda; o locador, no início do aluguel; o inquilino, na devolução." },
+      { id: "entregante_cpf", rotulo: "CPF de quem entrega", tipo: "cpf", grupo: "Quem entrega" },
+      { id: "recebedor_nome", rotulo: "nome completo de quem recebe", tipo: "texto", grupo: "Quem recebe" },
+      { id: "recebedor_cpf", rotulo: "CPF de quem recebe", tipo: "cpf", grupo: "Quem recebe" },
+      { id: "tipo_negocio", rotulo: "tipo de contrato (compra e venda ou locação)", tipo: "texto", grupo: "O negócio" },
+      { id: "data_contrato", rotulo: "data do contrato", tipo: "data", grupo: "O negócio" },
+      { id: "imovel_descricao", rotulo: "descrição do imóvel", tipo: "longo", grupo: "O imóvel" },
+      { id: "imovel_endereco", rotulo: "endereço do imóvel", tipo: "longo", grupo: "O imóvel" },
+      { id: "data_entrega", rotulo: "data e hora da entrega", tipo: "texto", grupo: "A entrega" },
+      { id: "chaves", rotulo: "chaves e acessos entregues", tipo: "longo", grupo: "A entrega", ajuda: "Ex.: 3 chaves da porta, 2 do portão, 1 controle da garagem, 2 tags da portaria." },
+      { id: "leitura_agua", rotulo: "leitura do relógio de água", tipo: "texto", grupo: "Medidores" },
+      { id: "leitura_luz", rotulo: "leitura do relógio de luz", tipo: "texto", grupo: "Medidores" },
+      { id: "leitura_gas", rotulo: "leitura do gás, ou \"não tem\"", tipo: "texto", grupo: "Medidores" },
+      { id: "estado", rotulo: "estado de cada cômodo", tipo: "longo", grupo: "Vistoria", ajuda: "Cômodo por cômodo: paredes, piso, portas, janelas, louças, torneiras, tomadas, sinais de umidade." },
+      { id: "itens_ficam", rotulo: "móveis e itens que ficam no imóvel", tipo: "longo", grupo: "Vistoria", ajuda: "Ex.: armários da cozinha, box do banheiro, 2 ventiladores de teto. Nada? Escreva \"nenhum\"." },
+      { id: "defeitos", rotulo: "defeitos aparentes", tipo: "longo", grupo: "Vistoria", ajuda: "O que já está com problema hoje. Nada? Escreva \"nenhum\"." },
+      { id: "fotos", rotulo: "fotos e vídeos anexos", tipo: "texto", grupo: "Vistoria", ajuda: "Ex.: 42 fotos e 1 vídeo de 28/10/2026, enviados por WhatsApp às duas partes." },
+      ...LOCAL,
+    ],
+    abertura: [
+      "QUEM ENTREGA: {{entregante_nome}}, CPF {{entregante_cpf}}.",
+      "QUEM RECEBE: {{recebedor_nome}}, CPF {{recebedor_cpf}}.",
+      "As partes acima registram a entrega das chaves e o estado do imóvel {{imovel_descricao}}, localizado em {{imovel_endereco}}, em cumprimento ao contrato de {{tipo_negocio}} assinado entre elas em {{data_contrato}}.",
+    ],
+    clausulas: [
+      {
+        titulo: "A entrega",
+        texto: ["Em {{data_entrega}}, QUEM ENTREGA passa a posse do imóvel a QUEM RECEBE, com estas chaves e acessos: {{chaves}}."],
+        nota: "Anote tudo o que abre alguma coisa: chaves, controles, tags, cartões e senhas. Na compra, troque o miolo das fechaduras no primeiro dia: ninguém sabe quantas cópias existem.",
+      },
+      {
+        titulo: "Medidores e contas",
+        texto: [
+          "Leituras no momento da entrega:",
+          "- Água: {{leitura_agua}};",
+          "- Luz: {{leitura_luz}};",
+          "- Gás: {{leitura_gas}}.",
+          "O consumo até essas leituras é de QUEM ENTREGA. Daí em diante, de QUEM RECEBE. IPTU e condomínio seguem o que diz o contrato.",
+        ],
+        nota: "Fotografe cada relógio com a data. Peça logo a troca de titular nas empresas de água, luz e gás: conta atrasada no nome errado vira briga.",
+      },
+      {
+        titulo: "Estado do imóvel",
+        texto: [
+          "As partes vistoriaram o imóvel juntas. O estado de cada cômodo é este: {{estado}}.",
+          "Ficam no imóvel: {{itens_ficam}}.",
+          "Defeitos aparentes anotados: {{defeitos}}.",
+          "Fazem parte deste termo: {{fotos}}.",
+        ],
+        nota: "É o coração do termo. Vá cômodo por cômodo e seja específico: \"mancha de umidade de 30 cm no teto do banheiro\" vale mais que \"banheiro com detalhes\". No aluguel, esta é a descrição do estado que a lei manda o locador entregar (Lei 8.245/1991, art. 22, V).",
+      },
+      {
+        titulo: "O que este termo resolve (e o que não)",
+        texto: [
+          "QUEM RECEBE fica com o imóvel no estado descrito acima.",
+          "Este termo não cobre defeitos ocultos, que não dava para ver na vistoria. Na locação, a devolução no fim do contrato será comparada com este termo, sem contar o desgaste normal do uso.",
+        ],
+        nota: "Na compra, defeito escondido (infiltração dentro da parede, cano rompido) continua cobrável do vendedor: em regra, até um ano depois da entrega, ou de quando ele aparecer (Código Civil, arts. 441 a 446). No aluguel, o inquilino devolve como recebeu, salvo o desgaste normal (Lei 8.245/1991, art. 23, III). Na devolução, use este mesmo modelo, com as partes trocadas.",
+      },
+    ],
+    conferir: [
+      "Cada cômodo descrito com o estado de paredes, piso, portas, janelas e instalações, sem termo vago.",
+      "Leituras dos três medidores preenchidas (ou \"não tem\") e fotos dos relógios citadas.",
+      "Todas as chaves, controles e tags listados com quantidade.",
+      "O tipo de contrato e a data batem com o contrato de compra e venda ou de locação.",
+    ],
+    assinaturas: ["QUEM ENTREGA", "QUEM RECEBE"],
+    testemunhas: false,
+    local: { cidade: "cidade", data: "data" },
+    seo: {
+      titulo: "Termo de entrega de chaves e vistoria: modelo",
+      h1: "Modelo de termo de entrega de chaves e vistoria do imóvel",
+      descricao: "Modelo de termo de entrega de chaves e laudo de vistoria, em Word e PDF, para venda ou aluguel: estado de cada cômodo, medidores, chaves e o que fica no imóvel.",
+      resposta: "Baixe o modelo em **Word ou PDF**. No dia das chaves, registre **o estado de cada cômodo, com fotos**, **as leituras de água, luz e gás** e **o que fica no imóvel**. Serve para a venda e para o aluguel.",
+    },
+    faq: [
+      { q: "Termo de entrega e laudo de vistoria são a mesma coisa?", a: "Neste modelo, sim: o termo registra a entrega das chaves e traz a vistoria junto, com o estado de cada cômodo e as fotos." },
+      { q: "Recebi no estado em que se encontra. Perdi o direito de reclamar?", a: "Não do que estava escondido. Defeito oculto que aparece depois continua cobrável do vendedor, em regra por até um ano." },
+      { q: "Serve para a devolução do aluguel?", a: "Serve. Use o mesmo modelo com as partes trocadas e compare com o termo da entrada, cômodo por cômodo." },
+      { q: "Preciso de testemunhas ou cartório?", a: "Não. A assinatura dos dois e as fotos datadas já são a prova. Guarde uma via cada um." },
+    ],
+  },
 ];
 
 export const modelo = (id: string) => {
