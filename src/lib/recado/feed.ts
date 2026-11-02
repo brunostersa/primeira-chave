@@ -5,6 +5,7 @@ import { PARAMS, PARAMS_ATUALIZADOS_EM } from "@/lib/financiamento/params";
 import { brl, pct } from "@/lib/format";
 import { SITE } from "@/lib/site-config";
 import { CTAS } from "./ctas";
+import { cardDe } from "./imagens";
 import { FASES, TRILHA, type Passo } from "./sequencias";
 
 /**
@@ -39,8 +40,15 @@ export function destinoDe(destino: string): Link {
   return linkDe(destino);
 }
 
-/** O e-mail como o Hub recebe: link resolvido e o id do convite do fim (o cartão sai de `ctas`). */
-const passoDoFeed = <T extends Pick<Passo, "link" | "botao">>(p: T) => ({ ...p, link: { ...destinoDe(p.link), botao: p.botao } });
+/** O card de imagem já como o e-mail usa: endereço público e texto alternativo. Card que não existe falha no build. */
+export function imagemDe(id: string) {
+  const card = cardDe(id);
+  if (!card) throw new Error(`Recado: card de imagem "${id}" não existe (src/lib/recado/imagens.ts)`);
+  return { url: url(`/email/cards/${id}.jpg`), alt: card.alt };
+}
+
+/** O e-mail como o Hub recebe: link e imagem resolvidos, e o id do convite do fim (o cartão sai de `ctas`). */
+const passoDoFeed = <T extends Pick<Passo, "link" | "botao" | "imagem">>(p: T) => ({ ...p, link: { ...destinoDe(p.link), botao: p.botao }, imagem: imagemDe(p.imagem) });
 
 /** Juros nominais ao ano → efetivos (o número que o banco mostra). */
 const efetivo = (nominal: number) => (Math.pow(1 + nominal / 1200, 12) - 1) * 100;
@@ -97,7 +105,7 @@ export function feedRecado() {
     paginas: publicadas
       .filter((n) => ["atalho", "guia", "ferramenta"].includes(n.tipo))
       .sort((a, b) => a.prioridade - b.prioridade)
-      .map((n) => ({ id: n.id, titulo: n.titulo, resumo: n.resumo, url: url(n.slug), tipo: n.tipo, etapa: n.etapa, prioridade: n.prioridade })),
+      .map((n) => ({ id: n.id, titulo: n.titulo, resumo: n.resumo, url: url(n.slug), tipo: n.tipo, etapa: n.etapa, prioridade: n.prioridade, ...(n.ilustracao && { imagem: imagemDe(`cena-${n.ilustracao}`) }) })),
   };
 }
 

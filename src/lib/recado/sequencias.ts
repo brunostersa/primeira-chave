@@ -1,6 +1,7 @@
 import { PARAMS } from "@/lib/financiamento/params";
 import { brl } from "@/lib/format";
 import type { CtaId } from "./ctas";
+import type { IdCard } from "./imagens";
 
 /**
  * "Recado do João": a newsletter da Primeira Chave. Este arquivo é o TEXTO; quem envia é o
@@ -30,6 +31,8 @@ export type Passo = {
   botao: string;
   /** O convite do fim do e-mail (ctas.ts). Não pode levar ao mesmo lugar que o botão. */
   cta: CtaId;
+  /** O card de imagem do topo (imagens.ts): cena desenhada, às vezes com foto. */
+  imagem: IdCard;
 };
 
 export type Fase = {
@@ -97,6 +100,7 @@ export const FASES: Fase[] = [
         link: "simulador",
         botao: "Simular quanto posso comprar",
         cta: "caminho",
+        imagem: "simular",
       },
       {
         dia: 3,
@@ -110,6 +114,7 @@ export const FASES: Fase[] = [
         link: "quanto-preciso-ganhar",
         botao: "Ver quanto preciso ganhar",
         cta: "simular",
+        imagem: "renda",
       },
       {
         dia: 7,
@@ -123,6 +128,7 @@ export const FASES: Fase[] = [
         link: "sem-entrada-casa",
         botao: "Entender a avaliação",
         cta: "simular",
+        imagem: "sem-entrada",
       },
       {
         dia: 5,
@@ -136,6 +142,7 @@ export const FASES: Fase[] = [
         link: "duvide:score-alto-aprova",
         botao: "Ler a explicação",
         cta: "simular",
+        imagem: "score",
       },
     ],
   },
@@ -157,6 +164,7 @@ export const FASES: Fase[] = [
         link: "consultar-fgts",
         botao: "Consultar o meu FGTS",
         cta: "simular",
+        imagem: "fgts",
       },
       {
         dia: 3,
@@ -169,6 +177,7 @@ export const FASES: Fase[] = [
         link: "usar-fgts-comprar",
         botao: "Ver as regras do FGTS",
         cta: "simular",
+        imagem: "juntar",
       },
       {
         dia: 7,
@@ -181,6 +190,7 @@ export const FASES: Fase[] = [
         link: "custos-compra",
         botao: "Calcular os meus custos",
         cta: "simular",
+        imagem: "custos",
       },
       {
         dia: 5,
@@ -194,6 +204,7 @@ export const FASES: Fase[] = [
         link: "duvide:fgts-qualquer-imovel",
         botao: "Ler a explicação",
         cta: "proximo",
+        imagem: "casa",
       },
     ],
   },
@@ -214,6 +225,7 @@ export const FASES: Fase[] = [
         link: "documentos-financiamento",
         botao: "Ver o checklist",
         cta: "simular",
+        imagem: "documentos",
       },
       {
         dia: 3,
@@ -226,6 +238,7 @@ export const FASES: Fase[] = [
         link: "registrato",
         botao: "Consultar o Registrato",
         cta: "proximo",
+        imagem: "score",
       },
       {
         dia: 7,
@@ -238,6 +251,7 @@ export const FASES: Fase[] = [
         link: "financiamento-negado",
         botao: "Ver o que fazer",
         cta: "simular",
+        imagem: "negado",
       },
       {
         dia: 5,
@@ -251,6 +265,7 @@ export const FASES: Fase[] = [
         link: "duvide:cobram-para-aprovar",
         botao: "Ler a explicação",
         cta: "duvide",
+        imagem: "banco",
       },
     ],
   },
@@ -271,6 +286,7 @@ export const FASES: Fase[] = [
         link: "avaliacao-do-imovel",
         botao: "Entender a avaliação",
         cta: "custos",
+        imagem: "avaliacao",
       },
       {
         dia: 3,
@@ -283,6 +299,7 @@ export const FASES: Fase[] = [
         link: "certidao-matricula",
         botao: "Como pedir a matrícula",
         cta: "proximo",
+        imagem: "apartamento",
       },
       {
         dia: 7,
@@ -295,6 +312,7 @@ export const FASES: Fase[] = [
         link: "contrato-compra-venda",
         botao: "Ver o modelo de contrato",
         cta: "custos",
+        imagem: "custos",
       },
       {
         dia: 5,
@@ -308,6 +326,7 @@ export const FASES: Fase[] = [
         link: "duvide:sinal-garante",
         botao: "Ler a explicação",
         cta: "proximo",
+        imagem: "chave",
       },
     ],
   },
@@ -328,6 +347,7 @@ export const FASES: Fase[] = [
         link: "quanto-vale",
         botao: "Ver os três preços",
         cta: "proximo",
+        imagem: "vender",
       },
       {
         dia: 3,
@@ -340,6 +360,7 @@ export const FASES: Fase[] = [
         link: "vender-para-quem-financia",
         botao: "Entender o lado do comprador",
         cta: "caminho",
+        imagem: "avaliacao",
       },
       {
         dia: 7,
@@ -352,6 +373,7 @@ export const FASES: Fase[] = [
         link: "imposto-venda",
         botao: "Ver se pago imposto",
         cta: "caminho",
+        imagem: "simular",
       },
       {
         dia: 5,
@@ -364,6 +386,7 @@ export const FASES: Fase[] = [
         link: "duvide:anuncio-alto",
         botao: "Ler a explicação",
         cta: "proximo",
+        imagem: "casa",
       },
     ],
   },
@@ -387,6 +410,7 @@ export const TRILHA: PassoTrilha[] = [
     link: "simulador",
     botao: "Simular agora",
     cta: "caminho",
+    imagem: "simular",
   },
   {
     id: "depois-do-simulador",
@@ -402,6 +426,7 @@ export const TRILHA: PassoTrilha[] = [
     link: "preparar-a-casa",
     botao: "Ver o que arrumar antes",
     cta: "custos",
+    imagem: "juntar",
   },
   {
     id: "custos",
@@ -417,6 +442,7 @@ export const TRILHA: PassoTrilha[] = [
     link: "custos-compra",
     botao: "Calcular os custos da compra",
     cta: "simular",
+    imagem: "custos",
   },
   {
     id: "trocar-fase",
@@ -431,6 +457,7 @@ export const TRILHA: PassoTrilha[] = [
     link: "/recado/",
     botao: "Mudar a minha fase",
     cta: "simular",
+    imagem: "apartamento",
   },
   {
     id: "sumiu",
@@ -445,6 +472,7 @@ export const TRILHA: PassoTrilha[] = [
     link: "/recado/",
     botao: "Quero continuar recebendo",
     cta: "canal",
+    imagem: "chave",
   },
   {
     id: "um-mes",
@@ -459,6 +487,7 @@ export const TRILHA: PassoTrilha[] = [
     link: "/mapa/",
     botao: "Ver o caminho completo",
     cta: "canal",
+    imagem: "casa",
   },
 ];
 

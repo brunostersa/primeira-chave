@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { feedRecado } from "./feed";
 import { CTAS } from "./ctas";
@@ -53,6 +55,12 @@ describe("Recado do João", () => {
     expect(f.numeros.length).toBeGreaterThanOrEqual(4);
     expect(f.duvide.length).toBeGreaterThanOrEqual(4);
     expect(f.paginas.some((p) => p.tipo === "atalho")).toBe(true);
+  });
+
+  it("toda imagem dos e-mails já foi gerada em public/email/cards (npm run figuras -- email)", () => {
+    const f = feedRecado();
+    const usadas = [...f.fases.flatMap((x) => x.sequencia), ...f.trilha, ...f.paginas].flatMap((p) => ("imagem" in p && p.imagem ? [p.imagem.url] : []));
+    for (const u of new Set(usadas)) expect(existsSync(join(process.cwd(), "public", new URL(u).pathname)), u).toBe(true);
   });
 
   it("nenhum texto soa como criar conta", () => {

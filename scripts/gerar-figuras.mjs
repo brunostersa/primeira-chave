@@ -4,6 +4,7 @@
 //   npm run figuras            # build + todas as imagens
 //   node scripts/gerar-figuras.mjs simulador   # só as de uma página (precisa de out/ atualizado)
 //   node scripts/gerar-figuras.mjs cartas      # só as cartas
+//   node scripts/gerar-figuras.mjs email       # só os cards dos e-mails do Recado (public/email/cards/<id>.jpg)
 //
 // Cada figura tem uma rota /figura/<pagina>/<id>/ no build estático (noindex). O script serve
 // a pasta out/, tira o print com o Chrome sem janela e converte com o cwebp. Também copia o
@@ -51,9 +52,10 @@ const perfil = join(tmpdir(), "pc-figuras-perfil");
 let feitas = 0;
 
 /** Tira o print de uma rota e converte para WebP (e, nas cartas, JPG para baixar e postar). */
-async function exportar(rota, w, h, webp, jpg) {
+async function exportar(rota, w, h, webp, jpg, escala = 1) {
   const png = join(tmp, "atual.png");
   await rodar(CHROME, [
+    `--force-device-scale-factor=${escala}`,
     "--headless=new",
     `--user-data-dir=${perfil}`,
     "--no-first-run",
@@ -65,16 +67,17 @@ async function exportar(rota, w, h, webp, jpg) {
     `--screenshot=${png}`,
     `http://localhost:${PORTA}${rota}`,
   ], { timeout: 60_000 });
-  await rodar("cwebp", ["-quiet", "-q", "82", png, "-o", webp]);
+  if (webp) await rodar("cwebp", ["-quiet", "-q", "82", png, "-o", webp]);
   if (jpg) await rodar("sips", ["-s", "format", "jpeg", "-s", "formatOptions", "86", png, "--out", jpg]);
   rmSync(png);
   feitas++;
-  console.log(`  ${webp.split("/").pop()}  ${Math.round(statSync(webp).size / 1024)} KB`);
+  const feito = webp || jpg;
+  console.log(`  ${feito.split("/").pop()}  ${Math.round(statSync(feito).size / 1024)} KB`);
 }
 
 // Infográficos das páginas: 1200x675.
 for (const pagina of readdirSync(join(OUT, "figura"))) {
-  if (so && pagina !== so) continue;
+  if (pagina === "email" || (so && pagina !== so)) continue;
   for (const id of readdirSync(join(OUT, "figura", pagina))) {
     const nome = `${pagina}-${id}.webp`;
     await exportar(`/figura/${pagina}/${id}/`, 1200, 675, join(DESTINO, nome));
@@ -90,6 +93,16 @@ if ((!so || so === "cartas") && existsSync(join(OUT, "carta"))) {
   for (const id of readdirSync(join(OUT, "carta"))) {
     await exportar(`/carta/${id}/`, 1080, 1350, join(cartas, `${id}.webp`), join(cartas, `${id}.jpg`));
     for (const ext of ["webp", "jpg"]) copyFileSync(join(cartas, `${id}.${ext}`), join(OUT, "cartas", `${id}.${ext}`));
+  }
+}
+// Cards dos e-mails do Recado do João: 560x300 em 2x, JPG (src/lib/recado/imagens.ts).
+if ((!so || so === "email") && existsSync(join(OUT, "figura", "email"))) {
+  const cards = join(RAIZ, "public", "email", "cards");
+  mkdirSync(cards, { recursive: true });
+  mkdirSync(join(OUT, "email", "cards"), { recursive: true });
+  for (const id of readdirSync(join(OUT, "figura", "email"))) {
+    await exportar(`/figura/email/${id}/`, 560, 300, null, join(cards, `${id}.jpg`), 2);
+    copyFileSync(join(cards, `${id}.jpg`), join(OUT, "email", "cards", `${id}.jpg`));
   }
 }
 // Imagens da marca a partir dos moldes: capa padrão das redes, logo e ícones de app.
@@ -112,4 +125,4 @@ if (!so || so === "marca") {
 }
 
 servidor.close();
-console.log(`${feitas} imagem(ns) em public/figuras/ e public/cartas/`);
+console.log(`${feitas} imagem(ns) em public/figuras/, public/cartas/ e public/email/cards/`);
