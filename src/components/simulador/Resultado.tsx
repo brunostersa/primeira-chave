@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { Badge, Eyebrow } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/components/ui/utils";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
@@ -99,8 +100,14 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
           <QuemPaga r={r} perfil={perfil} />
         </Historia>
         <Historia
-          titulo="O cuidado com a avaliação"
-          resumo={perfil.avaliou && r.modo === "imovel" ? "O que o laudo do banco muda na sua conta." : "Por que o preço do imóvel e o valor do banco podem ser diferentes."}
+          titulo="A avaliação do banco"
+          resumo={
+            perfil.avaliou && r.modo === "imovel" && r.extraAval < 0
+              ? "Avaliou acima do preço: isso joga a seu favor."
+              : perfil.avaliou && r.modo === "imovel"
+                ? "O que o laudo do banco muda na sua conta."
+                : "Avaliou abaixo, você cobre a diferença. Avaliou acima, sua entrada cai."
+          }
         >
           <Avaliacao r={r} perfil={perfil} />
         </Historia>
@@ -114,11 +121,11 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
 
       <Card variant="strong" className="flex flex-col gap-4 bg-ink text-paper sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-display text-2xl font-semibold">Agora você tem o número. A trilha mostra o caminho.</h2>
-          <p className="mt-1 text-paper/80">As 7 etapas da compra, na mesma linguagem: documentos, aprovação, avaliação, contrato e chaves.</p>
+          <h2 className="font-display text-2xl font-semibold">Agora você tem o número. O guia mostra o caminho.</h2>
+          <p className="mt-1 text-paper/80">As 5 fases da compra num PDF grátis, com checklist: documentos, aprovação, avaliação, contrato e chaves.</p>
         </div>
-        <Button variant="mark" className="shrink-0">
-          Quero a trilha completa
+        <Button asChild variant="mark" className="shrink-0">
+          <Link href="/do-zero-a-chave/">Baixar o guia grátis</Link>
         </Button>
       </Card>
 
@@ -166,7 +173,7 @@ function resposta(r: R, z: SemEntrada | null): { titulo: ReactNode; sub: ReactNo
   const notas = (
     <>
       {r.extraAval > 0 && <> A avaliação abaixo do preço pesa <strong>{brl(r.extraAval)}</strong> nessa conta.</>}
-      {r.extraAval < 0 && r.entrada >= 1 && <> Como o banco avaliou acima do preço, ele empresta mais e sua entrada cai <strong>{brl(-r.extraAval)}</strong>.</>}
+      {ganhoDaAvaliacao(r) >= 1 && r.entrada >= 1 && <> Como o banco avaliou acima do preço, ele empresta mais e sua entrada cai <strong>{brl(ganhoDaAvaliacao(r))}</strong>.</>}
       {r.saiuMcmv && <> Como o preço passa do limite do Minha Casa Minha Vida, a conta vai pela linha de mercado, com juros maiores.</>}
     </>
   );
@@ -374,6 +381,36 @@ function QuemPaga({ r, perfil }: { r: R; perfil: Perfil }) {
   );
 }
 
+/**
+ * Quanto a avaliação acima do preço tirou, de fato, da entrada. `-extraAval` é o máximo possível;
+ * quando a renda trava o empréstimo (Pcap), o desconto real é menor ou zero.
+ */
+function ganhoDaAvaliacao(r: R) {
+  return Math.max(0, r.P - Math.min(r.prog.ltv * r.V, r.Pcap));
+}
+
+/** Avaliação acima do preço é oportunidade: mostra o desconto na entrada e, se a renda travar, o que destrava. */
+function AvaliouAcima({ r, acima }: { r: R; acima: number }) {
+  const possivel = Math.max(0, -r.extraAval);
+  const ganho = ganhoDaAvaliacao(r);
+  return (
+    <>
+      , <b>{brl(acima)} acima do preço</b>. Boa notícia: o banco empresta sobre a avaliação, sem passar do preço de venda,
+      {ganho >= 1 ? (
+        <>
+          {" "}e <span className="marca-texto">sua entrada cai {brl(ganho)}</span>.
+          {ganho < possivel - 1 && <> Poderia cair até {brl(possivel)}, mas aí a parcela não caberia na sua renda. Somar a renda de quem compra junto libera o resto.</>}
+        </>
+      ) : (
+        <>
+          {" "}e isso poderia tirar até <span className="marca-texto">{brl(possivel)} da sua entrada</span>. Hoje quem trava é a sua renda: com esse valor a mais emprestado, a parcela não caberia.
+          Somar a renda de quem compra junto pode destravar esse desconto.
+        </>
+      )}
+    </>
+  );
+}
+
 function Avaliacao({ r, perfil }: { r: R; perfil: Perfil }) {
   const [avalPct, setAvalPct] = useState(90);
   if (r.modo === "imovel" && perfil.avaliou && perfil.avalReal > 0) {
@@ -384,7 +421,7 @@ function Avaliacao({ r, perfil }: { r: R; perfil: Perfil }) {
         {a < r.V ? (
           <>, {brl(r.V - a)} abaixo do preço. Como ele empresta com base na avaliação, você cobre mais <span className="marca-texto">{brl(r.extraAval)}</span>. Use isso pra negociar o preço com o vendedor.</>
         ) : a > r.V ? (
-          <>, {brl(a - r.V)} acima do preço. Como ele empresta com base na avaliação, <span className="marca-texto">sua entrada cai {brl(Math.max(0, -r.extraAval))}</span>. Ele só não empresta mais que o preço de venda.{r.extraRenda > 0 && " Aqui quem limita é a sua renda, não a avaliação."}</>
+          <AvaliouAcima r={r} acima={a - r.V} />
         ) : (
           <>, igual ao preço. A avaliação não muda sua conta.</>
         )}

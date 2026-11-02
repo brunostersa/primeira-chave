@@ -64,7 +64,7 @@ export function RecadoFlutuante() {
     return () => removeEventListener(EVENTO, ao);
   }, []);
 
-  const visivel = liberado && !fora && !noRodape && !caminho?.startsWith("/recado");
+  const visivel = liberado && !fora && !noRodape && !caminho?.startsWith("/recado") && !caminho?.startsWith("/do-zero-a-chave");
 
   const sair = () => {
     // Se o foco estava no cartão, devolve para onde a pessoa estava (sem pular a página).

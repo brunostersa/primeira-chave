@@ -49,7 +49,8 @@ const sessao = () => (typeof window === "undefined" ? undefined : window.session
 /** Pode mostrar agora? (inscrito, fechou há pouco ou já viu nesta visita = não) */
 export function podeConvidar() {
   if (typeof window === "undefined" || !SITE.recado) return false;
-  if (location.pathname.startsWith("/recado")) return false;
+  // Na página do Recado e na LP do guia o formulário já está na tela.
+  if (location.pathname.startsWith("/recado") || location.pathname.startsWith("/do-zero-a-chave")) return false;
   if (ler(local(), INSCRITO)) return false;
   if (ler(sessao(), VISTO)) return false;
   const fechou = Number(ler(local(), FECHOU) || 0);
@@ -64,6 +65,7 @@ export function convidar(c: Convite) {
 export const marcarVisto = () => gravar(sessao(), VISTO, "1");
 export const marcarFechou = () => gravar(local(), FECHOU, String(Date.now()));
 export const marcarInscrito = () => gravar(local(), INSCRITO, "1");
+export const jaInscrito = () => typeof window !== "undefined" && Boolean(ler(local(), INSCRITO));
 
 /** Títulos por tipo de ferramenta: o convite conversa com o que a pessoa acabou de fazer. */
 export const TITULOS = {
