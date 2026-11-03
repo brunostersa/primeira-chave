@@ -8,6 +8,7 @@ import { naRotaUnica } from "@/lib/conteudo/textos";
 import { arquivoFigura, figurasDe } from "@/lib/conteudo/figuras";
 import { SITE } from "@/lib/site-config";
 import { MODELOS } from "@/lib/modelos/modelos";
+import { IMOVEIS_DE_OURO, slugImovel } from "@/lib/imoveis-de-ouro";
 
 export const dynamic = "force-static";
 
@@ -70,6 +71,9 @@ const FIXAS: { slug: string; tipo: No["tipo"]; prioridade: No["prioridade"] }[] 
   ...CARTAS.map((c) => ({ slug: `/duvide/${c.id}/`, tipo: "guia" as const, prioridade: 2 as const })),
   { slug: "/para/", tipo: "hub", prioridade: 2 },
   ...PERSONAS.map((p) => ({ slug: `/para/${p.id}/`, tipo: "guia" as const, prioridade: 3 as const })),
+  { slug: "/imoveis-de-ouro/", tipo: "hub", prioridade: 2 },
+  ...[...new Set(IMOVEIS_DE_OURO.map((i) => i.cidade.id))].map((c) => ({ slug: `/imoveis-de-ouro/${c}/`, tipo: "local" as const, prioridade: 3 as const })),
+  ...IMOVEIS_DE_OURO.map((i) => ({ slug: slugImovel(i), tipo: "guia" as const, prioridade: 2 as const })),
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
