@@ -42,25 +42,17 @@ jobs:
             echo "pronto=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # lftp em paralelo e só o que mudou: scripts/deploy-ftp.mjs (manifesto com sha256 no servidor).
+      # A action anterior enviava um arquivo por vez e levava muitos minutos quando o layout mudava.
+      - name: Instalar lftp
+        if: steps.ftp.outputs.pronto == 'true'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
       - name: Enviar out/ por FTP
         if: steps.ftp.outputs.pronto == 'true'
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_DIR }}
-          local-dir: ./out/
-          # Envia só o que mudou (guarda o estado no servidor) e não apaga o que não é do build.
-          dangerous-clean-slate: false
-          # Estado novo (v3, 02/11): os deploys quebravam ao apagar a pasta _next/<id do build>
-          # anterior ("550 No such file") e não gravavam o estado. O id agora é fixo (next.config.ts).
-          state-name: .ftp-deploy-sync-state-v3.json
-          # Rotas internas que só existem para gerar imagens e o guia de marca (fora do robots.txt).
-          exclude: |
-            **/.git*
-            **/.git*/**
-            figura/**
-            carta/**
-            molde/**
-            marca/**
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_DIR: ${{ secrets.FTP_DIR }}
+        run: node scripts/deploy-ftp.mjs

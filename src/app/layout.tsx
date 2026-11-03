@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Figtree, IBM_Plex_Mono, Outfit } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { FUNDADOR, SITE } from "@/lib/site-config";
 
-const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "600"], variable: "--font-outfit", display: "swap" });
-const figtree = Figtree({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-figtree", display: "swap" });
-const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
+// Fontes dentro do projeto (subconjunto latin do Google Fonts, que cobre os acentos do português).
+// Com next/font/google o build baixava as fontes a cada deploy e às vezes quebrava no GitHub.
+const outfit = localFont({ src: "./fontes/outfit-300-600.woff2", weight: "300 600", variable: "--font-outfit", display: "swap" });
+const figtree = localFont({ src: "./fontes/figtree-400-700.woff2", weight: "400 700", variable: "--font-figtree", display: "swap" });
+const plexMono = localFont({
+  src: [
+    { path: "./fontes/plex-mono-400.woff2", weight: "400" },
+    { path: "./fontes/plex-mono-500.woff2", weight: "500" },
+  ],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 const ORG_JSON_LD = {
   "@context": "https://schema.org",
