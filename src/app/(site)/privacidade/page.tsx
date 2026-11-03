@@ -46,6 +46,14 @@ export default function PrivacidadePage() {
         <p>Para sair, use o link “Sair da lista” no fim de qualquer e-mail.</p>
       </Secao>
 
+      <Secao titulo="Interesse num imóvel de ouro">
+        <p>
+          Quando você pede para conversar sobre um imóvel da Seleção de imóvel de ouro, guardamos o seu <b>nome</b>, o seu <b>WhatsApp</b>, o imóvel e a página
+          de onde veio, no sistema da CustomerHub. Em seguida a conversa abre no WhatsApp de quem atende aquele imóvel, com a mensagem pronta para você enviar.
+          Usamos esses dados só para o atendimento desse imóvel; a simulação da página continua no seu navegador e não é enviada.
+        </p>
+      </Secao>
+
       <Secao titulo="Relatos e sugestões">
         <p>
           Quando você usa “Algo errado aqui?” ou “Sugerir uma ideia”, guardamos o texto, a página e, se você informar, o e-mail para responder. Pedimos que não

@@ -57,7 +57,9 @@ export type ImovelDeOuro = {
   /** Escolas, saúde e comércio em volta, levantados no Google Maps na data da análise. */
   proximos: Proximo[];
   fotos: { arquivo: string; legenda: string }[];
-  /** Anúncio original, onde fica o contato de quem vende. */
+  /** WhatsApp de quem atende o interessado (com DDI e DDD). O lead entra no Hub antes. */
+  whatsapp: string;
+  /** Anúncio original na plataforma (referência interna; a página não manda para lá). */
   anuncio: { url: string; plataforma: string; anunciante: string };
   /** Relação do imóvel com a Primeira Chave, mostrada sempre que houver. */
   vinculo: string | null;
@@ -140,6 +142,7 @@ export const IMOVEIS_DE_OURO: ImovelDeOuro[] = [
       { arquivo: `${pasta}/17.jpg`, legenda: "Área de serviço" },
       { arquivo: `${pasta}/18.jpg`, legenda: "Entrada pela garagem" },
     ],
+    whatsapp: "5562982058386",
     anuncio: {
       url: "https://go.olx.com.br/grande-goiania-e-anapolis/imoveis/casa-ampla-de-2-quartos-completa-aceita-financiamento-1545230296",
       plataforma: "OLX",

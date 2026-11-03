@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BalaoWhatsapp, ContatoImovel } from "@/components/imoveis/Contato";
 import { GradeFotos, MosaicoCapa } from "@/components/imoveis/Galeria";
 import { BairroInterativo } from "@/components/imoveis/MapaProximos";
 import { MenuDossie, type ItemMenu } from "@/components/imoveis/MenuDossie";
@@ -75,7 +76,7 @@ const SECOES: (ItemMenu & { pergunta: string })[] = [
   { id: "bairro", rotulo: "Onde fica", pergunta: "Onde fica e o que tem perto" },
   { id: "selo", rotulo: "O que foi conferido", pergunta: "O que já foi conferido" },
   { id: "parcela", rotulo: "Parcela no tempo", pergunta: "A parcela ao longo dos anos" },
-  { id: "contato", rotulo: "Próximo passo", pergunta: "Gostou? O próximo passo" },
+  { id: "contato", rotulo: "Chamar no WhatsApp", pergunta: "O próximo passo" },
 ];
 const MENU: ItemMenu[] = SECOES.map(({ id, rotulo }) => ({ id, rotulo }));
 
@@ -311,27 +312,21 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           </Secao>
 
           <Secao id="contato">
-            <div className="grid grid-cols-[minmax(0,1fr)] gap-6 rounded-[var(--radius-card)] bg-ink p-6 text-paper sm:p-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-              <div className="flex flex-col gap-2">
-                <p className="font-display text-3xl font-light leading-tight sm:text-4xl">Fale direto com quem vende.</p>
-                <p className="text-paper/80">O contato é pelo anúncio na {i.anuncio.plataforma}. Leve a sua simulação: ela mostra que você sabe o que está fazendo.</p>
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-8 rounded-[var(--radius-card)] bg-ink p-6 text-paper sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-center">
+              <div className="flex flex-col gap-3">
+                <p className="font-display text-3xl font-light leading-tight sm:text-5xl">
+                  Gostou? <span className="font-semibold text-mark">Chame no WhatsApp.</span>
+                </p>
+                <p className="text-paper/80">Deixe seu nome e WhatsApp e a conversa abre na hora, já com esta casa na mensagem. Dá para tirar dúvida, pedir mais fotos e marcar a visita.</p>
+                <a href={`https://wa.me/?text=${encodeURIComponent(`${i.titulo}: ${url}`)}`} rel="noopener" className="self-start text-sm text-paper/80 underline underline-offset-4 hover:text-paper">
+                  Mandar esta casa para alguém no WhatsApp
+                </a>
               </div>
-              <div className="flex flex-col gap-3 [&_a]:h-auto [&_a]:min-h-12 [&_a]:py-3 [&_a]:whitespace-normal [&_a]:text-center">
-                <Button asChild size="lg" variant="mark">
-                  <a href={i.anuncio.url} rel="noopener nofollow">
-                    Ver o anúncio e falar com quem vende
-                  </a>
-                </Button>
-                <Button asChild size="lg" variant="outline">
-                  <a href={`https://wa.me/?text=${encodeURIComponent(`${i.titulo}: ${url}`)}`} rel="noopener">
-                    Mandar para alguém no WhatsApp
-                  </a>
-                </Button>
-              </div>
+              <ContatoImovel imovelId={i.id} titulo={`${i.titulo}, em ${i.cidade.nome}`} whatsapp={i.whatsapp} />
             </div>
             <p className="text-sm text-muted">
               A Primeira Chave é conteúdo educativo: não é banco, correspondente nem imobiliária, e não intermedeia a venda. Os números são simulação com as regras de {PARAMS_ATUALIZADOS_EM.split("-").reverse().join("/")}, não aprovação de
-              crédito; quem aprova é o banco, com a sua renda e os documentos. Preço e fotos informados por quem vende; matrícula, averbação e laudo conferidos pela Primeira Chave em {dataBr(i.analisadoEm)}.
+              crédito; quem aprova é o banco, com a sua renda e os documentos. Preço e fotos informados por quem vende; o atendimento pelo WhatsApp é de quem vende; matrícula, averbação e laudo conferidos pela Primeira Chave em {dataBr(i.analisadoEm)}.
             </p>
           </Secao>
         </div>
@@ -354,9 +349,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
               <a href="#bolso">Ver se cabe no meu bolso</a>
             </Button>
             <Button asChild variant="outline">
-              <a href={i.anuncio.url} rel="noopener nofollow">
-                Falar com quem vende
-              </a>
+              <a href="#contato">Chamar no WhatsApp</a>
             </Button>
           </div>
           <p className="px-1 text-xs text-muted">Simulação para 30 anos, sem FGTS e sem outras dívidas. A sua pode mudar.</p>
@@ -373,6 +366,8 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           <a href="#bolso">Cabe no meu bolso?</a>
         </Button>
       </div>
+
+      <BalaoWhatsapp whatsapp={i.whatsapp} texto={`Oi! Estava vendo a ${i.titulo} na Primeira Chave e tenho uma dúvida/sugestão:`} className="bottom-24 xl:bottom-6" />
     </article>
   );
 }
