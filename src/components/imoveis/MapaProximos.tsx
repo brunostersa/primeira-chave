@@ -1,8 +1,9 @@
 "use client";
 
 import "leaflet/dist/leaflet.css";
-import { useEffect, useRef } from "react";
-import { CATEGORIAS, distancia, type Proximo } from "@/lib/imoveis-de-ouro";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/components/ui/utils";
+import { CATEGORIAS, distancia, type Categoria, type Proximo } from "@/lib/imoveis-de-ouro";
 
 const metros = (m: number) => (m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1).replace(".", ",")} km`);
 
@@ -76,6 +77,38 @@ export function ListaProximos({ centro, proximos }: { centro: { lat: number; lng
           </ul>
         </div>
       ))}
+    </div>
+  );
+}
+
+/** Mapa + filtros por tipo + lista: os botões ligam e desligam o que aparece nos dois. */
+export function BairroInterativo({ centro, proximos }: { centro: { lat: number; lng: number }; proximos: Proximo[] }) {
+  const todas = [...new Set(proximos.map((p) => p.categoria))] as Categoria[];
+  const [ligadas, setLigadas] = useState<Categoria[]>(todas);
+  const visiveis = proximos.filter((p) => ligadas.includes(p.categoria));
+  const alternar = (c: Categoria) => setLigadas((l) => (l.includes(c) ? l.filter((x) => x !== c) : [...l, c]));
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div role="group" aria-label="Mostrar no mapa" className="flex flex-wrap gap-2">
+        {todas.map((c) => {
+          const on = ligadas.includes(c);
+          return (
+            <button
+              key={c}
+              type="button"
+              aria-pressed={on}
+              onClick={() => alternar(c)}
+              className={cn("inline-flex items-center gap-2 rounded-full border-[1.5px] px-3 py-1.5 text-sm font-semibold transition-colors", on ? "border-ink bg-surface" : "border-line bg-transparent text-muted line-through")}
+            >
+              <i aria-hidden className="size-3 rounded-full" style={{ background: on ? CATEGORIAS[c].cor : "var(--line)" }} />
+              {CATEGORIAS[c].nome}
+            </button>
+          );
+        })}
+      </div>
+      <MapaProximos centro={centro} proximos={visiveis} rotulo="A casa" />
+      <ListaProximos centro={centro} proximos={visiveis} />
     </div>
   );
 }
