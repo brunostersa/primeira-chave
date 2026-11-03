@@ -1,9 +1,13 @@
 # Hostinger (Apache): página de erro do próprio site.
 ErrorDocument 404 /404.html
 
+RewriteEngine On
+
+# Páginas que mudaram de endereço (301: o Google passa a usar o novo e os links antigos continuam valendo).
+RewriteRule ^vender-para-quem-vai-financiar/?$ /vender-imovel-pela-caixa/ [R=301,L]
+
 # Link curto de parceiro (mídia kit): /p/<parceiro> e /p/<parceiro>/<destino>
 # viram a página certa com as UTMs que o GA4 lê. O gerador fica em src/components/conteudo/LinkParceiro.tsx.
-RewriteEngine On
 RewriteRule ^p/([a-z0-9-]+)/?$ /simulador-financiamento-caixa/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=simulador [R=302,L]
 RewriteRule ^p/([a-z0-9-]+)/inicio/?$ /?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=home [R=302,L]
 RewriteRule ^p/([a-z0-9-]+)/documentos/?$ /documentos-para-financiar-imovel/?utm_source=parceiro&utm_medium=indicacao&utm_campaign=$1&utm_content=documentos [R=302,L]

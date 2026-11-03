@@ -2,7 +2,7 @@ import type { Texto } from "../tipos";
 
 export const TEXTOS_VENDER: Record<string, Texto> = {
   "vender-para-quem-financia": {
-    tituloSeo: "Vender imóvel para quem vai financiar: como funciona",
+    tituloSeo: "Como vender um imóvel pela Caixa (para quem vai financiar)",
     descricao: "Como a venda para um comprador que financia funciona: a avaliação do banco dele, os documentos que você entrega e quando você recebe.",
     resposta: "Quase todo comprador financia, e o banco dele vai **avaliar o seu imóvel**. Se a [avaliação](g:avaliacao) vier abaixo do preço, o comprador precisa cobrir a diferença — ou o negócio trava. Você recebe **depois do [registro](g:registro)**.",
     secoes: [
@@ -258,7 +258,7 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
             passos: [
               { titulo: "Vendas reais, não anúncios", texto: "Pergunte a corretores e cartórios o preço de vendas parecidas na região." },
               { titulo: "Ajuste por estado e documentação", texto: "Reforma recente sobe; pendência na matrícula derruba." },
-              { titulo: "Pense na avaliação do comprador", texto: "Se o banco avaliar abaixo do seu preço, o comprador precisa de mais entrada. Veja [vender para quem financia](#vender-para-quem-financia)." },
+              { titulo: "Pense na avaliação do comprador", texto: "Se o banco avaliar abaixo do seu preço, o comprador precisa de mais entrada. Veja [como vender um imóvel pela Caixa](#vender-para-quem-financia)." },
             ],
           },
         ],

@@ -185,7 +185,7 @@ export const TEXTOS_FINANCIAR: Record<string, Texto> = {
         titulo: "A oportunidade do usado",
         blocos: [
           { p: "Usado que precisa de reforma ou de venda rápida costuma sair abaixo do mercado. Se a avaliação vier bem acima do preço, a entrada cai — às vezes a zero. Veja [financiar sem entrada](#sem-entrada-casa)." },
-          { p: "Quem vende também precisa entender isso: [vender para quem vai financiar](#vender-para-quem-financia)." },
+          { p: "Quem vende também precisa entender isso: [como vender um imóvel pela Caixa](#vender-para-quem-financia)." },
         ],
       },
       {

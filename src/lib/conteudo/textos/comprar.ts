@@ -540,7 +540,7 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
       },
       {
         titulo: "Para quem vende",
-        blocos: [{ p: "A avaliação do banco do comprador define até onde ele consegue pagar. Veja [vender para quem vai financiar](#vender-para-quem-financia)." }],
+        blocos: [{ p: "A avaliação do banco do comprador define até onde ele consegue pagar. Veja [como vender um imóvel pela Caixa](#vender-para-quem-financia)." }],
       },
     ],
     faq: [

@@ -237,7 +237,7 @@ export const TEXTOS_LEILAO: Record<string, Texto> = {
               "Pesquise vendas reais na região, não só anúncios.",
             ],
           },
-          { p: "Quem compra para morar ganha casa pronta abaixo do mercado; quem compra para revender vende para alguém que vai financiar — veja [vender para quem financia](#vender-para-quem-financia)." },
+          { p: "Quem compra para morar ganha casa pronta abaixo do mercado; quem compra para revender vende para alguém que vai financiar — veja [como vender um imóvel pela Caixa](#vender-para-quem-financia)." },
         ],
       },
     ],

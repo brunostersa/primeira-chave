@@ -15,6 +15,86 @@ export const PDF_GUIA = "/guia/do-zero-a-chave-amostra.pdf";
 const FASES_COMPRA = FASES.filter((f) => f.id !== "vender");
 
 /**
+ * Botão de baixar com progresso de verdade: o PDF tem 4,5 MB e, sem retorno, o clique parecia travado.
+ * Baixa em segundo plano (fetch, lendo os pedaços para medir), mostra a porcentagem e salva o arquivo no fim.
+ * Se o navegador não der conta disso, o link normal faz o download.
+ */
+function BotaoPdf() {
+  const [pct, setPct] = useState<number | null>(null);
+  const [pronto, setPronto] = useState(false);
+
+  const baixar = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pct !== null || typeof ReadableStream === "undefined") return;
+    e.preventDefault();
+    setPronto(false);
+    setPct(0);
+    try {
+      const r = await fetch(PDF_GUIA);
+      if (!r.ok || !r.body) throw new Error(String(r.status));
+      const total = Number(r.headers.get("content-length")) || 4_528_661;
+      const leitor = r.body.getReader();
+      const pedacos: Uint8Array[] = [];
+      let lidos = 0;
+      for (;;) {
+        const { done, value } = await leitor.read();
+        if (done) break;
+        pedacos.push(value);
+        lidos += value.length;
+        setPct(Math.min(99, Math.round((lidos / total) * 100)));
+      }
+      const url = URL.createObjectURL(new Blob(pedacos as BlobPart[], { type: "application/pdf" }));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = PDF_GUIA.split("/").pop()!;
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      setPronto(true);
+    } catch {
+      // É o arquivo PDF, não uma página do Next: abrir direto é o plano B do download.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      window.location.href = PDF_GUIA;
+    } finally {
+      setPct(null);
+    }
+  };
+
+  const baixando = pct !== null;
+  return (
+    <div className="flex flex-col gap-2">
+      <a
+        href={PDF_GUIA}
+        download
+        onClick={baixar}
+        aria-busy={baixando}
+        className={cn(
+          "relative inline-flex min-h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-xl border-[1.5px] border-ink bg-mark px-5 text-lg font-semibold shadow-[3px_3px_0_var(--ink)] hover:translate-y-px",
+          baixando && "cursor-progress bg-mark/40",
+        )}
+      >
+        {baixando && <span aria-hidden className="absolute inset-y-0 left-0 bg-mark transition-[width] duration-200" style={{ width: `${pct}%` }} />}
+        <span className="relative inline-flex items-center gap-2">
+          {baixando ? (
+            <>
+              <span aria-hidden className="size-5 animate-spin rounded-full border-2 border-ink border-t-transparent" />
+              Baixando… {pct}%
+            </>
+          ) : (
+            <>
+              <Download aria-hidden className="size-5" /> {pronto ? "Baixar de novo" : "Baixar o PDF (4,5 MB)"}
+            </>
+          )}
+        </span>
+      </a>
+      <p aria-live="polite" className="min-h-5 text-center text-sm text-ink-2">
+        {baixando ? "São 36 páginas, leva alguns segundos." : pronto ? "Pronto! O PDF está nos seus downloads." : ""}
+      </p>
+    </div>
+  );
+}
+
+/**
  * O card de download do guia "Do zero à chave": grátis, em troca do e-mail, que entra no Recado do João
  * (origem "guia-pdf"). Formulário próprio, em dois passos, de propósito diferente do formulário do rodapé.
  * Quem já assina, ou sem o Recado ligado, baixa direto.
@@ -70,13 +150,7 @@ export function BaixarGuia({ className }: { className?: string }) {
               olhe a caixa de promoções.
             </p>
           )}
-          <a
-            href={PDF_GUIA}
-            download
-            className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-xl border-[1.5px] border-ink bg-mark px-5 text-lg font-semibold shadow-[3px_3px_0_var(--ink)] hover:translate-y-px"
-          >
-            <Download aria-hidden className="size-5" /> Baixar o PDF (4,5 MB)
-          </a>
+          <BotaoPdf />
         </div>
       ) : (
         <form onSubmit={enviar} className="flex flex-col gap-5">
