@@ -29,8 +29,8 @@ export function Menu({ secoes, simular }: Props) {
 
 /* ——— peças comuns ——————————————————————————————————————————————————————————— */
 
-/** Uma página no menu: título forte e o resumo de uma linha. Planejada vira texto "em breve". */
-function LinkPagina({ i, comResumo = true }: { i: ItemNav; comResumo?: boolean }) {
+/** Uma página no menu: só o título, para o painel não parecer cheio. Planejada vira texto "em breve". */
+function LinkPagina({ i, comResumo = false }: { i: ItemNav; comResumo?: boolean }) {
   if (!i.href)
     return (
       <span className="block rounded-lg px-3 py-2 text-muted">

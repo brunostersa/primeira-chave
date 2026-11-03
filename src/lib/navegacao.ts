@@ -1,5 +1,5 @@
 import { ARVORE, type EtapaId, type HubId, type No } from "@/lib/conteudo/arvore";
-import { doHub, hubDe, no, trilha } from "@/lib/conteudo/links";
+import { hubDe, no, trilha } from "@/lib/conteudo/links";
 
 /**
  * Navegação derivada da árvore (header, rodapé, breadcrumbs). Decisões em docs/navegacao.md.
@@ -35,16 +35,29 @@ const atalho = (id: string, titulo: string): ItemNav => ({ ...item(no(id)), titu
 
 /** Publicadas primeiro, depois a prioridade (1 = mais buscada). */
 const porRelevancia = (a: No, b: No) => Number(publicado(b)) - Number(publicado(a)) || a.prioridade - b.prioridade;
-const MAX_ITENS = 6;
 
-/** As 8 etapas da compra agrupadas em 5 fases: a cascata do menu "Comprar". */
-const FASES: { id: string; rotulo: string; pergunta: string; etapas: EtapaId[] }[] = [
-  { id: "comecar", rotulo: "Antes de começar", pergunta: "Quanto eu posso comprar?", etapas: ["descobrir", "preparar"] },
-  { id: "aprovar", rotulo: "Aprovar o crédito", pergunta: "O banco vai aprovar?", etapas: ["aprovar"] },
-  { id: "escolher", rotulo: "Escolher o imóvel", pergunta: "Qual imóvel cabe e quanto ele vale?", etapas: ["escolher", "avaliar"] },
-  { id: "fechar", rotulo: "Contrato e chaves", pergunta: "Quando a chave é minha?", etapas: ["contratar", "registrar"] },
-  { id: "depois", rotulo: "Depois da chave", pergunta: "Como pago menos?", etapas: ["depois"] },
+/**
+ * As 8 etapas da compra agrupadas em 5 fases: a cascata do menu "Comprar".
+ * `vitrine` = as páginas que o menu mostra, NA ORDEM EM QUE A PESSOA PRECISA ENTENDER (não por
+ * volume de busca), no máximo 4. O resto da fase fica em "Ver as N páginas". Atalhos vão em Ajuda,
+ * ferramentas em Ferramentas: cada link aparece num lugar só do menu.
+ */
+const FASES: { id: string; rotulo: string; pergunta: string; etapas: EtapaId[]; vitrine: string[] }[] = [
+  { id: "comecar", rotulo: "Antes de começar", pergunta: "Quanto eu posso comprar?", etapas: ["descobrir", "preparar"], vitrine: ["quanto-preciso-ganhar", "preparar-a-casa", "usar-fgts-comprar", "quanto-custa-financiar"] },
+  { id: "aprovar", rotulo: "Aprovar o crédito", pergunta: "O banco vai aprovar?", etapas: ["aprovar"], vitrine: ["documentos-financiamento", "score", "quanto-tempo-demora", "financiamento-negado"] },
+  { id: "escolher", rotulo: "Escolher o imóvel", pergunta: "Qual imóvel cabe e quanto ele vale?", etapas: ["escolher", "avaliar"], vitrine: ["imovel-usado", "avaliacao-do-imovel", "sem-entrada-casa", "sem-entrada-apartamento"] },
+  { id: "fechar", rotulo: "Contrato e chaves", pergunta: "Quando a chave é minha?", etapas: ["contratar", "registrar"], vitrine: ["contrato-compra-venda", "registro-do-imovel", "primeiro-imovel-desconto"] },
+  { id: "depois", rotulo: "Depois da chave", pergunta: "Como pago menos?", etapas: ["depois"], vitrine: ["amortizar-fgts", "sac-ou-price"] },
 ];
+
+/** Vender, na ordem da venda: preparar, preço, papéis, o comprador financiado. O resto em "Ver tudo". */
+const VITRINE_VENDER = ["preparar-para-vender", "quanto-vale", "documentos-vender", "vender-para-quem-financia"];
+/** Ajuda: os atalhos que a pessoa mais procura antes de começar. */
+const VITRINE_AJUDA = ["consultar-fgts", "registrato", "carteira-trabalho", "certidao-matricula"];
+/** Ferramentas (rodapé e celular): do plano à conta fechada. No desktop o painel mostra todas, por família. */
+const VITRINE_FERRAMENTAS = ["simulador", "quanto-preciso-ganhar", "custos-compra", "calculadora-itbi"];
+const MAX_VITRINE = 4;
+const vitrine = (ids: string[]) => ids.map(no).filter(publicado).slice(0, MAX_VITRINE).map(item);
 
 /**
  * Leilão é público específico (quem arremata para revender): fica fora do menu, do rodapé e da
@@ -57,17 +70,14 @@ function fase(f: (typeof FASES)[number]): GrupoNav {
   const todas = ARVORE.filter(
     (n) => n.etapa && f.etapas.includes(n.etapa) && !["hub", "glossario", "nucleo"].includes(n.tipo) && !FORA_DE_COMPRAR.includes(n.hub),
   ).sort(porRelevancia);
-  return { id: f.id, rotulo: f.rotulo, pergunta: f.pergunta, href: `/guias/#${f.etapas[0]}`, itens: todas.slice(0, MAX_ITENS).map(item), total: todas.length };
+  return { id: f.id, rotulo: f.rotulo, pergunta: f.pergunta, href: `/guias/#${f.etapas[0]}`, itens: vitrine(f.vitrine), total: todas.length };
 }
 
-const paginasDoHub = (hub: HubId) => doHub(hub).filter((n) => n.tipo !== "hub" && n.tipo !== "glossario").sort(porRelevancia);
 const linkDe = (id: string) => (publicado(no(id)) ? no(id).slug : null);
 
 const MAPA: ItemNav = { id: "mapa", titulo: "Mapa do site", resumo: "Todas as páginas, conectadas.", href: "/mapa/" };
-const DUVIDE: ItemNav = { id: "duvide", titulo: "Duvide: armadilhas e segredos", resumo: "Contrato de gaveta, ágio, preço por fora e mais.", href: "/duvide/" };
-const PROFISSIONAIS: ItemNav = { id: "para", titulo: "Quem é quem", resumo: "Corretor, correspondente, investidor, construtor e imobiliária.", href: "/para/" };
-const SOBRE: ItemNav = { id: "sobre", titulo: "Sobre a Primeira Chave", resumo: "Quem faz, por quê e como trabalhamos.", href: "/sobre/" };
-/** Modelos de contrato para baixar: servem a quem compra e a quem vende, então aparecem nas duas portas. */
+/** Duvide, Quem é quem, Sobre e Mídia kit ficam só na linha final do rodapé: não são ajuda. */
+/** Modelos de contrato para baixar: ficam em Vender (quem compra chega a eles pelo guia do contrato). */
 const MODELOS_CONTRATO: ItemNav = atalho("modelos-de-contrato", "Modelos de contrato");
 
 /**
@@ -96,25 +106,25 @@ export function secoesMenu(): SecaoNav[] {
       href: linkDe("comprar"),
       grupos: FASES.map(fase),
       itens: [],
-      extras: [atalho("minha-casa-minha-vida", "Minha Casa Minha Vida"), atalho("financiamento-imobiliario", "Financiamento imobiliário"), atalho("guias", "Todos os guias")],
+      extras: [atalho("minha-casa-minha-vida", "Minha Casa Minha Vida"), atalho("financiamento-imobiliario", "Financiamento imobiliário")],
     },
     {
       id: "ferramentas",
       rotulo: "Ferramentas",
       resumo: "Simuladores, calculadoras e mapas que respondem com o seu número.",
       href: linkDe("ferramentas"),
-      itens: ferramentas.slice(0, MAX_ITENS).map(item),
+      itens: vitrine(VITRINE_FERRAMENTAS),
       colunas,
-      extras: [MODELOS_CONTRATO],
+      extras: [],
     },
-    { id: "vender", rotulo: "Vender", resumo: no("vender").resumo, href: linkDe("vender"), itens: paginasDoHub("vender").slice(0, MAX_ITENS).map(item), extras: [MODELOS_CONTRATO] },
+    { id: "vender", rotulo: "Vender", resumo: no("vender").resumo, href: linkDe("vender"), itens: vitrine(VITRINE_VENDER), extras: [MODELOS_CONTRATO] },
     {
       id: "ajuda",
       rotulo: "Ajuda",
       resumo: "Os links difíceis de achar, os termos do banco e o mapa de tudo.",
       href: linkDe("atalhos"),
-      itens: paginasDoHub("atalhos").slice(0, MAX_ITENS).map(item),
-      extras: [DUVIDE, PROFISSIONAIS, atalho("glossario", "Glossário"), atalho("guias", "Todos os guias"), MAPA, SOBRE],
+      itens: vitrine(VITRINE_AJUDA),
+      extras: [atalho("glossario", "Glossário"), MAPA],
     },
   ];
 }
@@ -128,7 +138,7 @@ export function colunasRodape(): { id: string; rotulo: string; href: string | nu
     itens: s.grupos
       ? [...s.grupos.map((g) => ({ id: g.id, titulo: g.rotulo, href: g.href })), ...s.extras.slice(0, 2)]
       : s.id === "ajuda"
-        ? [{ id: "atalhos", titulo: "Atalhos", href: s.href }, ...s.extras]
+        ? [{ id: "atalhos", titulo: "Atalhos", href: s.href }, atalho("glossario", "Glossário"), atalho("guias", "Todos os guias")]
         : s.itens.filter((i) => i.href).slice(0, 4),
   }));
 }

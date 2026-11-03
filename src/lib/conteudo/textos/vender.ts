@@ -66,56 +66,94 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
   },
 
   "vender-financiado": {
-    tituloSeo: "Como vender um imóvel financiado",
-    descricao: "Três caminhos para vender imóvel ainda financiado: quitar com o dinheiro do comprador, transferir a dívida ou vender e quitar antes — e o que evitar.",
-    resposta: "Dá para vender. O caminho mais comum é o **comprador financiar e o dinheiro quitar o seu saldo** no próprio processo. O imóvel está em [alienação fiduciária](g:alienacao-fiduciaria): o banco precisa participar.",
+    tituloSeo: "Como vender um imóvel financiado (sem quitar antes)",
+    descricao: "Como vender imóvel financiado sem quitar antes: o financiamento do comprador paga o seu saldo devedor e a diferença cai na sua conta. Com exemplo.",
+    resposta: "Dá para vender um imóvel financiado sem quitar antes, e pouca gente sabe disso. O **financiamento do comprador paga o seu saldo devedor** direto ao seu banco, no mesmo processo, e **a diferença cai na sua conta**. Seu banco entra no contrato como **interveniente quitante**.",
     secoes: [
       {
-        titulo: "Para onde vai o dinheiro da venda",
+        titulo: "Você não precisa se preocupar com o saldo devedor",
+        blocos: [
+          { p: "É comum achar que só dá para vender depois de quitar o financiamento. Não é preciso. O imóvel está em [alienação fiduciária](g:alienacao-fiduciaria) com o seu banco, mas a venda resolve isso: **o dinheiro da própria venda quita a dívida**, e o banco libera o imóvel para o comprador." },
+          { p: "A única conta que importa é esta: **o preço de venda precisa ser maior que o saldo devedor**. É o que acontece quase sempre, porque o imóvel valoriza e a dívida cai a cada parcela. Se o preço não cobrir o saldo, você teria de completar a diferença do próprio bolso, e aí vender raramente faz sentido." },
+        ],
+      },
+      {
+        titulo: "Um exemplo, do começo ao fim",
         blocos: [
           {
             figura: {
               id: "dinheiro-da-venda",
-              alt: "Como vender imóvel financiado: o banco do comprador paga, parte quita o saldo devedor do vendedor e o restante vai para quem vende",
+              alt: "Como vender imóvel financiado: venda por R$ 290 mil, R$ 95 mil quitam o saldo devedor no banco do vendedor e R$ 195 mil vão para quem vende",
               etiqueta: "Vender imóvel financiado",
               titulo: "A venda quita a dívida;",
               destaque: "o resto é seu.",
               esquema: {
                 tipo: "divisao",
-                total: "exemplo: venda por R$ 400 mil",
+                total: "venda por R$ 290 mil",
                 partes: [
-                  { rotulo: "quita o seu saldo devedor", valor: 180000, texto: "R$ 180 mil", tom: "planta" },
-                  { rotulo: "vai para você", valor: 220000, texto: "R$ 220 mil", tom: "mark" },
+                  { rotulo: "quita o seu saldo devedor", valor: 95000, texto: "R$ 95 mil", tom: "planta" },
+                  { rotulo: "vai para a sua conta", valor: 195000, texto: "R$ 195 mil", tom: "mark" },
                 ],
               },
-              legenda: "Valores ilustrativos. O saldo devedor atualizado vem do seu banco.",
+              legenda: "Exemplo: imóvel comprado por R$ 130 mil, com R$ 35 mil abatidos em cerca de 10 anos de parcelas.",
             },
           },
-        ],
-      },
-      {
-        titulo: "Os caminhos",
-        blocos: [
+          {
+            passos: [
+              { titulo: "A compra", texto: "O imóvel foi comprado por **R$ 130 mil**, financiado." },
+              { titulo: "Dez anos de parcelas", texto: "Em cerca de 10 anos, as parcelas abateram **R$ 35 mil** da dívida. O saldo devedor ficou em **R$ 95 mil**." },
+              { titulo: "A venda", texto: "O imóvel foi vendido por **R$ 290 mil** para alguém que financiou." },
+              { titulo: "A quitação", texto: "No dia do pagamento, o banco do comprador mandou **R$ 95 mil** ao banco do vendedor, que deu a dívida por quitada." },
+              { titulo: "A diferença", texto: "Os **R$ 195 mil** restantes foram para a conta do vendedor. E começou um financiamento novo, no nome do comprador." },
+            ],
+          },
           {
             tabela: {
-              cabecalho: ["Caminho", "Como funciona"],
+              cabecalho: ["De onde vem", "Quanto", "Para onde vai"],
               linhas: [
-                ["Quitar com a venda", "O banco do comprador paga; parte quita sua dívida e o resto vai para você."],
-                ["Transferir a dívida", "O comprador assume seu contrato, se o banco aprovar o crédito dele."],
-                ["Quitar antes", "Você quita (com reserva ou FGTS) e vende livre."],
+                ["Entrada do comprador", "R$\u00a058\u00a0mil", "Direto para você"],
+                ["Financiamento do comprador (80%)", "R$\u00a0232\u00a0mil", "R$ 95 mil para o seu banco e R$ 137 mil para você"],
+                ["**Total**", "**R$\u00a0290\u00a0mil**", "**R$ 195 mil para você**, dívida quitada"],
               ],
             },
           },
-          { aviso: { titulo: "Evite o \"contrato de gaveta\"", texto: "Vender sem o banco saber deixa a dívida e o imóvel no seu nome. Se o comprador parar de pagar, o problema é seu.", tom: "bad" } },
+          { p: "Quanto o comprador consegue financiar depende da [avaliação do banco](#avaliacao-do-imovel) e da renda dele, não do seu saldo. Veja [como vender pela Caixa](#vender-para-quem-financia)." },
         ],
       },
       {
-        titulo: "O primeiro passo",
-        blocos: [{ p: "Peça o **saldo devedor atualizado** ao seu banco (no app ou na agência; na Caixa, veja o [atalho do Habitação](#boleto-habitacao)). É ele que define quanto sobra para você." }],
+        titulo: "O nome técnico: interveniente quitante",
+        blocos: [
+          { p: "No contrato de financiamento do comprador, o seu banco aparece como **interveniente quitante**: a parte que entra no negócio só para **receber o saldo devedor e dar a quitação**. Depois do registro, ele libera a alienação fiduciária na matrícula, e o imóvel passa limpo para o comprador, já com a garantia do banco dele." },
+          { p: "Funciona mesmo quando os bancos são diferentes. Você assina junto com o comprador, e cada banco cuida da sua parte." },
+          {
+            passos: [
+              { titulo: "Peça o saldo para quitação", texto: "No seu banco, peça o saldo devedor atualizado para quitação. Na Caixa, veja o [atalho do Habitação](#boleto-habitacao)." },
+              { titulo: "Defina o preço", texto: "Acima do saldo e dentro do que o banco do comprador vai avaliar. Veja [quanto vale meu imóvel](#quanto-vale)." },
+              { titulo: "Crédito e avaliação do comprador", texto: "O banco dele aprova a renda e avalia o imóvel. Os seus documentos estão em [documentos para vender](#documentos-vender)." },
+              { titulo: "Assinatura e registro", texto: "Você, o comprador e os bancos assinam. O contrato vai ao cartório (até 30 dias)." },
+              { titulo: "Pagamento", texto: "Registrado, o banco do comprador quita o seu saldo e deposita a diferença para você." },
+            ],
+          },
+        ],
+      },
+      {
+        titulo: "E o ágio?",
+        blocos: [
+          { p: "Antigamente era comum o **ágio**: o comprador pagava ao vendedor o que ele já tinha quitado e passava a pagar as parcelas dele. Hoje o mercado não trabalha assim. A forma correta é a que está acima: **quitação pelo interveniente quitante e financiamento novo no nome de quem compra**, nas taxas e no prazo dele." },
+          { aviso: { titulo: "Repassar as parcelas é contrato de gaveta", texto: "Vender sem o banco saber deixa a dívida e o imóvel no seu nome. Se o comprador parar de pagar, o problema é seu. Para fechar o negócio do jeito certo, use um [contrato de compra e venda](#contrato-compra-venda).", tom: "bad" } },
+        ],
+      },
+      {
+        titulo: "E o imposto?",
+        blocos: [{ p: "O imposto não olha o que caiu na sua conta, e sim o lucro: no exemplo, a venda por R$ 290 mil de um imóvel comprado por R$ 130 mil. Há isenções comuns, como comprar outro imóvel residencial em até 180 dias. Veja [imposto na venda](#imposto-venda)." }],
       },
     ],
-    faq: [{ q: "Pago imposto na venda?", a: "Pode haver imposto sobre o lucro; o guia de imposto na venda explica as isenções." },
-      { q: "Preciso quitar antes de vender?", a: "Não. O caminho mais comum é quitar com o dinheiro da própria venda, no mesmo processo." },
+    faq: [
+      { q: "Preciso quitar o financiamento antes de vender?", a: "Não. O financiamento do comprador quita o seu saldo devedor no mesmo processo, e a diferença vai para você. Seu banco entra no contrato como interveniente quitante." },
+      { q: "O que é interveniente quitante?", a: "É o banco do vendedor quando ele participa do contrato de financiamento do comprador só para receber o saldo devedor, dar a quitação e liberar a alienação fiduciária na matrícula." },
+      { q: "E se o saldo devedor for maior que o preço de venda?", a: "Aí você teria de completar a diferença do próprio bolso para quitar. É raro, porque a dívida cai a cada parcela e o imóvel costuma valorizar, mas faça a conta antes de anunciar." },
+      { q: "Ainda existe venda com ágio?", a: "Na prática, não. O comprador faz um financiamento novo no nome dele, que quita o seu. Repassar as parcelas sem o banco é contrato de gaveta e deixa a dívida no seu nome." },
+      { q: "Quando eu recebo o dinheiro?", a: "Depois do registro do contrato no cartório, que leva até 30 dias da assinatura. O banco do comprador quita o seu saldo e deposita a diferença na sua conta." },
       { q: "O comprador pode usar FGTS?", a: "Pode, se ele cumprir as regras do FGTS: o dinheiro entra na compra como em qualquer outra." },
     ],
   },
@@ -167,6 +205,141 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
     faq: [{ q: "Imóvel de herança pode ser vendido?", a: "Depois do inventário e da partilha registrados na matrícula, sim." },
       { q: "Quanto tempo valem as certidões?", a: "O banco do comprador costuma pedir certidões recentes, em geral de até 30 dias. Tire perto da data do contrato." },
       { q: "O cônjuge precisa assinar a venda?", a: "Em regra, sim, conforme o regime de bens. Confira na certidão de casamento antes de fechar." },
+    ],
+  },
+
+  "preparar-para-vender": {
+    tituloSeo: "Como preparar o imóvel para vender: reforma, dívidas e avaliação",
+    descricao: "Como preparar o imóvel para vender: que reforma se paga, IPTU e condomínio atrasados, averbação na matrícula e a hora certa da avaliação do banco.",
+    resposta: "Para preparar o imóvel para vender, a ordem é: **papéis e dívidas em dia**, **só a reforma que se paga** e, por último, a **[avaliação](g:avaliacao) do banco do comprador**. O engenheiro avalia o imóvel como ele está no dia da visita: reforme antes, não depois.",
+    secoes: [
+      {
+        titulo: "Reformar para vender: o que se paga",
+        blocos: [
+          {
+            figura: {
+              id: "reforma-retorno",
+              alt: "Como preparar o imóvel para vender: pintura e reparos quase sempre se pagam, cozinha e banheiro às vezes, reforma pesada raramente",
+              etiqueta: "Preparar o imóvel para vender",
+              titulo: "Reforma para vender:",
+              destaque: "quanto menor, mais se paga.",
+              esquema: {
+                tipo: "comparar",
+                colunas: [
+                  { titulo: "Quase sempre vale", tom: "mark", itens: ["Pintura", "Vazamentos e infiltração", "Tomadas, portas, metais"] },
+                  { titulo: "Às vezes vale", tom: "planta", itens: ["Cozinha", "Banheiro", "Piso muito gasto"] },
+                  { titulo: "Raramente vale", tom: "bad", itens: ["Mudar a planta", "Ampliar", "Acabamento de luxo"] },
+                ],
+              },
+              legenda: "O teto é o preço da vizinhança: reforma que passa dele não volta na venda.",
+            },
+          },
+          {
+            tabela: {
+              cabecalho: ["Nível", "O que entra", "Quando vale"],
+              linhas: [
+                ["Pintura e reparos", "Paredes, infiltração, vazamento, elétrica, portas e janelas", "Quase sempre: custa pouco, melhora as fotos e o estado de conservação que o engenheiro anota."],
+                ["Cozinha e banheiro", "Trocar louças, bancada e revestimento, sem quebrar tudo", "Quando estão estragados ou muito atrás dos vizinhos. Refaça o básico, não o sonho."],
+                ["Reforma pesada", "Derrubar paredes, ampliar, trocar tudo", "Raramente. É caro, demora e, se a área muda, exige averbação na matrícula."],
+              ],
+            },
+          },
+          {
+            aviso: {
+              titulo: "Quando não vale reformar",
+              texto: "Quando você precisa vender rápido, quando o imóvel já está no teto de preço do bairro, ou quando o comprador provável vai querer reformar do jeito dele. Nesses casos, venda como está e ajuste o preço. É o mesmo raciocínio de quem compra para reformar: veja [a conta da reforma](#reforma-leilao).",
+            },
+          },
+          { p: "Guarde as notas fiscais: reforma comprovada soma ao custo do imóvel e reduz o [imposto na venda](#imposto-venda)." },
+        ],
+      },
+      {
+        titulo: "IPTU, condomínio, água e luz atrasados",
+        blocos: [
+          { p: "Dá para vender imóvel com IPTU atrasado ou com dívida de condomínio, mas **a dívida vai junto com o imóvel**. Por isso o comprador e o banco dele pedem as certidões antes de assinar, e ninguém financia um imóvel com débito aberto." },
+          {
+            tabela: {
+              cabecalho: ["Conta", "De quem é a dívida", "Como aparece para o comprador"],
+              linhas: [
+                ["IPTU", "Do imóvel: passa para o comprador, a menos que a escritura prove a quitação (Código Tributário Nacional, art. 130)", "Na certidão de débitos imobiliários da prefeitura. Se virou cobrança na Justiça, pode chegar à [matrícula](g:matricula) como penhora."],
+                ["Condomínio", "Do imóvel: quem compra responde pelos atrasados (Código Civil, art. 1.345)", "Na declaração de quitação assinada pelo síndico, que o comprador vai pedir."],
+                ["Água e luz", "Em regra, de quem consumiu, não do imóvel", "Não entra na matrícula, mas vira briga na entrega das chaves. Quite e troque a titularidade."],
+              ],
+            },
+          },
+          {
+            passos: [
+              { titulo: "Tire as certidões primeiro", texto: "Certidão de débitos do IPTU na prefeitura e declaração do condomínio. Assim você sabe o tamanho do problema antes do comprador." },
+              { titulo: "Quite ou parcele", texto: "Com o débito parcelado e em dia, a prefeitura costuma emitir certidão positiva com efeito de negativa, que serve para a venda." },
+              { titulo: "Ou acerte no preço", texto: "Sem dinheiro para quitar antes, combine por escrito que a dívida é paga com o dinheiro da venda, no ato. Escreva isso no [contrato](#contrato-compra-venda)." },
+            ],
+          },
+          { aviso: { titulo: "Penhora trava a venda", texto: "Dívida que virou processo pode gerar penhora registrada na matrícula, um [ônus](g:onus). Com ela, o banco do comprador não aceita o imóvel como garantia até a baixa.", tom: "bad" } },
+        ],
+      },
+      {
+        titulo: "Matrícula em dia: a averbação",
+        blocos: [
+          { p: "O banco empresta sobre o que está no papel. Se você construiu, ampliou ou fechou uma área e isso **não está averbado na matrícula** (anotado no cartório), o imóvel real e o registrado não batem. Isso pode baixar o valor considerado ou travar o financiamento do comprador." },
+          {
+            lista: [
+              "**Construção ou ampliação**: peça o habite-se na prefeitura e averbe no cartório de registro. Em obra nova, o cartório também pede a certidão da obra no INSS.",
+              "**Reforma sem mudar a área** (pintura, piso, cozinha): em regra, não precisa averbar.",
+              "**Casamento, divórcio ou óbito** desde a compra: atualize o estado civil na matrícula, ou o cartório vai pedir antes do registro.",
+              "Confira se a área do carnê do IPTU bate com a da matrícula.",
+            ],
+          },
+          { p: "Comece pela certidão de inteiro teor: [onde tirar e como ler](#certidao-matricula). A lista completa está em [documentos para vender](#documentos-vender)." },
+        ],
+      },
+      {
+        titulo: "A hora certa da avaliação do banco",
+        blocos: [
+          { p: "A avaliação do banco não é uma visita que você agenda sozinho. Ela faz parte da proposta de financiamento do comprador: na Caixa, é o banco que pede a vistoria ao engenheiro, **depois da análise de crédito do comprador**, e cada avaliação é cobrada à parte." },
+          {
+            tabela: {
+              cabecalho: ["Pergunta", "Resposta (Caixa)"],
+              linhas: [
+                ["Quem pede", "A Caixa, dentro da proposta de financiamento do comprador, depois da análise de crédito."],
+                ["Quem paga", "O comprador, pela tarifa de avaliação: uma parte na entrega dos documentos, o resto na assinatura."],
+                ["Quanto custa (SBPE)", "De R$ 841,44 a R$ 954,13 por imóvel residencial, com R$ 750 pagos na entrega dos documentos."],
+                ["Quanto custa (FGTS e MCMV)", "1,5% do valor financiado, com R$ 750 pagos na entrega dos documentos."],
+                ["Quanto tempo vale o laudo", "A Caixa não publica o prazo. No mercado, fala-se em até 6 meses. Vencido, é preciso nova avaliação e nova tarifa."],
+              ],
+            },
+          },
+          {
+            aviso: {
+              titulo: "Reforme antes da avaliação, nunca depois",
+              texto: "O [laudo](g:laudo) descreve o imóvel do dia da vistoria: área, estado de conservação, acabamento. Avaliado antes da reforma, ele registra o imóvel velho, e refazer custa outra tarifa ao comprador e mais semanas de espera. Termine a obra e a averbação **antes de aceitar proposta de quem vai financiar**.",
+              tom: "mark",
+            },
+          },
+          { p: "Quer saber o valor antes de ter comprador? Contrate uma avaliação particular, de engenheiro ou corretor: ela ajuda a definir o preço, mas o banco faz a dele de qualquer jeito. Veja [quanto vale meu imóvel](#quanto-vale) e como a avaliação mexe no seu preço em [como vender um imóvel pela Caixa](#vender-para-quem-financia)." },
+          { p: "Fonte: página de financiamento de imóveis e Tabela de Tarifas da Caixa (divulgada em 01/10/2026). Os valores mudam: confirme na agência ou com o correspondente." },
+        ],
+      },
+      {
+        titulo: "A ordem certa, do começo à venda",
+        blocos: [
+          {
+            passos: [
+              { titulo: "Certidões", texto: "Matrícula, IPTU e condomínio. Você descobre o que falta antes do comprador." },
+              { titulo: "Dívidas e averbação", texto: "Quite ou parcele os débitos e regularize o que foi construído." },
+              { titulo: "Reforma que se paga", texto: "Pintura e reparos; cozinha e banheiro só se estiverem ruins." },
+              { titulo: "Preço", texto: "Um preço que caiba na avaliação do banco do comprador." },
+              { titulo: "Anúncio e comprador", texto: "A avaliação do banco vem com a proposta dele. Imóvel financiado? Veja [como vender](#vender-financiado)." },
+            ],
+          },
+        ],
+      },
+    ],
+    faq: [
+      { q: "Posso vender imóvel com IPTU atrasado?", a: "Pode, mas a dívida acompanha o imóvel e o banco do comprador pede a certidão de débitos. O caminho é quitar ou parcelar antes, ou combinar por escrito que o débito é pago com o dinheiro da venda." },
+      { q: "Quem paga a dívida de IPTU depois da venda?", a: "Pela lei, a dívida de IPTU passa para quem compra, a menos que a escritura prove a quitação. Por isso nenhum comprador atento assina sem a certidão." },
+      { q: "Reformar aumenta a avaliação do banco?", a: "O engenheiro considera o estado de conservação e a área registrada. Reparos e pintura ajudam; ampliação só conta direito depois de averbada na matrícula." },
+      { q: "Posso pedir a avaliação da Caixa antes de ter comprador?", a: "Na Caixa, a avaliação faz parte da proposta de financiamento de quem compra, e é o comprador quem paga. Para ter uma referência antes, contrate uma avaliação particular de engenheiro ou corretor." },
+      { q: "Quanto tempo vale o laudo de avaliação?", a: "A Caixa não publica o prazo. No mercado, fala-se em até 6 meses. Se o negócio demorar mais, o banco pode pedir nova avaliação, com nova tarifa." },
     ],
   },
 

@@ -23,6 +23,17 @@ O menu antigo tinha 7 hubs no topo e cada painel listava **todas** as páginas d
 - **Rodapé enxuto** (~30 links): as mesmas 5 portas, só o 1º nível (em Comprar, as fases). "Todas as páginas (mapa do site)" fica em destaque na linha final: cada página continua a um clique do rodapé, via `/mapa/`.
 - A página `/guias/` ganhou âncoras por etapa (`id` = id da etapa).
 
+## Revisão de 02/11/2026: menos itens, na ordem de entendimento
+
+Os painéis ordenavam pela `prioridade` (volume de busca) e mostravam 6 páginas com resumo cortado: "Antes de começar" abria com Registrato e preço por capital, Vender abria pelo contrato. Agora:
+
+- **Vitrine curada, no máximo 4 por fase ou seção**, na ordem em que a pessoa precisa entender (`vitrine` em `FASES`, `VITRINE_VENDER`, `VITRINE_AJUDA`, `VITRINE_FERRAMENTAS` em `navegacao.ts`). O resto continua a um clique em "Ver as N páginas desta fase", no hub e no mapa. Página nova **não entra sozinha no menu**: entra na vitrine se for mais importante que uma das 4.
+- **Só o título** no item do menu (o resumo cortado em "…" passava a sensação de excesso).
+- **Cada link num lugar só**: atalhos (Registrato, FGTS) só em Ajuda; ferramentas só em Ferramentas; Modelos de contrato só em Vender; "Todos os guias" só no rodapé.
+- **Ajuda** = 4 atalhos + Glossário + Mapa do site. Duvide, Quem é quem, Sobre e Mídia kit ficam na linha final do rodapé.
+- **Rodapé**: a coluna Ajuda não repete a linha final (Atalhos, Glossário, Todos os guias).
+- Nenhuma página saiu do ar: o teste da árvore segue exigindo 2 links chegando e no máximo 3 cliques da home.
+
 ## Regra de ouro: nada de link quebrado
 
 Página `planejado` aparece como **texto + selo "em breve"** (`<EmBreve />` em `components/ui/badge.tsx`), nunca como `<a>`. Vale para menu, rodapé e breadcrumb. Hoje só `/` e `/simulador-financiamento-caixa/` estão publicadas, então quase tudo aparece "em breve": é honesto e mostra o tamanho do que vem.

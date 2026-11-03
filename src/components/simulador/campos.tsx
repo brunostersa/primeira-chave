@@ -13,9 +13,12 @@ export function CampoDinheiro({
   onEnter,
   autoFocus,
   acao,
+  ajuda,
 }: {
   id: string;
   rotulo: string;
+  /** Linha de apoio abaixo do rótulo, menor e cinza. */
+  ajuda?: string;
   valor: number;
   onChange: (v: number) => void;
   onEnter?: () => void;
@@ -25,8 +28,9 @@ export function CampoDinheiro({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-[15px] font-semibold">
+      <label htmlFor={id} className="flex flex-col text-[15px] font-semibold">
         {rotulo}
+        {ajuda && <span className="text-sm font-normal text-ink-2">{ajuda}</span>}
       </label>
       <LinhaComAcao acao={acao}>
         <div className="flex max-w-xs min-w-0 flex-1 items-center rounded-xl border-[1.5px] border-ink bg-surface focus-within:outline focus-within:outline-[2.5px] focus-within:outline-offset-2 focus-within:outline-ink">
