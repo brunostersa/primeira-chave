@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MessageCircle } from "lucide-react";
+import { Bus, MessageCircle } from "lucide-react";
 import { Ajuda } from "@/components/imoveis/Ajuda";
 import { BalaoWhatsapp, ContatoImovel } from "@/components/imoveis/Contato";
 import { GradeFotos, MosaicoCapa } from "@/components/imoveis/Galeria";
@@ -15,7 +15,7 @@ import { custosDaCompra } from "@/lib/financiamento/custos";
 import { calcular, PERFIL_VAZIO, rendaMinimaPara, type Resultado } from "@/lib/financiamento/engine";
 import { PARAMS_ATUALIZADOS_EM } from "@/lib/financiamento/params";
 import { brl } from "@/lib/format";
-import { distancia, IMOVEIS_DE_OURO, imovelDeOuro, seloAprovado, slugImovel, type ImovelDeOuro, type Situacao } from "@/lib/imoveis-de-ouro";
+import { distancia, IMOVEIS_DE_OURO, SOBRE_CIDADES, imovelDeOuro, seloAprovado, slugImovel, type ImovelDeOuro, type Situacao } from "@/lib/imoveis-de-ouro";
 import { linkWhatsapp } from "@/lib/hub";
 import { metadadosPagina } from "@/lib/seo";
 import { SITE } from "@/lib/site-config";
@@ -77,20 +77,21 @@ const SECOES: (ItemMenu & { pergunta: string })[] = [
   { id: "na-mao", rotulo: "Dinheiro na mão", pergunta: "Quanto ter na mão" },
   { id: "casa", rotulo: "A casa", pergunta: "A casa por dentro" },
   { id: "bairro", rotulo: "Onde fica", pergunta: "Onde fica e o que tem perto" },
+  { id: "cidade", rotulo: "A cidade", pergunta: "Morar na cidade" },
   { id: "selo", rotulo: "O que foi conferido", pergunta: "O que já foi conferido" },
   { id: "parcela", rotulo: "Parcela no tempo", pergunta: "A parcela ao longo dos anos" },
   { id: "contato", rotulo: "Chamar no WhatsApp", pergunta: "O próximo passo" },
 ];
 const MENU: ItemMenu[] = SECOES.map(({ id, rotulo }) => ({ id, rotulo }));
 
-function Secao({ id, children, intro }: { id: string; children: React.ReactNode; intro?: React.ReactNode }) {
+function Secao({ id, children, intro, titulo }: { id: string; children: React.ReactNode; intro?: React.ReactNode; titulo?: string }) {
   const k = SECOES.findIndex((s) => s.id === id);
   return (
     <section id={id} aria-labelledby={`${id}-titulo`} className="flex scroll-mt-32 flex-col gap-6 border-t border-line pt-10 xl:scroll-mt-24">
       <header className="flex flex-col gap-2">
         <span className="font-mono text-sm text-muted">{String(k + 1).padStart(2, "0")}</span>
         <h2 id={`${id}-titulo`} className="font-display text-[clamp(30px,3.6vw,48px)] font-light leading-[1.05]">
-          {SECOES[k].pergunta}
+          {titulo ?? SECOES[k].pergunta}
         </h2>
         {intro && <div className="max-w-3xl text-lg text-ink-2">{intro}</div>}
       </header>
@@ -116,6 +117,8 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
   if (!i) notFound();
   const { minima, r, custos, semDesconto, avalParaZerar } = numeros(i);
   const aprovado = seloAprovado(i);
+  const sobre = SOBRE_CIDADES[i.cidade.id];
+  const menu = sobre ? MENU : MENU.filter((m) => m.id !== "cidade");
   const naMao = r.entrada + custos.total;
   const url = `${SITE.url}${slugImovel(i)}`;
   const maisPerto = (cat: string) => i.proximos.filter((p) => p.categoria === cat).map((p) => ({ ...p, d: distancia(i.mapa, p) })).sort((a, b) => a.d - b.d)[0];
@@ -248,7 +251,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
 
         {/* Menu: faixa presa no topo até o desktop largo, coluna à esquerda nele. */}
         <aside className="sticky top-16 z-30 -mx-4 border-y border-line bg-paper/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6 xl:top-24 xl:mx-0 xl:self-start xl:border-0 xl:bg-transparent xl:p-0 xl:backdrop-blur-none">
-          <MenuDossie itens={MENU} />
+          <MenuDossie itens={menu} />
         </aside>
 
         <div className="@container flex min-w-0 flex-col gap-16 pt-6 xl:pt-0">
@@ -338,6 +341,60 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
             <BairroInterativo centro={i.mapa} proximos={i.proximos} />
             <p className="text-sm text-muted">Distâncias em linha reta a partir da casa; a pé ou de carro o caminho é um pouco maior. Pontos levantados no Google Maps em {dataBr(i.analisadoEm)}.</p>
           </Secao>
+
+          {sobre && (
+            <Secao id="cidade" titulo={`Morar em ${i.cidade.nome}`} intro={sobre.resumo}>
+              <dl className="grid grid-cols-[minmax(0,1fr)] gap-3 @xl:grid-cols-2">
+                <div className="rounded-[var(--radius-card)] bg-ink p-5 text-paper">
+                  <dt className="text-sm text-paper/70">{sobre.destaque.rotulo}</dt>
+                  <dd className="font-display text-5xl font-semibold tabular-nums">
+                    <span className="text-mark">{sobre.destaque.km} km</span>
+                  </dd>
+                  <dd className="text-sm text-paper/80">
+                    cerca de {sobre.destaque.minutos} min de carro, pela {sobre.destaque.via}
+                  </dd>
+                </div>
+                <div className="rounded-[var(--radius-card)] border border-line bg-surface p-5">
+                  <dt className="text-sm text-ink-2">Moradores</dt>
+                  <dd className="font-display text-5xl font-semibold tabular-nums">{sobre.populacao.estimativa.toLocaleString("pt-BR")}</dd>
+                  <dd className="text-sm text-ink-2">
+                    estimativa do IBGE para {sobre.populacao.anoEstimativa}; eram {sobre.populacao.censo2022.toLocaleString("pt-BR")} no Censo 2022
+                  </dd>
+                </div>
+              </dl>
+              <div className="grid grid-cols-[minmax(0,1fr)] gap-8 @3xl:grid-cols-2">
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-semibold">De carro, saindo da casa</h3>
+                  <ol className="divide-y divide-line border-y border-line">
+                    {sobre.tempos.map((t) => (
+                      <li key={t.destino} className="flex items-baseline justify-between gap-4 py-3">
+                        <span>
+                          {t.destino}
+                          {t.nota && <span className="block text-sm text-muted">{t.nota}</span>}
+                        </span>
+                        <span className="font-display text-xl font-semibold whitespace-nowrap tabular-nums">{t.minutos} min</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-semibold">Vale saber</h3>
+                  {i.transporte && (
+                    <p className="flex gap-3 rounded-xl bg-mark/40 px-4 py-3 text-[15px] font-medium">
+                      <Bus className="mt-0.5 size-5 shrink-0" aria-hidden />
+                      {i.transporte}
+                    </p>
+                  )}
+                  <ul className="flex flex-col gap-3 text-[15px]">
+                    {sobre.pontos.map((p) => (
+                      <Check key={p}>{p}</Check>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <p className="text-sm text-muted">{sobre.fontes} Os tempos mudam com o horário e o trânsito.</p>
+            </Secao>
+          )}
 
           <Secao id="selo" intro={<>O selo só sai quando cada item abaixo é conferido. Análise de {dataBr(i.analisadoEm)}.</>}>
             <div className="grid items-start gap-8 @3xl:grid-cols-[minmax(0,1fr)_200px]">

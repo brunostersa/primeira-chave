@@ -52,6 +52,8 @@ export type ImovelDeOuro = {
   caracteristicas: string[];
   historico: string[];
   bairroPontos: string[];
+  /** Como sair da casa sem carro; aparece em destaque no bloco da cidade. */
+  transporte?: string;
   /** Ponto no mapa e o link para abrir no Google Maps. */
   mapa: { lat: number; lng: number; url: string };
   /** Escolas, saúde e comércio em volta, levantados no Google Maps na data da análise. */
@@ -100,6 +102,7 @@ export const IMOVEIS_DE_OURO: ImovelDeOuro[] = [
       "Planta que separa a área íntima da sala",
     ],
     historico: ["Reforma finalizada em 2026", "Pintura, pisos e banheiros novos (ver fotos)"],
+    transporte: "Esta casa tem ônibus na porta: dá para chegar ao Terminal Goianira e seguir para Goiânia pela rede metropolitana, sem depender de carro.",
     bairroPontos: ["Na rua principal do setor", "Linha de ônibus na porta", "Para urgência: SAMU e Hospital Municipal de Goianira a uns 3 km; a UPA mais perto é a de Trindade, a uns 13 km"],
     mapa: { lat: -16.522116, lng: -49.405643, url: "https://maps.app.goo.gl/pxn3HngQGpe3VKJHA" },
     proximos: [
@@ -148,7 +151,7 @@ export const IMOVEIS_DE_OURO: ImovelDeOuro[] = [
       plataforma: "OLX",
       anunciante: "Cryssia",
     },
-    vinculo: "Este imóvel é da família do fundador da Primeira Chave. Por isso a análise mostra cada item e de onde veio cada número, para você conferir sem precisar confiar na gente.",
+    vinculo: "Esta é uma página de imóvel como todas deveriam ser: cada item conferido e cada número com a origem à mostra, para você decidir sem precisar confiar na gente.",
     selo: [
       { item: "Aceita financiamento", situacao: "ok", nota: "Informado no anúncio; a casa é de alvenaria, com laje, como o banco pede." },
       { item: "Avaliação do banco perto do preço", situacao: "ok", nota: "Laudo da Caixa de R$ 244 mil, R$ 1 mil abaixo do preço: a entrada sobe só R$ 800, sem susto." },
@@ -161,6 +164,40 @@ export const IMOVEIS_DE_OURO: ImovelDeOuro[] = [
     analisadoEm: "2026-11-03",
   },
 ];
+
+/** O que vale saber da cidade, com fonte: o mesmo bloco serve para todos os imóveis dela. */
+export type SobreCidade = {
+  resumo: string;
+  /** A referência de Goiânia mais útil para quem mora ali, de carro a partir da casa (Google Maps). */
+  destaque: { rotulo: string; km: number; minutos: number; via: string };
+  populacao: { censo2022: number; estimativa: number; anoEstimativa: number };
+  /** Tempos de carro a partir da casa, sem trânsito pesado. */
+  tempos: { destino: string; minutos: number; nota?: string }[];
+  pontos: string[];
+  fontes: string;
+};
+
+export const SOBRE_CIDADES: Record<string, SobreCidade> = {
+  goianira: {
+    resumo: "Cidade da Região Metropolitana de Goiânia, ligada à capital pela GO-070. Cresceu ao longo da rodovia e hoje é praticamente emendada à zona noroeste de Goiânia.",
+    destaque: { rotulo: "Até o Portal Shopping, em Goiânia", km: 19, minutos: 23, via: "GO-070" },
+    populacao: { censo2022: 71916, estimativa: 81495, anoEstimativa: 2025 },
+    tempos: [
+      { destino: "Terminal Goianira", minutos: 10, nota: "ônibus metropolitano para Goiânia" },
+      { destino: "Basílica do Divino Pai Eterno, Trindade", minutos: 27 },
+      { destino: "Passeio das Águas Shopping, Goiânia", minutos: 37 },
+      { destino: "Centro de Goiânia (Praça Cívica)", minutos: 45, nota: "29 km, com trânsito normal" },
+      { destino: "Aeroporto Santa Genoveva", minutos: 45 },
+    ],
+    pontos: [
+      "Faz parte da rede de ônibus metropolitano da Grande Goiânia, com terminal próprio na cidade.",
+      "Ganhou quase 10 mil moradores entre o Censo 2022 e a estimativa de 2025: cidade em crescimento, com comércio e serviços chegando junto.",
+      "Vizinha de Trindade, onde fica a UPA mais perto e a Basílica do Divino Pai Eterno.",
+      "Quem trabalha em Goiânia costuma ir pela GO-070; nos horários de pico, conte com mais tempo.",
+    ],
+    fontes: "População: IBGE (Censo 2022 e estimativa 2025). Tempos e distâncias: Google Maps, saindo da casa, em 03/11/2026.",
+  },
+};
 
 export const porCidade = (cidade: string) => IMOVEIS_DE_OURO.filter((i) => i.cidade.id === cidade);
 export const imovelDeOuro = (cidade: string, id: string) => IMOVEIS_DE_OURO.find((i) => i.cidade.id === cidade && i.id === id);
