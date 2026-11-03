@@ -173,7 +173,7 @@ export default function DoZeroAChavePage() {
         {/* O selo de grátis no canto de cima do formulário, metade para fora. */}
         <div className="relative">
           <SeloGratis className="absolute -right-2 -top-10 z-10 size-[80px] sm:-right-6 sm:-top-12 sm:size-[96px]" />
-          <BaixarGuia />
+          <BaixarGuia className="pt-14 sm:pt-16" />
         </div>
       </header>
 
