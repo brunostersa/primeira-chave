@@ -321,7 +321,7 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
       { q: "O que posso abater do lucro na venda do imóvel?", a: "Do custo: ITBI, escritura e registro da compra, corretagem paga na compra, reformas e obras e os juros pagos para comprar. Da venda: a corretagem que você paga. Tudo com comprovante e informado na declaração." },
       { q: "Quanto o tempo de posse reduz o imposto?", a: "A lei aplica fatores de redução por mês desde a compra. Em 10 anos, o ganho tributado cai para cerca de dois terços. Imóvel comprado até 1988 tem redução extra, e até 1969 é isento." },
       { q: "Reforma sem nota fiscal entra no custo?", a: "Não. Só entram gastos comprovados com nota ou recibo e informados na declaração." },
-      { q: "Quando pago o imposto?", a: "Até o último dia útil do mês seguinte à venda, por DARF, gerado no programa de ganho de capital da Receita." },
+      { q: "Onde e como pago o imposto da venda?", a: "No GCAP, o programa de ganho de capital da Receita Federal, grátis no site da Receita (gov.br). Você informa a compra, a venda e o que abate; o programa calcula o imposto e gera o DARF, a guia que se paga no app do banco até o último dia útil do mês seguinte à venda. Dá para fazer sozinho ou pedir a um contador. Depois, o arquivo do GCAP é importado na declaração anual do imposto de renda." },
     ],
   },
 };

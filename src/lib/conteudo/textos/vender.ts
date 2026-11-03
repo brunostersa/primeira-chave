@@ -391,6 +391,7 @@ export const TEXTOS_VENDER: Record<string, Texto> = {
     ],
     faq: [{ q: "Quem paga o imposto, comprador ou vendedor?", a: "O vendedor, sobre o próprio lucro. O comprador paga o ITBI." },
       { q: "A isenção dos 180 dias vale se eu financiar o novo imóvel?", a: "Vale: o dinheiro da venda precisa ir para a compra do novo imóvel residencial, mesmo que o resto seja financiado." },
+      { q: "Onde e como pago o imposto da venda?", a: "No GCAP, o programa de ganho de capital da Receita Federal, grátis no site da Receita (gov.br). Você informa a compra, a venda e o que abate; o programa calcula o imposto e gera o DARF, a guia que se paga no app do banco até o último dia útil do mês seguinte à venda. Dá para fazer sozinho ou pedir a um contador. Depois, o arquivo do GCAP é importado na declaração anual do imposto de renda." },
       { q: "Vendi com prejuízo. Pago imposto?", a: "Não há ganho de capital quando a venda sai por menos que o custo. Mesmo assim, informe a venda na declaração." },
     ],
   },
