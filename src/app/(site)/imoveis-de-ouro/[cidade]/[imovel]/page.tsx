@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Ajuda } from "@/components/imoveis/Ajuda";
 import { BalaoWhatsapp, ContatoImovel } from "@/components/imoveis/Contato";
 import { GradeFotos, MosaicoCapa } from "@/components/imoveis/Galeria";
 import { BairroInterativo } from "@/components/imoveis/MapaProximos";
@@ -125,11 +126,38 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
     .map((x) => ({ ...maisPerto(x.cat), texto: x.texto }))
     .filter((x) => x.nome);
 
-  const ficha = [
-    { k: "Preço", v: brl(i.preco) },
-    { k: `Laudo ${i.avaliacao.banco}`, v: brl(i.avaliacao.valor) },
-    { k: "Na mão", v: brl(naMao), marca: true },
-    { k: "Parcela", v: `${brl(r.price.first.pg)}/mês` },
+  const juros = `${r.prog.juros.toLocaleString("pt-BR")}% ao ano`;
+  /** Os quatro números da casa, num lugar só; o (?) conta de onde cada um vem. */
+  const ficha: { k: string; v: string; sub?: string; marca?: boolean; ajuda?: React.ReactNode; lado?: "esquerda" | "direita" }[] = [
+    { k: "Valor de venda", v: brl(i.preco) },
+    { k: `Avaliação do engenheiro (${i.avaliacao.banco})`, v: brl(i.avaliacao.valor) },
+    {
+      k: "Valor de entrada",
+      v: brl(r.entrada),
+      sub: `+ ${brl(custos.total)} de custos da compra`,
+      marca: true,
+      ajuda: (
+        <>
+          O banco financia até {Math.round(r.prog.ltv * 100)}% da avaliação: {brl(r.P)}. A entrada é o que falta para o valor de venda: {brl(i.preco)} − {brl(r.P)} ={" "}
+          <b>{brl(r.entrada)}</b>. Pode sair do FGTS.
+          <br />
+          À parte, os custos da compra: ITBI {brl(custos.itbi)}, cartório {brl(custos.registro)} e avaliação {brl(custos.avaliacao)}. Total na mão sem FGTS: <b>{brl(naMao)}</b>.
+        </>
+      ),
+    },
+    {
+      k: "Parcela estimada",
+      v: `${brl(r.price.first.pg)}/mês`,
+      sub: `${i.avaliacao.banco}, ${juros}`,
+      lado: "direita",
+      ajuda: (
+        <>
+          Estimativa pela {i.avaliacao.banco}, {r.prog.nome}, {juros}, em {Math.round(r.n / 12)} anos, tabela PRICE, com seguros e taxa, para alguém de 30 anos. Na SAC começa em{" "}
+          {brl(r.sac.first.pg)} e vai caindo.
+          <br />A casa aceita financiamento por outros bancos também; cada um tem juros, seguros e laudo próprios, e a parcela final sai da proposta do banco.
+        </>
+      ),
+    },
   ];
 
   return (
@@ -171,9 +199,17 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
             </div>
             <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 lg:grid-cols-4">
               {ficha.map((f) => (
-                <div key={f.k}>
-                  <dt className="font-mono text-xs uppercase tracking-[0.07em] text-muted">{f.k}</dt>
-                  <dd className="font-display text-[clamp(24px,2.6vw,36px)] font-semibold tabular-nums">{f.marca ? <span className="marca-texto">{f.v}</span> : f.v}</dd>
+                <div key={f.k} className="flex flex-col gap-1">
+                  <dt className="flex items-end gap-1.5 text-sm text-ink-2 lg:min-h-10">
+                    {f.k}
+                    {f.ajuda && (
+                      <Ajuda rotulo={`Como chegamos em: ${f.k}`} lado={f.lado}>
+                        {f.ajuda}
+                      </Ajuda>
+                    )}
+                  </dt>
+                  <dd className="font-display text-[clamp(22px,2.1vw,34px)] font-semibold leading-tight whitespace-nowrap tabular-nums">{f.marca ? <span className="marca-texto">{f.v}</span> : f.v}</dd>
+                  {f.sub && <dd className="text-xs text-muted">{f.sub}</dd>}
                 </div>
               ))}
             </dl>
@@ -301,7 +337,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
             id="parcela"
             intro={
               <>
-                {r.prog.nome}, {r.prog.juros.toLocaleString("pt-BR")}% ao ano ({r.ef.toFixed(2).replace(".", ",")}% efetivos), em {r.n / 12} anos, para alguém de 30 anos sem FGTS. Com seguros e taxa de administração.{" "}
+                {r.prog.nome}, {r.prog.juros.toLocaleString("pt-BR")}% ao ano ({r.ef.toFixed(2).replace(".", ",")}% efetivos), em {r.n / 12} anos, para alguém de 30 anos sem FGTS. Com seguros e taxa de administração. É uma estimativa: a parcela final sai da proposta do banco. A casa aceita financiamento por outros bancos também, e cada um tem juros, seguros e laudo próprios.{" "}
                 <Link href="/sac-ou-price/" className="underline underline-offset-2">
                   SAC ou PRICE: qual escolher
                 </Link>
@@ -331,20 +367,13 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           </Secao>
         </div>
 
-        {/* Ficha fixa: os números e o contato sempre à mão no desktop largo. */}
+        {/* Atalhos fixos no desktop largo; os números ficam só no topo. */}
         <aside className="hidden xl:sticky xl:top-24 xl:flex xl:flex-col xl:gap-4 xl:self-start">
           <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-5">
             <Badge tone={aprovado ? "ok" : "warn"} className="self-start">
               {aprovado ? "Selo João aprova" : "Selo em análise"}
             </Badge>
-            <dl className="flex flex-col divide-y divide-line">
-              {ficha.map((f) => (
-                <div key={f.k} className="flex items-baseline justify-between gap-3 py-2">
-                  <dt className="text-sm text-ink-2">{f.k}</dt>
-                  <dd className={f.marca ? "marca-texto font-display text-xl font-semibold tabular-nums" : "font-display text-xl font-semibold tabular-nums"}>{f.v}</dd>
-                </div>
-              ))}
-            </dl>
+            <p className="text-sm text-ink-2">Matrícula, averbação e laudo conferidos. A casa aceita financiamento pela {i.avaliacao.banco} ou por outros bancos.</p>
             <Button asChild size="lg" variant="mark">
               <a href="#bolso">Ver se cabe no meu bolso</a>
             </Button>
@@ -352,15 +381,14 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
               <a href="#contato">Chamar no WhatsApp</a>
             </Button>
           </div>
-          <p className="px-1 text-xs text-muted">Simulação para 30 anos, sem FGTS e sem outras dívidas. A sua pode mudar.</p>
-        </aside>
+                  </aside>
       </div>
 
       {/* No celular e no tablet, a ficha vira uma barra presa embaixo. */}
       <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur xl:hidden">
         <div className="leading-tight">
           <p className="font-display text-lg font-semibold tabular-nums">{brl(i.preco)}</p>
-          <p className="text-xs whitespace-nowrap text-ink-2">{brl(r.price.first.pg)}/mês</p>
+          <p className="text-xs whitespace-nowrap text-ink-2">≈ {brl(r.price.first.pg)}/mês, estimativa</p>
         </div>
         <Button asChild variant="mark">
           <a href="#bolso">Cabe no meu bolso?</a>

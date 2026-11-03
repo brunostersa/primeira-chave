@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Images, X } from "lucide-react";
 
 type Foto = { arquivo: string; legenda: string };
@@ -26,6 +26,8 @@ function Visor({ fotos, inicio, fechar }: { fotos: Foto[]; inicio: number; fecha
     };
   }, [fechar, ir]);
 
+  // No celular, arrastar o dedo para o lado troca a foto.
+  const toque = useRef<number | null>(null);
   const f = fotos[k];
   return (
     <div role="dialog" aria-modal="true" aria-label="Fotos da casa" className="fixed inset-0 z-[60] flex flex-col bg-ink text-paper">
@@ -37,7 +39,16 @@ function Visor({ fotos, inicio, fechar }: { fotos: Foto[]; inicio: number; fecha
           <X className="size-6" />
         </button>
       </div>
-      <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-2 sm:px-16">
+      <div
+        className="relative flex min-h-0 flex-1 touch-pan-y items-center justify-center px-2 pb-2 sm:px-16"
+        onTouchStart={(e) => (toque.current = e.touches[0].clientX)}
+        onTouchEnd={(e) => {
+          if (toque.current === null) return;
+          const dx = e.changedTouches[0].clientX - toque.current;
+          toque.current = null;
+          if (Math.abs(dx) > 40) ir(dx < 0 ? 1 : -1);
+        }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element -- tamanho natural da foto no visor */}
         <img src={f.arquivo} alt={f.legenda} className="size-full rounded-lg object-contain" />
         <button type="button" onClick={() => ir(-1)} aria-label="Foto anterior" className="absolute left-2 rounded-full bg-paper/10 p-3 hover:bg-paper/20 sm:left-4">
@@ -62,11 +73,26 @@ function Visor({ fotos, inicio, fechar }: { fotos: Foto[]; inicio: number; fecha
 export function MosaicoCapa({ fotos, children }: { fotos: Foto[]; children?: React.ReactNode }) {
   const [aberta, setAberta] = useState<number | null>(null);
   const fechar = useCallback(() => setAberta(null), []);
+  const [atual, setAtual] = useState(0);
   const [capa, ...resto] = fotos;
 
   return (
     <div className="relative">
-      <div className="grid h-[min(60vh,620px)] min-h-[360px] grid-cols-4 grid-rows-2 gap-1.5 sm:gap-2">
+      {/* Celular: as fotos passam para o lado com o dedo. */}
+      <div
+        className="flex h-[min(60vh,520px)] min-h-[320px] snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden"
+        onScroll={(e) => setAtual(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}
+      >
+        {fotos.map((f, j) => (
+          <button key={f.arquivo} type="button" onClick={() => setAberta(j)} className="relative w-full shrink-0 snap-center" aria-label={`Abrir foto: ${f.legenda}`}>
+            <Image src={f.arquivo} alt={f.legenda} fill priority={j === 0} sizes="100vw" className="object-cover" />
+          </button>
+        ))}
+      </div>
+      <span className="pointer-events-none absolute bottom-4 left-4 rounded-full bg-ink/70 px-3 py-1 font-mono text-xs text-paper md:hidden">
+        {atual + 1} / {fotos.length}
+      </span>
+      <div className="hidden h-[min(60vh,620px)] min-h-[360px] grid-cols-4 grid-rows-2 gap-2 md:grid">
         <button type="button" onClick={() => setAberta(0)} className="relative col-span-4 row-span-2 overflow-hidden md:col-span-2">
           <Image src={capa.arquivo} alt={capa.legenda} fill priority sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
         </button>

@@ -1,11 +1,27 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Deslizador } from "@/components/simulador/campos";
 import { Badge } from "@/components/ui/badge";
 import { custosDaCompra, type Uf } from "@/lib/financiamento/custos";
 import { calcular, PERFIL_VAZIO } from "@/lib/financiamento/engine";
 import { brl } from "@/lib/format";
+
+/** Régua nativa do navegador, sem o pássaro: o arrasto que a pessoa já conhece. */
+function Regua({ id, rotulo, saida, min, max, step, valor, onChange }: { id: string; rotulo: string; saida: string; min: number; max: number; step: number; valor: number; onChange: (v: number) => void }) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-baseline justify-between gap-3">
+        <label htmlFor={id} className="text-[15px]">
+          {rotulo}
+        </label>
+        <output htmlFor={id} className="font-display text-xl font-semibold tabular-nums">
+          {saida}
+        </output>
+      </div>
+      <input id={id} type="range" min={min} max={max} step={step} value={valor} onChange={(e) => onChange(Number(e.target.value))} className="h-8 w-full cursor-pointer accent-[var(--ink)]" />
+    </div>
+  );
+}
 
 type Props = { preco: number; avaliacao: number; tipo: "usado" | "novo"; uf: Uf; itbiPct: number; rendaMinima: number | null };
 
@@ -54,9 +70,9 @@ export function SimuladorCasa({ preco, avaliacao, tipo, uf, itbiPct, rendaMinima
   return (
     <div className="grid gap-8 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-5 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div className="flex flex-col gap-7">
-        <Deslizador id="casa-renda" rotulo="Renda bruta da família, por mês" saida={brl(renda)} min={2000} max={20000} step={100} valor={renda} onChange={setRenda} humor={conta.bloqueio || conta.entradaAlta ? "triste" : conta.limitadoPelaRenda ? "surpreso" : "feliz"} />
-        <Deslizador id="casa-fgts" rotulo="FGTS que dá para usar" saida={fgts ? brl(fgts) : "não vou usar"} min={0} max={80000} step={1000} valor={fgts} onChange={setFgts} />
-        <Deslizador id="casa-idade" rotulo="Idade de quem é mais velho" saida={`${idade} anos`} min={18} max={70} step={1} valor={idade} onChange={setIdade} />
+        <Regua id="casa-renda" rotulo="Renda bruta da família, por mês" saida={brl(renda)} min={2000} max={20000} step={100} valor={renda} onChange={setRenda} />
+        <Regua id="casa-fgts" rotulo="FGTS que dá para usar" saida={fgts ? brl(fgts) : "não vou usar"} min={0} max={80000} step={1000} valor={fgts} onChange={setFgts} />
+        <Regua id="casa-idade" rotulo="Idade de quem é mais velho" saida={`${idade} anos`} min={18} max={70} step={1} valor={idade} onChange={setIdade} />
         <p className="text-sm text-muted">Sem outras dívidas. Renda bruta é o valor do holerite antes dos descontos; quem compra junto soma as rendas.</p>
       </div>
 
@@ -101,12 +117,12 @@ export function SimuladorCasa({ preco, avaliacao, tipo, uf, itbiPct, rendaMinima
             </div>
             <dl className="grid grid-cols-2 gap-3">
               <div className="rounded-xl bg-paper p-4">
-                <dt className="text-sm text-ink-2">Parcela PRICE</dt>
+                <dt className="text-sm text-ink-2">Parcela PRICE estimada</dt>
                 <dd className="font-display text-2xl font-semibold tabular-nums">{brl(conta.r.price.first.pg)}</dd>
                 <dd className="text-xs text-muted">{Math.round(conta.pctRenda)}% da renda</dd>
               </div>
               <div className="rounded-xl bg-paper p-4">
-                <dt className="text-sm text-ink-2">Parcela SAC</dt>
+                <dt className="text-sm text-ink-2">Parcela SAC estimada</dt>
                 <dd className="font-display text-2xl font-semibold tabular-nums">{brl(conta.r.sac.first.pg)}</dd>
                 <dd className="text-xs text-muted">cai até {brl(conta.r.sac.last)}</dd>
               </div>
@@ -122,6 +138,9 @@ export function SimuladorCasa({ preco, avaliacao, tipo, uf, itbiPct, rendaMinima
                 </dd>
               </div>
             </dl>
+            <p className="rounded-xl border border-line px-4 py-3 text-sm text-ink-2">
+              <b>Parcelas estimadas</b>, com as regras da {conta.r.prog.curto}. A casa aceita financiamento pela Caixa ou por outros bancos: cada um tem juros, seguros e laudo próprios, então a parcela final sai da proposta do banco que você escolher.
+            </p>
             {conta.limitadoPelaRenda && (
               <p className="text-sm text-ink-2">
                 Com essa renda o banco empresta {brl(conta.r.P)}, menos que os {brl(conta.r.P + conta.r.extraRenda)} que a casa permite. A diferença entra na entrada.
