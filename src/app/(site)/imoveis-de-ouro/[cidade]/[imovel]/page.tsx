@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MessageCircle } from "lucide-react";
 import { Ajuda } from "@/components/imoveis/Ajuda";
 import { BalaoWhatsapp, ContatoImovel } from "@/components/imoveis/Contato";
 import { GradeFotos, MosaicoCapa } from "@/components/imoveis/Galeria";
@@ -15,6 +16,7 @@ import { calcular, PERFIL_VAZIO, rendaMinimaPara, type Resultado } from "@/lib/f
 import { PARAMS_ATUALIZADOS_EM } from "@/lib/financiamento/params";
 import { brl } from "@/lib/format";
 import { distancia, IMOVEIS_DE_OURO, imovelDeOuro, seloAprovado, slugImovel, type ImovelDeOuro, type Situacao } from "@/lib/imoveis-de-ouro";
+import { linkWhatsapp } from "@/lib/hub";
 import { metadadosPagina } from "@/lib/seo";
 import { SITE } from "@/lib/site-config";
 
@@ -126,11 +128,23 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
     .map((x) => ({ ...maisPerto(x.cat), texto: x.texto }))
     .filter((x) => x.nome);
 
+  const textoDuvida = `Oi! Estava vendo a ${i.titulo} na Primeira Chave e tenho uma dúvida/sugestão:`;
   const juros = `${r.prog.juros.toLocaleString("pt-BR")}% ao ano`;
   /** Os quatro números da casa, num lugar só; o (?) conta de onde cada um vem. */
   const ficha: { k: string; v: string; sub?: string; marca?: boolean; ajuda?: React.ReactNode; lado?: "esquerda" | "direita" }[] = [
     { k: "Valor de venda", v: brl(i.preco) },
-    { k: `Avaliação do engenheiro (${i.avaliacao.banco})`, v: brl(i.avaliacao.valor) },
+    {
+      k: "Avaliação do engenheiro",
+      v: brl(i.avaliacao.valor),
+      sub: `Laudo da ${i.avaliacao.banco}`,
+      ajuda: (
+        <>
+          Um engenheiro da {i.avaliacao.banco} vistoriou a casa e avaliou em <b>{brl(i.avaliacao.valor)}</b>. É sobre esse valor que o banco calcula quanto financia.
+          <br />
+          Se preferir outro banco, ele faz a própria avaliação quando você manifestar interesse, e o valor pode mudar um pouco.
+        </>
+      ),
+    },
     {
       k: "Valor de entrada",
       v: brl(r.entrada),
@@ -161,9 +175,34 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
   ];
 
   return (
-    <article className="pb-28 xl:pb-16">
+    <article className="pb-28 2xl:pb-16">
+      {/* Trilha acima das fotos, alinhada à margem do conteúdo. */}
+      <nav aria-label="Você está em" className="mx-auto max-w-[1760px] px-4 py-3 sm:px-6 2xl:px-10">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2">
+          <li>
+            <Link href="/imoveis-de-ouro/" className="hover:text-ink hover:underline hover:underline-offset-4">
+              Imóveis de ouro
+            </Link>
+          </li>
+          <li aria-hidden className="text-muted">
+            /
+          </li>
+          <li>
+            <Link href={`/imoveis-de-ouro/${i.cidade.id}/`} className="hover:text-ink hover:underline hover:underline-offset-4">
+              {i.cidade.nome}
+            </Link>
+          </li>
+          <li aria-hidden className="text-muted">
+            /
+          </li>
+          <li aria-current="page" className="max-w-[60vw] truncate font-semibold text-ink">
+            {i.bairro.split(",")[0]}
+          </li>
+        </ol>
+      </nav>
+
       {/* Capa de borda a borda, com o carimbo do selo. */}
-      <div className="px-1.5 pt-1.5 sm:px-2 sm:pt-2">
+      <div className="px-1.5 sm:px-2">
         <MosaicoCapa fotos={i.fotos}>
           <a href="#selo" className="absolute top-4 right-4 hidden transition-transform hover:scale-105 sm:block" aria-label={aprovado ? "Selo João aprova: ver o que foi conferido" : "Selo em análise"}>
             <Carimbo aprovado={aprovado} className="w-32 lg:w-40" />
@@ -171,19 +210,10 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
         </MosaicoCapa>
       </div>
 
-      <div className="mx-auto grid max-w-[1760px] grid-cols-[minmax(0,1fr)] gap-x-10 px-4 sm:px-6 xl:grid-cols-[200px_minmax(0,1fr)_320px] 2xl:gap-x-16 2xl:px-10">
+      <div className="mx-auto grid max-w-[1760px] grid-cols-[minmax(0,1fr)] gap-x-10 px-4 sm:px-6 xl:grid-cols-[200px_minmax(0,1fr)] 2xl:grid-cols-[200px_minmax(0,1fr)_320px] 2xl:gap-x-16 2xl:px-10">
         {/* Cabeçalho: o que é, onde fica e os sinais que importam. */}
-        <header className="flex flex-col gap-4 py-8 xl:col-span-3 xl:grid xl:grid-cols-[200px_minmax(0,1fr)_320px] xl:gap-x-10 2xl:gap-x-16">
-          <nav aria-label="Você está em" className="text-sm text-muted xl:pt-3">
-            <Link href="/imoveis-de-ouro/" className="underline underline-offset-4">
-              Imóveis de ouro
-            </Link>{" "}
-            ›{" "}
-            <Link href={`/imoveis-de-ouro/${i.cidade.id}/`} className="underline underline-offset-4">
-              {i.cidade.nome}
-            </Link>
-          </nav>
-          <div className="flex flex-col gap-4">
+        <header className="flex flex-col gap-4 py-8 xl:col-span-2 xl:grid xl:grid-cols-[200px_minmax(0,1fr)] xl:gap-x-10 2xl:col-span-3 2xl:grid-cols-[200px_minmax(0,1fr)_320px] 2xl:gap-x-16">
+          <div className="flex flex-col gap-4 xl:col-start-2">
             <Eyebrow>
               {i.bairro} · {i.cidade.nome} ({i.cidade.uf})
             </Eyebrow>
@@ -200,7 +230,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
             <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 lg:grid-cols-4">
               {ficha.map((f) => (
                 <div key={f.k} className="flex flex-col gap-1">
-                  <dt className="flex items-end gap-1.5 text-sm text-ink-2 lg:min-h-10">
+                  <dt className="flex items-center gap-1.5 text-sm text-ink-2">
                     {f.k}
                     {f.ajuda && (
                       <Ajuda rotulo={`Como chegamos em: ${f.k}`} lado={f.lado}>
@@ -221,7 +251,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           <MenuDossie itens={MENU} />
         </aside>
 
-        <div className="flex min-w-0 flex-col gap-16 pt-6 xl:pt-0">
+        <div className="@container flex min-w-0 flex-col gap-16 pt-6 xl:pt-0">
           <Secao
             id="bolso"
             intro={
@@ -242,7 +272,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
             }
           >
             <BarraDaConta preco={i.preco} financiado={r.P} custos={custos.total} />
-            <ul className="grid gap-x-10 gap-y-3 text-[15px] lg:grid-cols-2">
+            <ul className="grid gap-x-10 gap-y-3 text-[15px] @3xl:grid-cols-2">
               <Check>
                 <b>Entrada de {brl(r.entrada)}:</b> o banco financia {Math.round(r.prog.ltv * 100)}% do laudo de {brl(i.avaliacao.valor)}. Pode sair do FGTS de quem tem 3 anos de carteira e não tem outro imóvel na região.
               </Check>
@@ -270,7 +300,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           </Secao>
 
           <Secao id="casa" intro={<>{i.areaConstruida.toLocaleString("pt-BR")} m² construídos num lote de {i.areaTerreno} m². Toque numa foto para ver em tela cheia.</>}>
-            <ul className="grid gap-x-10 gap-y-3 sm:grid-cols-2 2xl:grid-cols-3">
+            <ul className="grid gap-x-10 gap-y-3 @xl:grid-cols-2 @5xl:grid-cols-3">
               {[`${i.quartos} quartos, ${i.banheiros} banheiros, ${i.vagas} vagas`, ...i.caracteristicas, ...i.historico].map((c) => (
                 <Check key={c}>{c}</Check>
               ))}
@@ -289,7 +319,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
               </>
             }
           >
-            <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <dl className="grid grid-cols-2 gap-3 @3xl:grid-cols-4">
               {perto.map((p) => (
                 <div key={p.categoria} className="rounded-[var(--radius-card)] border border-line bg-surface p-4">
                   <dt className="text-sm text-ink-2">{p.texto}</dt>
@@ -310,10 +340,10 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           </Secao>
 
           <Secao id="selo" intro={<>O selo só sai quando cada item abaixo é conferido. Análise de {dataBr(i.analisadoEm)}.</>}>
-            <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_200px]">
+            <div className="grid items-start gap-8 @3xl:grid-cols-[minmax(0,1fr)_200px]">
               <ul className="divide-y divide-line border-y border-line">
                 {i.selo.map((s) => (
-                  <li key={s.item} className="grid gap-2 py-4 sm:grid-cols-[minmax(0,1fr)_140px] sm:items-start">
+                  <li key={s.item} className="grid gap-2 py-4 @xl:grid-cols-[minmax(0,1fr)_140px] @xl:items-start">
                     <span>
                       <b className="text-[17px]">{s.item}</b>
                       <span className="block text-ink-2">{s.nota}</span>
@@ -348,9 +378,9 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
           </Secao>
 
           <Secao id="contato">
-            <div className="grid grid-cols-[minmax(0,1fr)] gap-8 rounded-[var(--radius-card)] bg-ink p-6 text-paper sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-center">
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-8 rounded-[var(--radius-card)] bg-ink p-6 text-paper @xl:p-10 @4xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] @4xl:items-center">
               <div className="flex flex-col gap-3">
-                <p className="font-display text-3xl font-light leading-tight sm:text-5xl">
+                <p className="font-display text-3xl font-light leading-tight @xl:text-5xl">
                   Gostou? <span className="font-semibold text-mark">Chame no WhatsApp.</span>
                 </p>
                 <p className="text-paper/80">Deixe seu nome e WhatsApp e a conversa abre na hora, já com esta casa na mensagem. Dá para tirar dúvida, pedir mais fotos e marcar a visita.</p>
@@ -368,7 +398,7 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
         </div>
 
         {/* Atalhos fixos no desktop largo; os números ficam só no topo. */}
-        <aside className="hidden xl:sticky xl:top-24 xl:flex xl:flex-col xl:gap-4 xl:self-start">
+        <aside className="hidden 2xl:sticky 2xl:top-24 2xl:flex 2xl:flex-col 2xl:gap-4 2xl:self-start">
           <div className="flex flex-col gap-4 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-5">
             <Badge tone={aprovado ? "ok" : "warn"} className="self-start">
               {aprovado ? "Selo João aprova" : "Selo em análise"}
@@ -385,17 +415,32 @@ export default async function PaginaImovelDeOuro({ params }: Props) {
       </div>
 
       {/* No celular e no tablet, a ficha vira uma barra presa embaixo. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur xl:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur 2xl:hidden">
         <div className="leading-tight">
           <p className="font-display text-lg font-semibold tabular-nums">{brl(i.preco)}</p>
           <p className="text-xs whitespace-nowrap text-ink-2">≈ {brl(r.price.first.pg)}/mês, estimativa</p>
         </div>
-        <Button asChild variant="mark">
-          <a href="#bolso">Cabe no meu bolso?</a>
-        </Button>
+        <div className="flex items-center gap-2">
+          <a
+            href={linkWhatsapp(i.whatsapp, textoDuvida)}
+            rel="noopener"
+            aria-label="Dúvidas ou sugestões pelo WhatsApp"
+            className="flex size-11 items-center justify-center rounded-full border-[1.5px] border-ink bg-[#25D366] text-ink"
+          >
+            <MessageCircle className="size-5" />
+          </a>
+          <Button asChild variant="mark" className="px-4">
+            <a href="#bolso">
+              <span>
+                Cabe no <span className="hidden sm:inline">meu </span>bolso?
+              </span>
+            </a>
+          </Button>
+        </div>
       </div>
 
-      <BalaoWhatsapp whatsapp={i.whatsapp} texto={`Oi! Estava vendo a ${i.titulo} na Primeira Chave e tenho uma dúvida/sugestão:`} className="bottom-24 xl:bottom-6" />
+      {/* No celular e no tablet o WhatsApp fica na barra de baixo, sem cobrir o conteúdo. */}
+      <BalaoWhatsapp whatsapp={i.whatsapp} texto={textoDuvida} className="bottom-6 hidden 2xl:flex" />
     </article>
   );
 }

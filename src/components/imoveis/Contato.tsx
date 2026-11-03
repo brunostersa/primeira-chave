@@ -86,7 +86,7 @@ export function ContatoImovel({ imovelId, titulo, whatsapp, tom = "escuro" }: { 
 export function BalaoWhatsapp({ whatsapp, texto, className }: { whatsapp: string; texto: string; className?: string }) {
   const [aberto, setAberto] = useState(false);
   return (
-    <div className={`fixed left-4 z-40 flex flex-col items-start gap-2 ${className ?? "bottom-4"}`}>
+    <div className={`fixed left-4 z-40 flex-col items-start gap-2 ${className ?? "bottom-4 flex"}`}>
       {aberto && (
         <div className="momento-sobe w-64 rounded-2xl border-[1.5px] border-ink bg-surface p-4 shadow-[4px_4px_0_var(--ink)]">
           <div className="flex items-start justify-between gap-2">

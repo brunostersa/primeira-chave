@@ -60,7 +60,7 @@ export function ListaProximos({ centro, proximos }: { centro: { lat: number; lng
     .filter((g) => g.itens.length);
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2">
+    <div className="grid gap-6 @xl:grid-cols-2">
       {grupos.map(({ cat, itens }) => (
         <div key={cat} className="flex flex-col gap-2">
           <h3 className="flex items-center gap-2 font-semibold">

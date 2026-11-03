@@ -42,7 +42,7 @@ export function BarraDaConta({ preco, financiado, custos }: { preco: number; fin
           <div key={p.rotulo} className={cn(p.classe, k > 0 && "border-l-[1.5px] border-ink")} style={{ width: p.w }} />
         ))}
       </div>
-      <figcaption className="grid gap-3 sm:grid-cols-3">
+      <figcaption className="grid gap-3 @xl:grid-cols-3">
         {partes.map((p) => (
           <div key={p.rotulo} className="flex items-start gap-2">
             <i aria-hidden className={cn("mt-1 size-4 shrink-0 rounded border-[1.5px] border-ink", p.classe)} />

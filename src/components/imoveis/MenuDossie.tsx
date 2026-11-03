@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/components/ui/utils";
 
 export type ItemMenu = { id: string; rotulo: string };
@@ -27,9 +27,17 @@ export function MenuDossie({ itens, className }: { itens: ItemMenu[]; className?
     return () => obs.disconnect();
   }, [itens]);
 
+  // Na faixa rolável, o item ativo sempre fica à vista.
+  const faixa = useRef<HTMLOListElement>(null);
+  useEffect(() => {
+    const ol = faixa.current;
+    const a = ol?.querySelector<HTMLElement>(`a[href="#${ativo}"]`);
+    if (ol && a && ol.scrollWidth > ol.clientWidth) ol.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" });
+  }, [ativo]);
+
   return (
     <nav aria-label="Nesta página" className={className}>
-      <ol className="flex gap-1 overflow-x-auto xl:flex-col xl:gap-0 xl:overflow-visible">
+      <ol ref={faixa} className="relative flex gap-1 overflow-x-auto [scrollbar-width:none] xl:flex-col xl:gap-0 xl:overflow-visible [&::-webkit-scrollbar]:hidden">
         {itens.map((it, k) => (
           <li key={it.id} className="shrink-0">
             <a

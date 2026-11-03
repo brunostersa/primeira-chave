@@ -68,7 +68,7 @@ export function SimuladorCasa({ preco, avaliacao, tipo, uf, itbiPct, rendaMinima
   }, [renda, fgts, idade, preco, avaliacao, tipo, uf, itbiPct]);
 
   return (
-    <div className="grid gap-8 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-5 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+    <div className="grid gap-8 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface p-5 @xl:p-8 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div className="flex flex-col gap-7">
         <Regua id="casa-renda" rotulo="Renda bruta da família, por mês" saida={brl(renda)} min={2000} max={20000} step={100} valor={renda} onChange={setRenda} />
         <Regua id="casa-fgts" rotulo="FGTS que dá para usar" saida={fgts ? brl(fgts) : "não vou usar"} min={0} max={80000} step={1000} valor={fgts} onChange={setFgts} />

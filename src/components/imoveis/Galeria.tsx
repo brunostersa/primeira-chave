@@ -121,7 +121,7 @@ export function GradeFotos({ fotos }: { fotos: Foto[] }) {
   const fechar = useCallback(() => setAberta(null), []);
   return (
     <>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 @xl:grid-cols-3 @5xl:grid-cols-4">
         {fotos.map((f, j) => (
           <button key={f.arquivo} type="button" onClick={() => setAberta(j)} className="group flex flex-col gap-1 text-left">
             <span className="relative block aspect-[4/3] overflow-hidden rounded-lg">
