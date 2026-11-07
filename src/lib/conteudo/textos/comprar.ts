@@ -173,74 +173,73 @@ export const TEXTOS_COMPRAR: Record<string, Texto> = {
         ],
       },
       {
-        titulo: "Do comprador",
+        titulo: "Seus documentos",
         blocos: [
           {
             lista: [
-              "RG e CPF, ou CNH.",
-              "Certidão de nascimento (solteiro) ou de casamento. **Casado:** leve também RG e CPF (ou CNH) e o comprovante de renda do cônjuge.",
-              "Comprovante de endereço recente, de até 60 dias.",
-              "Comprovante de renda recente, de até 2 meses. O que vale como prova muda conforme o seu trabalho: veja a tabela abaixo.",
-              "Declaração do imposto de renda do ano, com o recibo, se você declara.",
-              "Carteira de trabalho: a página da foto, a da qualificação e **todas** as páginas com contratos registrados, inclusive os antigos.",
-              "Número do PIS.",
-              "Extrato do FGTS (obrigatório para quem é CLT), dizendo se vai usar o saldo.",
-              "Se já tem conta corrente na Caixa: agência, operação e número da conta.",
-              "Telefone, e-mail e grau de escolaridade, que vão para o cadastro.",
+              "**Identidade:** RG e CPF, ou CNH.",
+              "**Estado civil:** certidão de nascimento (solteiro) ou de casamento. **Casado:** o cônjuge entra junto, com identidade e prova de renda.",
+              "**Endereço:** conta de consumo em seu nome, de até 60 dias.",
+              "**Renda:** muda conforme o seu trabalho. Está na tabela logo abaixo.",
+              "**Imposto de renda:** a última declaração com o recibo, se você declara.",
+              "**Carteira de trabalho:** a página da foto, a da qualificação e **todas** as páginas com contrato, inclusive os antigos.",
+              "**PIS e FGTS:** o número do PIS e o extrato do FGTS. Para quem é CLT, o extrato é obrigatório.",
+              "**Para a ficha do banco:** telefone, e-mail, escolaridade e, se já tiver conta na Caixa, agência, operação e número.",
             ],
           },
-          { aviso: { titulo: "De onde vem esta lista", texto: "É a lista que um correspondente Caixa Aqui pede hoje (outubro de 2026). Agência ou correspondente podem pedir algo a mais no seu caso: confirme antes de juntar tudo.", tom: "planta" } },
+          { aviso: { titulo: "De onde vem esta lista", texto: "É o que um correspondente Caixa Aqui pede hoje (outubro de 2026). No seu caso podem pedir algo a mais: confirme antes de juntar tudo.", tom: "planta" } },
         ],
       },
       {
         titulo: "Comprovante de renda: o que levar em cada caso",
         blocos: [
-          { p: "O banco só conta a renda que você consegue provar. Quem tem carteira assinada prova com o holerite. Quem é dono do próprio negócio prova com os extratos da conta e com os papéis da empresa." },
+          { p: "O banco só conta a renda que você prova. Os documentos da lista acima valem para todos. Esta tabela é só o que muda:" },
           {
             tabela: {
-              cabecalho: ["Como você ganha", "O que levar"],
+              cabecalho: ["Como você ganha", "Prova de renda"],
               linhas: [
-                ["CLT (carteira assinada)", "Holerites recentes (até 2 meses), carteira de trabalho e extrato do FGTS."],
-                ["MEI", "Certificado do MEI e comprovantes do DAS-MEI, mais os extratos bancários dos últimos 6 meses."],
-                ["Empresa no Simples Nacional", "Contrato social, extrato do PGDAS e a DEFIS, mais os extratos bancários dos últimos 6 meses."],
-                ["Empresa no Lucro Presumido ou Real", "Contrato social e a ECF, mais os extratos bancários dos últimos 6 meses."],
-                ["Autônomo ou informal", "Extratos bancários dos últimos 6 meses e a declaração do imposto de renda. Confirme com o correspondente o que mais ele aceita no seu caso."],
+                ["CLT (carteira assinada)", "Os holerites dos últimos 2 meses."],
+                ["MEI", "Certificado do MEI, os comprovantes do DAS-MEI e 6 meses de extrato bancário."],
+                ["Empresa no Simples Nacional", "Contrato social, extrato do PGDAS, a DEFIS e 6 meses de extrato bancário."],
+                ["Empresa no Lucro Presumido ou Real", "Contrato social, a ECF e 6 meses de extrato bancário."],
+                ["Autônomo ou informal", "6 meses de extrato bancário e a declaração do imposto de renda, que aqui é obrigatória."],
               ],
             },
           },
-          { aviso: { titulo: "Dica para quem tem negócio próprio", texto: "Peça ao contador o PGDAS, a DEFIS ou a ECF já em PDF. E faça o dinheiro passar pela sua conta: renda que entra em espécie e não aparece no extrato **não conta** para o banco." } },
-          { p: "Quem é MEI ou autônomo e quer usar o FGTS precisa de saldo de empregos com carteira e de 3 anos somados de registro. Veja [como usar o FGTS](#usar-fgts-comprar)." },
+          { aviso: { titulo: "Para quem tem negócio próprio", texto: "Peça ao contador os papéis da empresa já em PDF. E faça o dinheiro passar pela sua conta: renda recebida em espécie, que não aparece no extrato, **não conta**." } },
+          { p: "MEI ou autônomo só usa o FGTS se tiver saldo de empregos com carteira e 3 anos de registro somados. Veja [como usar o FGTS](#usar-fgts-comprar)." },
         ],
       },
       {
         titulo: "Do vendedor",
         blocos: [
           {
-            tabela: {
-              cabecalho: ["Vendedor", "Documentos"],
-              linhas: [
-                ["Pessoa física", "Identidade, CPF e comprovante de estado civil"],
-                ["Empresa", "Contrato social, certidão simplificada da Junta (até 180 dias) e documentos dos representantes"],
-              ],
-            },
+            lista: [
+              "**Pessoa física:** identidade, CPF e certidão de estado civil. Se for casado, o cônjuge também assina a venda.",
+              "**Empresa:** contrato social, certidão simplificada da Junta Comercial (de até 180 dias) e os documentos de quem assina por ela.",
+            ],
           },
-          { p: "Quem vende também precisa saber o que o banco vai pedir: veja [documentos para vender](#documentos-vender)." },
+          { p: "O lado de quem vende, com prazos e o que o banco confere, está em [documentos para vender](#documentos-vender)." },
         ],
       },
       {
         titulo: "Do imóvel",
         blocos: [
-          { p: "A certidão de inteiro teor da [matrícula](g:matricula), atualizada, com [ônus reais](g:onus) e ações. Tire online: [certidão de matrícula](#certidao-matricula)." },
-          { aviso: { titulo: "Dica", texto: "Entregue **todos** os documentos de uma vez. Documento que chega aos poucos é o motivo número 1 de financiamento demorado." } },
+          {
+            lista: [
+              "**Matrícula:** a certidão de inteiro teor, com [ônus reais](g:onus) e ações, de até 30 dias. Tire online: [certidão de matrícula](#certidao-matricula).",
+              "**IPTU:** a certidão negativa ou o carnê do ano, mostrando que não há débito.",
+              "**Condomínio:** se houver, a declaração do síndico de que as taxas estão em dia.",
+            ],
+          },
+          { aviso: { titulo: "Entregue tudo de uma vez", texto: "Documento que chega aos poucos é o motivo número 1 de financiamento demorado. E junte perto da entrega: papel vencido volta para você." } },
         ],
       },
     ],
     faq: [
-      { q: "Precisa de certidões negativas do vendedor?", a: "Depende do banco e do caso. É comum pedirem certidões de ações e de débitos para avaliar o risco do negócio." },
-      { q: "Quanto tempo vale a certidão da matrícula?", a: "Em geral, os bancos aceitam certidões emitidas há até 30 dias." },
-      { q: "Autônomo consegue financiar?", a: "Pode, se provar a renda: extratos bancários dos últimos 6 meses e declaração do imposto de renda. Renda que não aparece no extrato não conta." },
-      { q: "MEI consegue financiar?", a: "Pode, se provar a renda. Leve o certificado do MEI, os comprovantes do DAS-MEI e os extratos bancários dos últimos 6 meses, além dos documentos pessoais." },
-      { q: "Casado precisa levar os documentos do cônjuge?", a: "Precisa: RG e CPF (ou CNH) e o comprovante de renda do cônjuge, além da certidão de casamento." },
+      { q: "Precisa de certidões negativas do vendedor?", a: "Depende do banco e do caso. É comum pedirem certidões de ações e de débitos do vendedor para avaliar o risco do negócio." },
+      { q: "Autônomo ou MEI consegue financiar?", a: "Consegue, se provar a renda com extratos e os papéis do negócio. O que entra em espécie e não passa pela conta não conta para o banco." },
+      { q: "E se um documento vencer no meio do processo?", a: "O banco pede de novo. Por isso vale juntar tudo perto da entrega, principalmente a matrícula, o comprovante de endereço e os holerites." },
     ],
   },
 
