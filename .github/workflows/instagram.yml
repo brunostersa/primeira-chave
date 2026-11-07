@@ -1,0 +1,44 @@
+# Publica os posts aprovados em scripts/instagram/calendario.json. Roda todo dia às 12h de Brasília e pelo botão "Run workflow".
+# GitHub Actions: segredo IG_ACCESS_TOKEN e variável IG_USER_ID. Se falhar, o GitHub avisa por e-mail.
+name: Publicar no Instagram
+
+on:
+  schedule:
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Publicar o que venceu
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ vars.IG_USER_ID }}
+        run: node scripts/instagram/publicar.mjs
+
+      # Roda mesmo com falha: o que saiu antes dela não pode voltar a "aprovado".
+      - name: Gravar o que saiu no calendário
+        if: always()
+        run: |
+          git config user.name "primeira-chave-robo"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/instagram/calendario.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Instagram: calendário atualizado [skip ci]"
+          git pull --rebase
+          git push
