@@ -24,16 +24,18 @@ async function graph(caminho, corpo) {
   return dados;
 }
 
-// A Meta baixa a imagem do nosso site; se o link falhar aqui, falharia lá.
-async function conferirImagens(post) {
-  for (const url of post.imagens) {
+// A Meta baixa a imagem (ou o vídeo) do nosso site; se o link falhar aqui, falharia lá.
+async function conferirArquivos(post) {
+  const lista = post.video ? [[post.video, "video/mp4"]] : post.imagens.map((url) => [url, "image/jpeg"]);
+  for (const [url, tipo] of lista) {
     const res = await fetch(url, { method: "HEAD" });
-    if (!res.ok || !res.headers.get("content-type")?.includes("image/jpeg")) throw new Error(`imagem fora do ar: ${url} (${res.status})`);
+    if (!res.ok || !res.headers.get("content-type")?.includes(tipo)) throw new Error(`arquivo fora do ar: ${url} (${res.status})`);
   }
 }
 
-async function esperarContainer(id) {
-  for (let i = 0; i < 40; i++) {
+// Vídeo leva minutos para a Meta processar; imagem, segundos.
+async function esperarContainer(id, tentativas = 40) {
+  for (let i = 0; i < tentativas; i++) {
     const { status_code: estado } = await graph(`${id}?fields=status_code`);
     if (estado === "FINISHED") return;
     if (estado === "ERROR" || estado === "EXPIRED") throw new Error(`container ${id}: ${estado}`);
@@ -43,6 +45,8 @@ async function esperarContainer(id) {
 }
 
 async function montarContainer(post) {
+  // Reel: thumb_offset (ms) escolhe o quadro da capa.
+  if (post.video) return (await graph(`${CONTA}/media`, { media_type: "REELS", video_url: post.video, caption: post.legenda, share_to_feed: "true", ...(post.capa_ms != null && { thumb_offset: String(post.capa_ms) }) })).id;
   if (post.imagens.length === 1) return (await graph(`${CONTA}/media`, { image_url: post.imagens[0], caption: post.legenda })).id;
   const filhos = [];
   for (const image_url of post.imagens) filhos.push((await graph(`${CONTA}/media`, { image_url, is_carousel_item: "true" })).id);
@@ -50,9 +54,9 @@ async function montarContainer(post) {
 }
 
 async function publicar(post) {
-  await conferirImagens(post);
+  await conferirArquivos(post);
   const container = await montarContainer(post);
-  await esperarContainer(container);
+  await esperarContainer(container, post.video ? 100 : 40);
   const { id } = await graph(`${CONTA}/media_publish`, { creation_id: container });
   return id;
 }
@@ -64,7 +68,7 @@ const vencidos = calendario.filter((p) => p.status === "aprovado" && `${p.data} 
 
 console.log(`${agora}: ${vencidos.length} para publicar`);
 if (SIMULAR) {
-  for (const p of vencidos) console.log(`  ${p.n} ${p.titulo} (${p.imagens.length} imagem/ns)`);
+  for (const p of vencidos) console.log(`  ${p.n} ${p.titulo} (${p.video ? "reel" : `${p.imagens.length} imagem/ns`})`);
   process.exit(0);
 }
 if (vencidos.length === 0) process.exit(0);
