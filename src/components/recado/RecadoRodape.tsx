@@ -4,9 +4,12 @@ import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/site-config";
 import { InscricaoRecado } from "./InscricaoRecado";
 
-/** O formulário compacto do rodapé. Some nas páginas do próprio Recado (lá ele já está no topo, ou a pessoa está saindo). */
+/** Páginas que já pedem o e-mail no corpo: o Recado (topo ou saída) e a LP do guia (BaixarGuia inscreve no Recado). */
+const JA_INSCREVEM = ["/recado", "/do-zero-a-chave"];
+
+/** O formulário compacto do rodapé. Some onde a página já tem a inscrição, para não pedir o e-mail duas vezes. */
 export function RecadoRodape() {
   const caminho = usePathname();
-  if (!SITE.recado || caminho?.startsWith("/recado")) return null;
+  if (!SITE.recado || JA_INSCREVEM.some((p) => caminho?.startsWith(p))) return null;
   return <InscricaoRecado origem="rodape" compacto />;
 }
