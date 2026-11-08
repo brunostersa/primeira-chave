@@ -1,0 +1,43 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Salvar: imóvel, entrada e parcela</title>
+<style>
+@font-face{font-family:Outfit;src:url(../../../infoproduto/fontes/outfit-latin.woff2);font-weight:100 900}
+@font-face{font-family:Figtree;src:url(../../../infoproduto/fontes/figtree-latin.woff2);font-weight:300 900}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-400.woff2);font-weight:400}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-500.woff2);font-weight:500}
+:root{--paper:#f2f3f1;--surface:#fff;--ink:#121418;--ink-2:#3a3f47;--muted:#5a6069;--grid:#e3e9ee;--mark:#f4d23f;--planta:#c6d6e3;--planta-deep:#6f8ca5;--barro:#eeb194;--line:#c9cdc7;--f-display:Outfit,sans-serif;--f-sans:Figtree,sans-serif;--f-mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+#cartao{position:absolute;left:48px;right:48px;top:220px;border:3px solid var(--ink);border-radius:20px;padding:56px 44px 44px;color:var(--ink);
+ background-color:rgba(242,243,241,.85);background-image:linear-gradient(rgba(198,214,227,.35) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(198,214,227,.35) 1.5px,transparent 1.5px);background-size:40px 40px}
+h1{font:300 92px/1 var(--f-display);letter-spacing:-.02em;margin-bottom:18px}.sub{font:400 32px/1.2 var(--f-sans);color:var(--ink-2);margin-bottom:40px}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-family:var(--f-mono)}
+th{font:500 23px/1.15 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 0 18px;vertical-align:bottom}
+td{font:500 44px/1 var(--f-mono);padding:26px 0;border-top:2px solid var(--ink);white-space:nowrap}
+td.pc span{background:var(--mark);padding:4px 10px;border-radius:8px;margin-left:-10px}
+th:nth-child(1),td:nth-child(1){width:26%}th:nth-child(2),td:nth-child(2){width:24%}th:nth-child(3),td:nth-child(3){width:24%}
+.extra{margin-top:30px;padding-top:28px;border-top:3px solid var(--ink);font:400 36px/1.3 var(--f-sans);color:var(--ink-2)}.extra b{font-weight:600;color:var(--ink)}
+.url{position:absolute;right:40px;top:62px;font:500 26px/1 var(--f-mono);color:var(--ink-2)}.av{margin-top:20px;font:400 25px/1.35 var(--f-sans);color:var(--muted)}
+#salve{position:absolute;left:48px;top:1392px;display:flex;align-items:center;gap:18px}
+#salve .s{background:var(--mark);color:var(--ink);border:3px solid var(--ink);border-radius:16px;padding:26px 30px;font:400 44px/1.12 var(--f-display);letter-spacing:-.01em}#salve .s b{font-weight:600}#salve .s span{display:block;margin-top:12px;font:500 30px/1 var(--f-sans)}
+#salve .u{font:500 28px/1 var(--f-mono);color:var(--ink);background:rgba(242,243,241,.95);border:3px solid var(--ink);border-radius:12px;padding:18px 20px}
+#jo{position:absolute;right:58px;top:120px;width:200px}#jo svg{width:100%;height:auto}
+</style></head><body>
+<div id="cartao">
+  <h1>Quanto custa<br>por mês?</h1><div class="sub">Salve para consultar na hora de comprar.</div>
+  <table>
+    <thead><tr><th>Imóvel<br>R$</th><th>Entrada<br>R$</th><th>Parcela<br>R$</th><th>Renda mínima<br>R$</th></tr></thead>
+    <tbody id="linhas"></tbody>
+  </table>
+  <div class="extra">Separe também uns <b>5% do valor</b> para ITBI e cartório.</div>
+  <div class="av">Estimativa Minha Casa Minha Vida: 30 anos de idade, 35 anos de prazo, sem FGTS.</div>
+  <div class="url">primeirachave.com.br</div>
+</div>
+<div id="salve"><div class="s">Como comprar um imóvel<br>com <b>entrada zero</b>?<span>Veja no link da bio.</span></div></div>
+<div id="jo"></div>
+<script src="../05-salario-imovel-canteiro/artes.js"></script>
+<script>
+// Números do motor (src/lib/financiamento/engine.ts, rendaMinimaPara + calcular, 08/11/2026): idade 30, sem dívidas, sem FGTS, tabela Price.
+const L=[["150 mil","30 mil","653","2.180"],["200 mil","40 mil","862","2.880"],["250 mil","50 mil","1.506","5.020"],["300 mil","60 mil","1.802","6.010"],["400 mil","80 mil","2.394","7.980"]];
+document.getElementById('linhas').innerHTML=L.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="pc"><span>${r[2]}</span></td><td>${r[3]}</td></tr>`).join('');
+document.getElementById('jo').innerHTML=ARTE['joao-frente-pensativo'];
+</script>
+</body></html>
