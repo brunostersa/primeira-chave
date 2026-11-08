@@ -152,12 +152,13 @@
     "titulo": "O banco empresta sobre a avaliação",
     "data": "2026-11-08",
     "hora": "12:00",
-    "status": "aprovado",
+    "status": "publicado",
     "imagens": [
       "https://primeirachave.com.br/ig/11-1.jpg"
     ],
     "legenda": "O banco não empresta sobre o preço. Empresta sobre a avaliação.\n\nAté 80% do que o engenheiro dele disser que o imóvel vale, sem passar do preço. Avaliou 25% acima? A entrada zera. ITBI e cartório continuam.\n\nO jeito legítimo é um só: comprar um imóvel que vale mais do que custa e deixar o laudo dizer quanto vale.\n\nSimule: link na bio.\n\n#primeiroimovel #financiamentoimobiliario #casapropria #comprarimovel",
-    "comentario": "Regras conferidas em out/2026. Conteúdo educativo, não é aprovação. Primeira Chave não é banco nem a Caixa."
+    "comentario": "Regras conferidas em out/2026. Conteúdo educativo, não é aprovação. Primeira Chave não é banco nem a Caixa.",
+    "media_id": "18115567970078137"
   },
   {
     "n": 12,
@@ -759,11 +760,12 @@
     "titulo": "Reel: Qual imóvel cabe no seu salário?",
     "data": "2026-11-08",
     "hora": "12:00",
-    "status": "aprovado",
+    "status": "publicado",
     "imagens": [],
     "video": "https://primeirachave.com.br/ig/reel-05-salario-imovel.mp4",
     "capa_ms": 1900,
     "legenda": "Qual imóvel cabe no seu salário?\n\nR$ 2.000 de renda: imóvel de até R$ 137 mil, parcela de R$ 600\nR$ 3.000: até R$ 209 mil, parcela de R$ 900\nR$ 6.000: até R$ 300 mil, parcela de R$ 1.800\nR$ 8.000: até R$ 400 mil, parcela de R$ 2.394\n\nEm todos os casos, a parcela fica em até 30% da renda. É o limite que o banco usa.\n\nE com o seu salário? Descubra no simulador: link na bio.\n\nValores estimados com base nas regras de financiamento da Caixa (Minha Casa Minha Vida) vigentes em novembro de 2026. As regras podem mudar a qualquer momento. Não é aprovação de crédito.\n\n#primeiroimovel #financiamentoimobiliario #minhacasaminhavida #casapropria #comprarimovel #mcmv",
-    "comentario": "Estimativa educativa: 30 anos de idade, 35 anos de prazo, sem outras dívidas e sem subsídio. Não é aprovação."
+    "comentario": "Estimativa educativa: 30 anos de idade, 35 anos de prazo, sem outras dívidas e sem subsídio. Não é aprovação.",
+    "media_id": "18464156818186832"
   }
 ]
