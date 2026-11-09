@@ -34,6 +34,7 @@ import {
 import { brl } from "@/lib/format";
 import { mascarar } from "@/lib/joao/mascara";
 import { deuVoltas, saidaPorRegra, type TipoSaida } from "@/lib/joao/saidas";
+import { trazerDoSimulador } from "@/lib/joao/levar";
 import { Comeco } from "./Comeco";
 import { GuardarLink } from "./GuardarLink";
 import { MeuPlano } from "./Painel";
@@ -119,16 +120,32 @@ export function Joao() {
   useEffect(() => {
     const t = new URLSearchParams(location.hash.slice(1)).get("c");
     (async () => {
+      let carregada: Compra | null = null;
       try {
         if (t) {
-          restaurar((await abrirLink(t)).compra);
+          carregada = (await abrirLink(t)).compra;
           setToken(t);
         } else {
-          const c = lerLocal();
-          if (c) restaurar(c);
+          carregada = lerLocal();
         }
+        if (carregada) restaurar(carregada);
       } catch (e) {
         setErro((e as Error).message);
+      }
+      // Veio do resultado do simulador: o plano já abre com os números de lá.
+      const vindo = trazerDoSimulador(carregada?.estado ?? ESTADO_VAZIO);
+      if (vindo) {
+        setEstado(vindo);
+        const agora = linhaDoTempo(vindo).find((p) => p.atual)?.nome ?? "Seus dados";
+        setMensagens((m) => [
+          ...m,
+          {
+            de: "joao",
+            humor: "feliz",
+            fontes: [],
+            texto: `Trouxe a sua simulação para cá. O plano já está com os seus números, e agora estamos em ${agora}. O que você quer entender melhor?`,
+          },
+        ]);
       }
       setCarregou(true);
     })();

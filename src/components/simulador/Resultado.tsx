@@ -11,6 +11,7 @@ import { Cota } from "@/components/brand/Logo";
 import { Relatar } from "@/components/conteudo/Relatar";
 import { ConvidarAoVer } from "@/components/recado/ConvidarAoVer";
 import { faseDoSimulador, perfilDoSimulador } from "@/lib/recado/inscrever";
+import { levarAoJoao } from "@/lib/joao/levar";
 import {
   calcular,
   previaPrecoAvaliacao,
@@ -114,6 +115,7 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
       </div>
 
       <ProximoPasso tarefas={tarefas} />
+      {!exemplo && <PerguntarAoJoao perfil={perfil} />}
       {z && <Segredo z={z} r={r} poup={poup} />}
 
       <Eyebrow className="mt-4">Quer entender esse número?</Eyebrow>
@@ -214,6 +216,28 @@ function resposta(r: R, z: SemEntrada | null, quitando = false): { titulo: React
     titulo: <>Pra esse imóvel de {brl(r.V)}, <mark>faltam {brl(r.gap)}</mark>.</>,
     sub: <>O banco empresta <strong>{brl(r.P)}</strong>. Entrada e custos somam <strong>{brl(r.entrada + r.custos)}</strong>{r.fgtsNaEntrada > 0 && <>, e seu FGTS cobre {brl(r.fgtsNaEntrada)} disso</>}.{notas}</>,
   };
+}
+
+/** Porta para o João: leva estas respostas para o plano dele, sem passar pela URL. */
+function PerguntarAoJoao({ perfil }: { perfil: Perfil }) {
+  return (
+    <Card className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-3">
+        <span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-mark-soft">
+          <JoaoDeBarro pose="frente" humor="curioso" className="w-8" />
+        </span>
+        <div>
+          <p className="font-semibold">Ficou alguma dúvida sobre esse resultado?</p>
+          <p className="text-sm text-ink-2">O João explica com os seus números e monta o plano até a chave.</p>
+        </div>
+      </div>
+      <Button asChild variant="outline" className="shrink-0">
+        <Link href="/joao/" onClick={() => levarAoJoao(perfil)}>
+          Perguntar ao João
+        </Link>
+      </Button>
+    </Card>
+  );
 }
 
 function ProximoPasso({ tarefas }: { tarefas: { titulo: string; texto: string }[] }) {
