@@ -110,7 +110,6 @@ if (!so || so === "marca") {
   const MARCA = [
     { molde: "compartilhamento", w: 1200, h: 630, destinos: [join(RAIZ, "public", "og.png")] },
     { molde: "logo", w: 512, h: 512, destinos: [join(RAIZ, "public", "logo.png")] },
-    { molde: "icone", w: 512, h: 512, destinos: [join(RAIZ, "public", "icone-512.png")] },
   ];
   for (const m of MARCA) {
     const png = join(tmp, `${m.molde}.png`);
@@ -119,9 +118,8 @@ if (!so || so === "marca") {
     feitas++;
     console.log(`  ${m.molde} → ${m.destinos.map((d) => d.split("/").pop()).join(", ")}`);
   }
-  // Ícones menores, redimensionados do de 512 (Apple e Android).
-  await rodar("sips", ["-z", "180", "180", join(RAIZ, "public", "icone-512.png"), "--out", join(RAIZ, "src", "app", "apple-icon.png")]);
-  await rodar("sips", ["-z", "192", "192", join(RAIZ, "public", "icone-512.png"), "--out", join(RAIZ, "public", "icone-192.png")]);
+  // Os ícones de app (icone-192/512, apple-icon) saem de src/app/icon.svg, não de molde:
+  // precisam de fundo transparente, que o print do Chrome não dá.
 }
 
 servidor.close();
