@@ -28,8 +28,19 @@ type Props = { perfil: Perfil; exemplo: boolean; onRefazer: () => void; onInform
 
 export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props) {
   const [poup, setPoup] = useState(1500);
-  const r = calcular(perfil);
+  const r0 = calcular(perfil);
+  // Dívidas que já ocupam todo o limite da parcela não encerram a simulação: o resultado sai
+  // como se elas estivessem quitadas, com um aviso no topo e "liberar espaço" como 1º passo.
+  const semFolga = r0.blocked === "renda" && perfil.dividasOpt === "sim";
+  const r = semFolga ? calcular({ ...perfil, dividasOpt: "nao" }) : r0;
+  const limite = (perfil.renda * PARAMS.comp) / 100;
   const tarefas = proximosPassos(perfil, r, poup, brl);
+  if (semFolga && !r.blocked)
+    tarefas.unshift({
+      titulo: "Libere espaço na renda antes de pedir o crédito",
+      texto: `Suas parcelas de hoje (${brl(perfil.dividas)}) já passam do limite de ${brl(limite)} que o banco aceita. Quite ou renegocie as maiores: cada real liberado volta para a parcela da casa.`,
+    });
+  tarefas.splice(3);
 
   const topo = (
     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -66,9 +77,13 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
   }
 
   const z = semEntrada(r);
-  const { titulo, sub } = resposta(r, z);
+  const { titulo, sub } = resposta(r, z, semFolga);
   const sinais: { tom: "ok" | "warn" | "bad"; texto: string }[] = [
-    r.dividas > perfil.renda * 0.1 ? { tom: "warn", texto: "Parcela: dívidas pesando" } : { tom: "ok", texto: "Parcela: cabe na renda" },
+    semFolga
+      ? { tom: "bad", texto: "Parcela: dívidas ocupam o limite" }
+      : r.dividas > perfil.renda * 0.1
+        ? { tom: "warn", texto: "Parcela: dívidas pesando" }
+        : { tom: "ok", texto: "Parcela: cabe na renda" },
     r.gap === 0 ? { tom: "ok", texto: "Entrada: coberta" } : r.gap <= poup * 12 ? { tom: "warn", texto: "Entrada: falta pouco" } : { tom: "bad", texto: "Entrada: falta bastante" },
     perfil.nome === "sim" ? { tom: "ok", texto: "Nome: limpo" } : perfil.nome === "naosei" ? { tom: "warn", texto: "Nome: conferir" } : { tom: "bad", texto: "Nome: regularizar" },
   ];
@@ -84,6 +99,16 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
             </Badge>
           ))}
         </div>
+        {semFolga && (
+          <Card variant="bad" className="flex flex-col gap-1">
+            <p className="font-semibold">Hoje suas dívidas ocupam todo o espaço da parcela.</p>
+            <p className="text-ink-2">
+              O banco aceita até {brl(limite)} por mês em parcelas ({PARAMS.comp}% da sua renda), e as suas já somam {brl(perfil.dividas)}.
+              Os números abaixo mostram o que você consegue <strong className="text-ink">depois de quitá-las</strong>.
+            </p>
+          </Card>
+        )}
+        {semFolga && <Eyebrow>Depois de quitar as parcelas de hoje</Eyebrow>}
         <h1 className="font-display text-[clamp(32px,5.4vw,52px)] font-light leading-[1.05] [&_mark]:marca-texto [&_mark]:bg-transparent [&_mark]:font-semibold">{titulo}</h1>
         <p className="text-lg text-ink-2 [&_strong]:text-ink">{sub}</p>
       </div>
@@ -140,7 +165,8 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
   );
 }
 
-function resposta(r: R, z: SemEntrada | null): { titulo: ReactNode; sub: ReactNode } {
+/** `quitando`: o resultado é o de depois de quitar as dívidas, então nada de "hoje" ou "já". */
+function resposta(r: R, z: SemEntrada | null, quitando = false): { titulo: ReactNode; sub: ReactNode } {
   if (r.modo === "renda") {
     const extra = (
       <>
@@ -157,7 +183,7 @@ function resposta(r: R, z: SemEntrada | null): { titulo: ReactNode; sub: ReactNo
     );
     if (r.gap === 0)
       return {
-        titulo: <>Você já pode buscar imóveis de até <mark>{brl(r.Vbank!)}</mark>.</>,
+        titulo: <>Você {quitando ? "pode" : "já pode"} buscar imóveis de até <mark>{brl(r.Vbank!)}</mark>.</>,
         sub: <>O banco empresta <strong>{brl(r.P)}</strong>. O que você já tem cobre o resto{r.sobra > 1000 && <>, e ainda sobram <strong>{brl(r.sobra)}</strong></>}.{extra}</>,
       };
     if ((r.Vbolso ?? 0) < 20000)
@@ -166,7 +192,7 @@ function resposta(r: R, z: SemEntrada | null): { titulo: ReactNode; sub: ReactNo
         sub: <>O que falta é dinheiro na mão: <strong>{brl(r.gap)}</strong> pra entrada e custos. É aí que mora o seu plano.{extra}</>,
       };
     return {
-      titulo: <>Hoje, cabe um imóvel de até <mark>{brl(r.Vbolso!)}</mark>.</>,
+      titulo: <>{quitando ? "Com o que você já tem, cabe" : "Hoje, cabe"} um imóvel de até <mark>{brl(r.Vbolso!)}</mark>.</>,
       sub: <>Sua renda aguenta até <strong>{brl(r.Vbank!)}</strong>. O que falta é dinheiro na mão: <strong>{brl(r.gap)}</strong> pra entrada e custos.{extra}</>,
     };
   }
