@@ -1,5 +1,4 @@
-import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import type { MetadataRoute } from "next";
 import { CARTAS } from "@/lib/conteudo/duvide";
 import { PERSONAS } from "@/lib/conteudo/personas";
@@ -9,6 +8,7 @@ import { arquivoFigura, figurasDe } from "@/lib/conteudo/figuras";
 import { SITE } from "@/lib/site-config";
 import { MODELOS } from "@/lib/modelos/modelos";
 import { IMOVEIS_DE_OURO, slugImovel } from "@/lib/imoveis-de-ouro";
+import { fonteDoTexto, ultimaAlteracao } from "@/lib/ultima-alteracao";
 
 export const dynamic = "force-static";
 
@@ -16,27 +16,6 @@ type Frequencia = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
 /** Arquivo da página no app: "/atalhos/registrato/" → src/app/(site)/atalhos/registrato/page.tsx */
 const arquivo = (slug: string) => `src/app/(site)${slug.replace(/\/$/, "")}/page.tsx`;
-
-/**
- * Data do último commit que mexeu na página. Usar a data do build faria todo
- * deploy anunciar ao Google que todas as páginas mudaram.
- */
-function ultimaAlteracao(caminho: string): Date | undefined {
-  try {
-    const iso = execFileSync("git", ["log", "-1", "--format=%cI", "--", caminho], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-    return iso ? new Date(iso) : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-/** Páginas da rota única: o texto mora em src/lib/conteudo/textos/<arquivo>.ts. */
-const PASTA_TEXTOS = "src/lib/conteudo/textos";
-const TEXTOS_FONTE = readdirSync(PASTA_TEXTOS).map((f) => ({ f: `${PASTA_TEXTOS}/${f}`, s: readFileSync(`${PASTA_TEXTOS}/${f}`, "utf8") }));
-const fonteDoTexto = (id: string) => TEXTOS_FONTE.find(({ s }) => new RegExp(`\\n  "?${id.replace(/^g-/, "")}"?: \\{`).test(s))?.f;
 
 /** Modelos de contrato: uma rota dinâmica (modelos-de-contrato/[modelo]) monta cada um. */
 const ehModelo = (n: No) => n.tipo === "modelo" && MODELOS.some((m) => m.id === n.id);

@@ -46,6 +46,24 @@ export default function PrivacidadePage() {
         <p>Para sair, use o link “Sair da lista” no fim de qualquer e-mail.</p>
       </Secao>
 
+      <Secao titulo="A conversa com o João">
+        <p>
+          O João é uma inteligência artificial. O que você escreve passa pelo sistema da CustomerHub e pela Anthropic, a empresa do modelo de IA, nos Estados Unidos,
+          para gerar a resposta. Antes de sair do seu navegador, tiramos CPF, telefone e e-mail do texto. Mesmo assim, evite escrever documentos ou dados de outras
+          pessoas ali.
+        </p>
+        <p>
+          O seu plano e os dados do imóvel ficam no seu navegador. Para responder, o João recebe um resumo deles, como renda, idade, FGTS e preço do imóvel, além da
+          conversa. As contas continuam sendo feitas no seu navegador.
+        </p>
+        <p>
+          Quando o João não sabe responder, guardamos a pergunta. Quando você aponta um erro, guardamos também a resposta. Isso fica sem ligar a você e sem CPF,
+          telefone ou e-mail, para melhorar as nossas páginas. Falas sobre crise, disputa ou pedido de atendente não saem do seu navegador. Se quiser, você
+          pode guardar a conversa, o plano e o imóvel num <b>link só seu</b>. Isso só acontece com o seu aceite. Quem tiver o link consegue abrir, então guarde bem.
+          Apagamos depois de 12 meses sem uso, e você pode apagar tudo antes, na própria tela.
+        </p>
+      </Secao>
+
       <Secao titulo="Interesse num imóvel de ouro">
         <p>
           Quando você pede para conversar sobre um imóvel da Seleção de imóvel de ouro, guardamos o seu <b>nome</b>, o seu <b>WhatsApp</b>, o imóvel e a página
