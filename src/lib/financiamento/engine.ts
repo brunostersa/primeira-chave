@@ -371,6 +371,20 @@ export function rendaMinimaPara(valor: number, idade = 30, p: Params = PARAMS) {
 /** Uma tarefa do "Seu próximo passo". */
 export type Tarefa = { titulo: string; texto: string };
 
+/** O empréstimo travou pela renda (não pelos 80%) a ponto de pesar na entrada. */
+export function rendaTravaOEmprestimo(r: Resultado) {
+  return r.modo === "imovel" && r.extraRenda > Math.max(5000, 0.05 * r.V);
+}
+
+/** Com o empréstimo travado pela renda, o maior preço em que a renda pega o financiamento completo. */
+export function precoQueARendaAguenta(s: Perfil, r: Resultado): number | null {
+  if (!rendaTravaOEmprestimo(r)) return null;
+  const c = calcular({ ...s, achou: "nao", dividasOpt: r.dividas > 0 ? s.dividasOpt : "nao" });
+  if (c.blocked || !c.Vbank) return null;
+  const v = Math.floor(c.Vbank / 1000) * 1000;
+  return v >= 30000 && v < r.V ? v : null;
+}
+
 export function proximosPassos(s: Perfil, r: Resultado | Bloqueio, poupancaMensal: number, fmt: (v: number) => string): Tarefa[] {
   const t: Tarefa[] = [];
   if (s.nome === "nao") t.push({ titulo: "Regularize seu CPF antes de tudo", texto: "Com restrição, o banco recusa. Negocie as dívidas em aberto. É o passo que destrava o resto." });
@@ -388,7 +402,14 @@ export function proximosPassos(s: Perfil, r: Resultado | Bloqueio, poupancaMensa
         });
     }
   }
-  if (!r.blocked && r.gap > 0) {
+  const teto = !r.blocked ? precoQueARendaAguenta(s, r) : null;
+  if (teto)
+    t.push({
+      titulo: `Procure imóveis de até ${fmt(teto)}`,
+      texto: `Nesse preço sua renda pega o financiamento completo, e a entrada volta ao normal. Acima disso, o que o banco não empresta vira entrada.`,
+    });
+  // Com a renda travando o empréstimo, "junte a diferença" daria décadas: o passo é o preço.
+  if (!r.blocked && r.gap > 0 && !teto) {
     const m = Math.ceil(r.gap / poupancaMensal);
     t.push({ titulo: `Junte mais ${fmt(r.gap)}`, texto: `Guardando ${fmt(poupancaMensal)} por mês, são ${m} ${m === 1 ? "mês" : "meses"}. Lembre: o FGTS não paga ITBI e cartório.` });
   }

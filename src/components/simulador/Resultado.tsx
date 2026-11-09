@@ -14,8 +14,10 @@ import { faseDoSimulador, perfilDoSimulador } from "@/lib/recado/inscrever";
 import { levarAoJoao } from "@/lib/joao/levar";
 import {
   calcular,
+  precoQueARendaAguenta,
   previaPrecoAvaliacao,
   proximosPassos,
+  rendaTravaOEmprestimo,
   semEntrada,
   type Perfil,
   type Resultado as R,
@@ -84,6 +86,8 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
       ? { tom: "bad", texto: "Parcela: dívidas ocupam o limite" }
       : r.dividas > perfil.renda * 0.1
         ? { tom: "warn", texto: "Parcela: dívidas pesando" }
+        : rendaTravaOEmprestimo(r)
+          ? { tom: "warn", texto: "Renda: limita o empréstimo" }
         : { tom: "ok", texto: "Parcela: cabe na renda" },
     r.gap === 0 ? { tom: "ok", texto: "Entrada: coberta" } : r.gap <= poup * 12 ? { tom: "warn", texto: "Entrada: falta pouco" } : { tom: "bad", texto: "Entrada: falta bastante" },
     perfil.nome === "sim" ? { tom: "ok", texto: "Nome: limpo" } : perfil.nome === "naosei" ? { tom: "warn", texto: "Nome: conferir" } : { tom: "bad", texto: "Nome: regularizar" },
@@ -112,6 +116,7 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
         {semFolga && <Eyebrow>Depois de quitar as parcelas de hoje</Eyebrow>}
         <h1 className="font-display text-[clamp(32px,5.4vw,52px)] font-light leading-[1.05] [&_mark]:marca-texto [&_mark]:bg-transparent [&_mark]:font-semibold">{titulo}</h1>
         <p className="text-lg text-ink-2 [&_strong]:text-ink">{sub}</p>
+        {rendaTravaOEmprestimo(r) && <PorQueAEntrada r={r} perfil={perfil} onRefazer={onRefazer} />}
       </div>
 
       <ProximoPasso tarefas={tarefas} />
@@ -216,6 +221,39 @@ function resposta(r: R, z: SemEntrada | null, quitando = false): { titulo: React
     titulo: <>Pra esse imóvel de {brl(r.V)}, <mark>faltam {brl(r.gap)}</mark>.</>,
     sub: <>O banco empresta <strong>{brl(r.P)}</strong>. Entrada e custos somam <strong>{brl(r.entrada + r.custos)}</strong>{r.fgtsNaEntrada > 0 && <>, e seu FGTS cobre {brl(r.fgtsNaEntrada)} disso</>}.{notas}</>,
   };
+}
+
+/** Entrada alta porque a renda trava o empréstimo: diz o motivo e as duas saídas. */
+function PorQueAEntrada({ r, perfil, onRefazer }: { r: R; perfil: Perfil; onRefazer: () => void }) {
+  const teto = precoQueARendaAguenta(perfil, r);
+  const parcela = r.C;
+  const junto = perfil.quem === "junto";
+  return (
+    <Card className="flex flex-col gap-3">
+      <p className="font-semibold">Por que a entrada ficou tão alta</p>
+      <p className="text-ink-2 [&_strong]:text-ink">
+        O banco limita a parcela a {PARAMS.comp}% da renda{r.dividas > 0 && ", descontado o que você já paga"}. Para você, são até <strong>{brl(parcela)}</strong> por mês,
+        e essa parcela paga um empréstimo de <strong>{brl(r.P)}</strong>. Num imóvel de {brl(r.V)} o banco chegaria a {brl(r.P + r.extraRenda)}: os{" "}
+        <strong>{brl(r.extraRenda)}</strong> que a renda não cobre viram entrada.
+      </p>
+      <ul className="flex flex-col gap-2 text-ink-2 [&_strong]:text-ink">
+        {teto && (
+          <li>
+            <strong>Procure um imóvel de até {brl(teto)}.</strong> Nesse preço a sua renda pega o financiamento completo e a entrada volta ao normal.
+          </li>
+        )}
+        <li>
+          <strong>{junto ? "Confira se somou todas as rendas." : "Vai comprar com alguém?"}</strong>{" "}
+          {junto
+            ? "Entra a renda de todos que vão assinar, e também as rendas extras que vocês conseguem comprovar."
+            : "Cônjuge, parceiro ou parente pode somar a renda. Rendas extras que você comprova também entram."}{" "}
+          <button type="button" onClick={onRefazer} className="font-semibold text-ink underline underline-offset-4">
+            Mudar a renda
+          </button>
+        </li>
+      </ul>
+    </Card>
+  );
 }
 
 /** Porta para o João: leva estas respostas para o plano dele, sem passar pela URL. */
