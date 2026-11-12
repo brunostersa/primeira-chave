@@ -1,0 +1,139 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Reels rápidos: motion Planta</title>
+<style>
+@font-face{font-family:Outfit;src:url(../../../infoproduto/fontes/outfit-latin.woff2);font-weight:100 900}
+@font-face{font-family:Figtree;src:url(../../../infoproduto/fontes/figtree-latin.woff2);font-weight:300 900}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-400.woff2);font-weight:400}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-500.woff2);font-weight:500}
+:root{--paper:#f2f3f1;--surface:#fff;--ink:#121418;--ink-2:#3a3f47;--muted:#5a6069;--grid:#e3e9ee;--mark:#f4d23f;--mark-soft:#fbefb4;--planta:#c6d6e3;--planta-deep:#6f8ca5;--barro:#eeb194;--line:#c9cdc7;--bad:#c2410c;--ok:#2f7d4f;
+ --f-display:Outfit,sans-serif;--f-sans:Figtree,sans-serif;--f-mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background-color:var(--paper);color:var(--ink);
+ background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:70px 70px}
+.abs{position:absolute}
+.eyebrow{font:500 26px/1 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.h{font:300 92px/1.02 var(--f-display);letter-spacing:-.02em}.h b{font-weight:600}
+.grifo{background:linear-gradient(transparent 58%,var(--mark) 58%,var(--mark) 92%,transparent 92%);padding:0 6px;margin:0 -6px}
+.t{font:400 40px/1.25 var(--f-sans)}.t b{font-weight:600}
+.mono{font-family:var(--f-mono);font-weight:500}
+.card{background:var(--surface);border:3px solid var(--ink);border-radius:22px}
+.cardp{background:var(--planta);border:3px solid var(--ink);border-radius:22px}
+.hachura{background-color:var(--mark-soft);background-image:repeating-linear-gradient(-45deg,var(--ink) 0 2.5px,transparent 2.5px 16px)}
+.ic svg{width:100%;height:100%;display:block}
+.cta{left:64px;right:64px;background:var(--mark);border:3px solid var(--ink);border-radius:20px;padding:34px 38px;font:400 54px/1.1 var(--f-display);letter-spacing:-.01em}.cta b{font-weight:600}.cta span{display:block;margin-top:16px;font:500 34px/1 var(--f-sans)}
+.assina{right:64px;bottom:120px;display:flex;align-items:center;gap:14px;font:500 26px/1 var(--f-mono)}
+.assina .jo{width:96px}.assina .jo svg{width:100%;height:auto}
+.cota{height:3px;background:var(--ink)}.cota::before,.cota::after{content:"";position:absolute;top:-14px;width:3px;height:31px;background:var(--ink)}.cota::before{left:0}.cota::after{right:0}
+.lbl{font:500 30px/1 var(--f-mono);background:var(--paper);padding:0 12px}
+.item{left:64px;right:64px;display:flex;gap:26px;align-items:center;font:400 42px/1.22 var(--f-sans)}.item b{font-weight:600}
+.item .ic{width:78px;height:78px;flex:none;border:3px solid var(--ink);border-radius:18px;padding:12px;background:var(--surface)}
+</style></head><body>
+<div id="palco"></div>
+<script src="icones.js"></script>
+<script src="../05-salario-imovel-canteiro/artes.js"></script>
+<script>
+const DUR=15;window.DUR=DUR;window.GOLPES=[];
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>cl((t-a)/(b-a)),eo=x=>1-Math.pow(1-x,3),eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const P=document.getElementById("palco");
+const el=(html,css="",cls="abs")=>{const d=document.createElement("div");d.className=cls;d.style.cssText=css;d.innerHTML=html;P.appendChild(d);return d};
+const ic=(n,css="")=>el(ICONE[n],css,"abs ic");
+// entra: sobe 40px e aparece entre a e a+.5
+const entra=(e,t,a,d=.5,dy=40)=>{const p=eo(seg(t,a,a+d));e.style.opacity=p;e.style.transform=`translateY(${(1-p)*dy}px)`};
+const pop=(e,t,a,d=.45)=>{const p=seg(t,a,a+d);e.style.opacity=cl(p*3);e.style.transform=`scale(${p?back(p):0})`};
+const fmt=n=>Math.round(n).toLocaleString("pt-BR");
+const R=new URLSearchParams(location.search).get("r")||"cartorio";
+const assina=el(`<div class="jo">${ARTE["joao-frente-curioso"]}</div>primeirachave.com.br`,"","abs assina");
+const cta=(html,a)=>{const c=el(html,"bottom:330px","abs cta");return t=>entra(c,t,a,.6,60)};
+const golpe=(...s)=>window.GOLPES.push(...s);
+let cena;
+
+if(R==="cartorio"){
+ const eb=el("Primeiro imóvel financiado","left:64px;top:190px","abs eyebrow");
+ const h=el('Cartório pela <b class="grifo">metade</b>.',"left:64px;top:240px;width:950px","abs h");
+ const doc=el(`<div class="mono" style="font-size:26px;letter-spacing:.07em;color:var(--ink-2)">GUIA DO CARTÓRIO · REGISTRO</div>
+  <div style="margin-top:34px;font:400 34px/1 var(--f-sans)">Emolumentos</div>
+  <div id="trilho" style="position:relative;margin-top:22px;height:84px;border:3px solid var(--ink);border-radius:14px;background:var(--surface);overflow:hidden"><div id="barra" class="hachura" style="position:absolute;left:0;top:0;bottom:0;width:100%"></div></div>
+  <div id="cotaw" style="position:relative;margin-top:44px;height:40px"><div id="cota" class="abs cota" style="left:0;top:18px;width:100%"></div><div id="cotal" class="abs lbl" style="top:2px;left:50%;transform:translateX(-50%)">100%</div></div>`,
+  "left:64px;right:64px;top:520px;padding:40px 40px 34px","abs cardp");
+ const selo=el(`<div class="ic" style="width:70px;height:70px">${ICONE.carimbo}</div><div><div class="mono" style="font-size:24px;letter-spacing:.07em">LEI FEDERAL</div><div style="font:600 34px/1.1 var(--f-sans)">6.015/73, art. 290</div></div>`,
+  "right:90px;top:500px;display:flex;gap:16px;align-items:center;background:var(--surface);border:3px solid var(--ink);border-radius:16px;padding:16px 22px;transform-origin:center","abs");
+ const li=[["casa","Vale na <b>1ª compra residencial</b> financiada pelo SFH."],["lupa","Confira na guia se o <b>desconto veio</b>."],["local","O <b>ITBI</b> é da prefeitura: depende da sua cidade."]]
+  .map((x,i)=>el(`<div class="ic">${ICONE[x[0]]}</div><div>${x[1]}</div>`,`top:${1000+i*130}px`,"abs item"));
+ const c=cta("<b>Salve</b> para quando for assinar.<span>Mais no link da bio.</span>",11.2);
+ golpe(3.2,4.4,6.2,7.2,8.2,11.2);
+ cena=t=>{entra(eb,t,.1);entra(h,t,.3,.6);entra(doc,t,1.4,.6,60);
+  const m=eio(seg(t,3.2,4.6));document.getElementById("barra").style.width=(100-50*m)+"%";
+  document.getElementById("cota").style.width=(100-50*m)+"%";const L=document.getElementById("cotal");L.textContent=m>.98?"50%":fmt(100-50*m)+"%";L.style.left=(50-25*m)+"%";
+  L.style.background=m>.98?"var(--mark)":"var(--paper)";
+  const s=seg(t,4.4,4.85);selo.style.opacity=cl(s*4);selo.style.transform=`rotate(${-6*s}deg) scale(${s?1.5-.5*eo(s):1.5})`;
+  li.forEach((e,i)=>entra(e,t,6.2+i*1,.5));c(t)}
+}
+
+if(R==="35anos"){
+ const h=el('Você não precisa levar <b class="grifo">35 anos</b> para quitar.',"left:64px;top:190px;width:950px","abs h");
+ const n1=el(`<div class="eyebrow">Pegou</div><div class="mono" style="font-size:96px;margin-top:14px">R$ <span id="v1">0</span> mil</div>`,"left:64px;top:480px","abs");
+ const n2=el(`<div class="eyebrow">Paga em 35 anos, com juros</div><div class="mono" style="font-size:96px;margin-top:14px"><span style="background:var(--mark);padding:0 14px;margin-left:-14px;border-radius:10px">≈ R$ <span id="v2">0</span> mil</span></div>`,"left:64px;top:660px","abs");
+ // régua do prazo
+ const regua=el(`<div id="rfill" class="hachura abs" style="left:0;top:0;bottom:0;width:0;border-radius:11px"></div>`,"left:64px;right:64px;top:930px;height:64px;border:3px solid var(--ink);border-radius:14px;background:var(--surface);overflow:hidden","abs");
+ const marcas=el([0,5,10,15,20,25,30,35].map(a=>`<div class="abs mono" style="left:${a/35*100}%;top:0;transform:translateX(-50%);font-size:24px;color:var(--muted)">${a}</div>`).join(""),"left:${0}px;left:64px;right:64px;top:1010px;height:30px","abs");
+ const fim=el(`<div style="width:3px;height:96px;background:var(--ink);margin:0 auto"></div><div class="lbl" style="margin-top:8px;white-space:nowrap" id="flbl">35 anos</div>`,"top:914px;left:1016px;transform:translateX(-50%);text-align:center","abs");
+ const li=[["moeda","Valor extra abate o saldo e <b>corta juros</b>."],["cofre","O <b>FGTS</b> pode amortizar a cada 2 anos."],["calendario","Amortizou? Escolha <b>reduzir o prazo</b>."]]
+  .map((x,i)=>el(`<div class="ic">${ICONE[x[0]]}</div><div>${x[1]}</div>`,`top:${1090+i*106}px;font-size:38px`,"abs item"));
+ const nota=el("Imóvel de R$ 200 mil, entrada de R$ 40 mil, MCMV, tabela Price, com seguros. Estimativa.","left:64px;right:64px;top:840px;font:400 24px/1.3 var(--f-sans);color:var(--muted)","abs");
+ const c=cta("Quanto fica a <b>sua</b> parcela?<span>Simule no link da bio.</span>",12.4);
+ golpe(1.6,3.0,5.6,7.2,8.4,9.6,12.4);
+ cena=t=>{entra(h,t,.1,.6);entra(n1,t,1.4);document.getElementById("v1").textContent=fmt(160*eo(seg(t,1.5,2.4)));
+  entra(n2,t,2.8);document.getElementById("v2").textContent=fmt(360*eo(seg(t,2.9,4.2)));entra(nota,t,3.6);
+  regua.style.opacity=marcas.style.opacity=cl(seg(t,4.6,5));const f=eo(seg(t,4.8,6.2));document.getElementById("rfill").style.width=(f*100)+"%";
+  // amortizou: o fim da régua anda para trás
+  const a=eio(seg(t,7.4,9));const w=1-.36*a;document.getElementById("rfill").style.width=(f*w*100)+"%";
+  fim.style.opacity=cl(seg(t,6,6.3));fim.style.left=(64+952*w)+"px";document.getElementById("flbl").textContent=a>.02?"menos anos":"35 anos";
+  document.getElementById("flbl").style.background=a>.02?"var(--mark)":"var(--paper)";
+  li.forEach((e,i)=>entra(e,t,[6.6,8.0,9.4][i],.5));c(t);
+  // a régua e a lista sobem para dar lugar ao convite
+  const s=eo(seg(t,12,12.6));[regua,marcas,fim,...li].forEach(e=>e.style.marginTop=0);}
+}
+
+if(R==="simulacao"){
+ const tag=el("Envie para quem vai comprar o primeiro imóvel","left:64px;top:180px;background:var(--mark);border:3px solid var(--ink);border-radius:14px;padding:16px 22px;font:600 30px/1.2 var(--f-sans)","abs");
+ const h=el('A simulação <b class="grifo">não aprova</b> ninguém.',"left:64px;top:300px;width:950px","abs h");
+ const sim=el(`<div class="eyebrow">Simulação</div><div class="mono" style="font-size:54px;margin-top:12px">Parcela R$ 862</div><div style="font:400 28px/1.3 var(--f-sans);color:var(--muted);margin-top:8px">é só uma estimativa</div>`,
+  "left:64px;top:560px;width:560px;padding:30px 34px","abs card");
+ const carimbo=el("ainda não<br>é aprovação","left:560px;top:600px;border:5px solid var(--ink);border-radius:14px;padding:14px 20px;font:600 40px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.02em;background:rgba(242,243,241,.92);transform-origin:center","abs");
+ const sub=el("O que o banco olha de verdade:","left:64px;top:870px;font:600 40px/1 var(--f-sans)","abs");
+ const tiles=[["moeda","Renda","a parcela vai até <b>30%</b> dela"],["cpf","Nome e dívidas","no <b>Registrato</b>"],["casa","Avaliação","empresta sobre o <b>laudo</b>"],["documento","Documentos","do imóvel e do vendedor"]]
+  .map((x,i)=>el(`<div class="ic" style="width:74px;height:74px">${ICONE[x[0]]}</div><div style="font:600 40px/1.1 var(--f-display);margin-top:20px">${x[1]}</div><div style="font:400 30px/1.25 var(--f-sans);margin-top:8px;color:var(--ink-2)">${x[2]}</div><div class="ic abs ok" style="right:22px;top:22px;width:54px;height:54px;color:var(--ink)">${ICONE.ok}</div>`,
+   `left:${64+(i%2)*484}px;top:${950+Math.floor(i/2)*280}px;width:468px;height:264px;padding:26px 28px`,"abs card"));
+ const c=cta("Descubra o <b>seu número</b> antes de visitar.<span>Link na bio.</span>",12.2);
+ golpe(2.4,5.0,6.0,7.0,8.0,9.2,9.7,10.2,10.7,12.2);
+ cena=t=>{entra(tag,t,.1);entra(h,t,.4,.6);entra(sim,t,1.6,.6,60);
+  const s=seg(t,2.4,2.85);carimbo.style.opacity=cl(s*4);carimbo.style.transform=`rotate(${-8*s}deg) scale(${s?1.6-.6*eo(s):1.6})`;
+  entra(sub,t,4.4);tiles.forEach((e,i)=>{pop(e,t,5+i);const k=e.querySelector(".ok");k.style.opacity=seg(t,9.2+i*.5,9.4+i*.5);k.style.transform=`scale(${.5+.5*eo(seg(t,9.2+i*.5,9.5+i*.5))})`});
+  // o convite entra no lugar da segunda fileira
+  const sobe=eo(seg(t,11.6,12.2));tiles.forEach((e,i)=>{if(i>1)e.style.opacity=1-sobe});c(t)}
+}
+
+if(R==="trava"){
+ const h=el('4 coisas que <b class="grifo">travam</b> o financiamento.',"left:64px;top:190px;width:950px","abs h");
+ const topo=el(`<div class="ic" style="width:64px;height:64px;padding:10px;border:3px solid var(--ink);border-radius:16px;background:var(--surface)">${ICONE.calculadora}</div><div class="mono" style="font-size:28px">SIMULOU</div>`,"left:64px;top:470px;display:flex;align-items:center;gap:18px","abs");
+ const chave=el(`<div class="ic" style="width:64px;height:64px;padding:10px;border:3px solid var(--ink);border-radius:16px;background:var(--surface)">${ICONE.chave}</div><div class="mono" style="font-size:28px">A CHAVE</div>`,"left:64px;top:1420px;display:flex;align-items:center;gap:18px","abs");
+ const linha=el("","left:96px;top:540px;width:0;height:880px;border-left:4px dashed var(--ink)","abs");
+ const dot=el("","left:79px;top:540px;width:38px;height:38px;border-radius:50%;background:var(--mark);border:3px solid var(--ink)","abs");
+ const Y=[590,790,990,1190];
+ const itens=[["Fazer <b>dívida nova</b> durante a análise.","o banco consulta de novo"],["<b>Trocar de emprego</b> antes de assinar.","a renda precisa estar comprovada"],["Pagar o sinal sem cláusula para <b>crédito negado</b>.","escreva o que acontece se negar"],["Imóvel com obra que <b>não está na matrícula</b>.","a avaliação trava"]]
+  .map((x,i)=>el(`<div style="display:flex;gap:18px;align-items:flex-start"><div class="ic" style="width:56px;height:56px;flex:none;color:var(--ink)">${ICONE.alerta}</div><div><div style="font:400 38px/1.2 var(--f-sans)">${x[0]}</div><div style="font:400 28px/1.2 var(--f-sans);color:var(--muted);margin-top:8px">${x[1]}</div></div></div>`,
+   `left:150px;right:64px;top:${Y[i]-10}px;padding:22px 26px`,"abs card"));
+ const c=cta("<b>Salve</b> antes de começar.<span>Mais no link da bio.</span>",12.4);
+ const paradas=[1.9,4.2,6.5,8.8];golpe(...paradas,11.4,12.4);
+ cena=t=>{entra(h,t,.1,.6);entra(topo,t,.8);entra(chave,t,.8);linha.style.opacity=cl(seg(t,.8,1.2));
+  // o ponto (o seu dinheiro) desce pela linha e para em cada trava
+  let y=540;const alvo=[...Y.map(v=>v+30),1420];let ini=1.2;
+  for(let i=0;i<5;i++){const fimDesce=ini+.7;const de=i?alvo[i-1]:540;const p=eio(seg(t,ini,fimDesce));if(t>=ini)y=de+(alvo[i]-de)*p;ini=(paradas[i]??11)+1.1}
+  const tremor=paradas.some(p=>t>p&&t<p+.4)?Math.sin(t*80)*5:0;dot.style.top=y+"px";dot.style.left=(79+tremor)+"px";
+  itens.forEach((e,i)=>pop(e,t,paradas[i],.4));
+  const sobe=eo(seg(t,11.8,12.4));[chave].forEach(e=>e.style.opacity=1-sobe);c(t)}
+}
+function render(t){cena(t);entra(assina,t,.4)}
+window.render=render;render(new URLSearchParams(location.search).has("t")?+new URLSearchParams(location.search).get("t"):6);
+</script>
+</body></html>
