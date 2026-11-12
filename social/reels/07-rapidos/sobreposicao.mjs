@@ -8,7 +8,7 @@ const pg = await nav.newPage();
 await pg.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 1 });
 pg.on("pageerror", (e) => console.log("ERRO", e.message));
 for (const r of process.argv.slice(2)) {
-  await pg.goto("file://" + resolve("index.html") + "?r=" + r);
+  await pg.goto("file://" + resolve("index.html") + "?r=" + r + (process.env.SEMJO ? "&semjo" : ""));
   await pg.evaluate(() => document.fonts.ready);
   await pg.screenshot({ path: `sobreposicao-${r}.png`, type: "png", omitBackground: true });
   console.log("ok", r);

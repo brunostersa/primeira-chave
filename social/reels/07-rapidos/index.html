@@ -57,7 +57,8 @@ h+=`<ol>${d.li.map(x=>`<li><span>${x}</span></li>`).join("")}</ol>`;if(d.av)h+=`
 document.getElementById("cartao").innerHTML=h;
 if(d.topo){const t=document.getElementById("topo");t.textContent=d.topo;t.style.display="block";document.getElementById("cartao").style.top="260px";document.getElementById("jo").style.top="200px"}
 document.querySelector("#salve .s").innerHTML=d.cta;
-document.getElementById("jo").innerHTML=ARTE[d.jo];
+// Com fundo de cena da marca (?semjo) o João já está na cena: o cartão fica sem ele.
+if(new URLSearchParams(location.search).has("semjo"))document.querySelector("h1").style.paddingRight="0";else document.getElementById("jo").innerHTML=ARTE[d.jo];
 // CTA logo abaixo do cartão, sem passar de 1500 (área segura acima da legenda do Reels).
 const c=document.getElementById("cartao").getBoundingClientRect();document.getElementById("salve").style.top=Math.min(c.bottom+96,1500)+"px";
 </script>

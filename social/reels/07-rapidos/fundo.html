@@ -1,0 +1,15 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Fundo: cena da marca</title>
+<style>
+:root{--paper:#f2f3f1;--surface:#fff;--ink:#121418;--ink-2:#3a3f47;--muted:#5a6069;--grid:#e3e9ee;--mark:#f4d23f;--planta:#c6d6e3;--planta-deep:#6f8ca5;--barro:#eeb194;--line:#c9cdc7}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background-color:var(--paper);
+ background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:60px 60px}
+#cena{position:absolute;left:0;right:0;bottom:40px;padding:0 20px}#cena svg{width:100%;height:auto;overflow:visible}
+</style></head><body>
+<div id="cena"></div>
+<script src="cenas.js"></script>
+<script>
+const c=new URLSearchParams(location.search).get("c")||"casa";
+document.getElementById("cena").innerHTML=CENA[c];
+</script>
+</body></html>
