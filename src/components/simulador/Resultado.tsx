@@ -28,6 +28,15 @@ import { brl, pct } from "@/lib/format";
 import { Deslizador } from "./campos";
 import { Ajustar, irParaAjuste } from "./Ajustar";
 
+/**
+ * No celular, uma coluna: resposta, painel de ajuste, o resto. No computador, o painel
+ * vai para a direita e fica parado na tela enquanto o resultado rola à esquerda.
+ */
+const GRADE = "mx-auto grid max-w-3xl gap-8 px-4 py-10 sm:px-6 lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-x-10";
+const CABECA = "flex flex-col gap-4 lg:col-start-1 lg:row-start-1";
+const RESTO = "flex flex-col gap-8 lg:col-start-1 lg:row-start-2";
+const PAINEL = "lg:sticky lg:top-20 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-[calc(100vh-6rem)] lg:self-start lg:overflow-y-auto";
+
 type Props = { perfil: Perfil; exemplo: boolean; mudar: (patch: Partial<Perfil>) => void; onRefazer: () => void };
 
 export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
@@ -65,12 +74,12 @@ export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
       renda: ["Hoje não sobra espaço pra parcela.", `O banco aceita no máximo ${PARAMS.comp}% da renda pra todas as parcelas somadas, e suas outras dívidas já ocupam esse espaço. Quitar ou reduzir uma delas é o primeiro passo.`],
       valor: ["Faltou o preço do imóvel.", "Informe o valor pedido pelo vendedor pra ver se ele cabe no seu bolso."],
     }[r.blocked];
-    // Mesma estrutura do resultado normal (topo, cabeça, painel): assim, se um ajuste cai num bloqueio
+    // Mesma estrutura do resultado normal (cabeça, painel, resto): assim, se um ajuste cai num bloqueio
     // (ex.: apagou a renda pra redigitar), o painel não é remontado e o campo não perde o foco.
     return (
-      <section className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-10 sm:px-6">
-        {topo}
-        <div className="flex flex-col gap-4">
+      <section className={GRADE}>
+        <div className={CABECA}>
+          {topo}
           <h1 className="font-display text-[clamp(32px,5vw,48px)] font-light leading-tight">{m[0]}</h1>
           <Card variant="bad">{m[1]}</Card>
           {r.blocked === "valor" && (
@@ -79,8 +88,10 @@ export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
             </Button>
           )}
         </div>
-        <Ajustar perfil={perfil} r={r} mudar={mudar} onRefazer={onRefazer} />
-        <ProximoPasso tarefas={tarefas} />
+        <Ajustar perfil={perfil} r={r} mudar={mudar} onRefazer={onRefazer} className={PAINEL} />
+        <div className={RESTO}>
+          <ProximoPasso tarefas={tarefas} />
+        </div>
       </section>
     );
   }
@@ -100,9 +111,9 @@ export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
   ];
 
   return (
-    <section className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-10 sm:px-6">
-      {topo}
-      <div className="flex flex-col gap-4">
+    <section className={GRADE}>
+      <div className={CABECA}>
+        {topo}
         <div className="flex flex-wrap gap-2">
           {sinais.map((s) => (
             <Badge key={s.texto} tone={s.tom}>
@@ -125,8 +136,9 @@ export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
         {rendaTravaOEmprestimo(r) && <PorQueAEntrada r={r} perfil={perfil} />}
       </div>
 
-      <Ajustar perfil={perfil} r={r} mudar={mudar} onRefazer={onRefazer} quitando={semFolga} />
+      <Ajustar perfil={perfil} r={r} mudar={mudar} onRefazer={onRefazer} quitando={semFolga} className={PAINEL} />
 
+      <div className={RESTO}>
       <ProximoPasso tarefas={tarefas} />
       {!exemplo && <PerguntarAoJoao perfil={perfil} />}
       {/* A chave reinicia o "teste você mesmo" quando o painel de ajuste muda o imóvel de base. */}
@@ -177,6 +189,7 @@ export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
         substitui a análise do banco, que considera seu histórico, os documentos e a avaliação do imóvel. Seguros e taxas são estimados.
       </p>
       <Relatar contexto="simulador:resultado" />
+      </div>
     </section>
   );
 }

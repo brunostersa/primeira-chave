@@ -13,6 +13,7 @@ type Props = {
   onRefazer: () => void;
   /** As dívidas já ocupam o limite: os números são os de depois de quitá-las. */
   quitando?: boolean;
+  className?: string;
 };
 
 /**
@@ -20,7 +21,7 @@ type Props = {
  * sem refazer as perguntas. O resumo no topo fica preso na tela enquanto o painel
  * está à vista, então o número acompanha o dedo no deslizador.
  */
-export function Ajustar({ perfil, r, mudar, onRefazer, quitando }: Props) {
+export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Props) {
   const [aberto, setAberto] = useState(false);
   const avisoFaixa = useAvisoFaixa(r);
   const ajustados = useRef(new Set<string>());
@@ -44,7 +45,7 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando }: Props) {
   const fgtsValor = perfil.fgtsOpt === "sim" ? perfil.fgts : 0;
 
   return (
-    <section id="ajustar" aria-labelledby="ajustar-titulo" className="scroll-mt-20 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface">
+    <section id="ajustar" aria-labelledby="ajustar-titulo" className={cn("scroll-mt-20 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface", className)}>
       <Resumo r={r} quitando={quitando} />
 
       <div className="flex flex-col gap-1 px-5 pt-4 sm:px-6">
@@ -60,7 +61,7 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando }: Props) {
         </p>
       )}
 
-      <div className="flex flex-col gap-1 px-5 pt-2 sm:px-6">
+      <div className="flex flex-col gap-5 px-5 py-4 sm:px-6">
         <AjusteDinheiro
           id="ajuste-renda"
           rotulo={junto ? "Renda somada por mês" : "Renda por mês"}
@@ -239,16 +240,11 @@ function Resumo({ r, quitando }: { r: R | Bloqueio; quitando?: boolean }) {
     }
   }
   return (
-    <div
-      aria-live="polite"
-      className="sticky top-16 z-10 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 rounded-t-[calc(var(--radius-card)-2px)] border-b-[1.5px] border-ink bg-mark px-5 py-3 sm:px-6"
-    >
-      <div className="flex flex-col">
-        <span className="text-[13px]">{rotulo}</span>
-        <b className="font-display text-[26px] leading-tight tabular-nums">{numero}</b>
-      </div>
+    <div aria-live="polite" className="sticky top-16 z-10 flex flex-col rounded-t-[calc(var(--radius-card)-2px)] border-b-[1.5px] border-ink bg-mark px-5 py-3 sm:px-6 lg:top-0">
+      <span className="text-[13px]">{rotulo}</span>
+      <b className="font-display text-[26px] leading-tight tabular-nums">{numero}</b>
       {fatos.length > 0 && (
-        <span className="flex flex-col text-sm tabular-nums sm:items-end">
+        <span className="mt-0.5 flex flex-wrap gap-x-3 text-sm tabular-nums">
           {fatos.map((f) => (
             <span key={f}>{f}</span>
           ))}
@@ -260,17 +256,19 @@ function Resumo({ r, quitando }: { r: R | Bloqueio; quitando?: boolean }) {
 
 /** Quando a mudança troca a linha de crédito ou os juros (ex.: a renda passa do limite da Faixa 2), o número dá um salto: avisa o porquê por alguns segundos. */
 function useAvisoFaixa(r: R | Bloqueio): string | null {
-  const { curto, juros } = r.prog;
+  const { curto, juros, mcmv } = r.prog;
+  // "SBPE" sozinho não diz nada a quem está começando.
+  const linha = mcmv ? curto : "a linha de mercado (SBPE)";
   const chave = `${curto}|${juros}`;
   const anterior = useRef(chave);
   const [aviso, setAviso] = useState<string | null>(null);
   useEffect(() => {
     if (anterior.current === chave) return;
     anterior.current = chave;
-    setAviso(`Agora é ${curto}, com juros de ${pct(juros)} ao ano. Por isso o número saltou.`);
+    setAviso(`Agora é ${linha}, com juros de ${pct(juros)} ao ano. Por isso o número saltou.`);
     const t = setTimeout(() => setAviso(null), 8000);
     return () => clearTimeout(t);
-  }, [chave, curto, juros]);
+  }, [chave, linha, juros]);
   return aviso;
 }
 
@@ -362,7 +360,7 @@ function Linha({
   const noTrilho = Math.min(max, Math.max(min, valor));
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between gap-3 pt-3">
+      <div className="flex items-center justify-between gap-3">
         <label htmlFor={id} className="flex flex-col text-[15px] font-semibold">
           {rotulo}
           {ajuda && <span className="text-sm font-normal text-ink-2">{ajuda}</span>}
@@ -377,8 +375,7 @@ function Linha({
         step={passo}
         value={noTrilho}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="deslizador"
-        data-humor="gentil"
+        className="regua mt-2.5"
         style={{ "--pct": `${((noTrilho - min) / (max - min)) * 100}%` } as CSSProperties}
       />
     </div>
