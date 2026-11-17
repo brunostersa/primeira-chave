@@ -26,10 +26,11 @@ import {
 import { PARAMS } from "@/lib/financiamento/params";
 import { brl, pct } from "@/lib/format";
 import { Deslizador } from "./campos";
+import { Ajustar, irParaAjuste } from "./Ajustar";
 
-type Props = { perfil: Perfil; exemplo: boolean; onRefazer: () => void; onInformarPreco: () => void };
+type Props = { perfil: Perfil; exemplo: boolean; mudar: (patch: Partial<Perfil>) => void; onRefazer: () => void };
 
-export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props) {
+export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
   const [poup, setPoup] = useState(1500);
   const r0 = calcular(perfil);
   // Dívidas que já ocupam todo o limite da parcela não encerram a simulação: o resultado sai
@@ -52,8 +53,8 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
       ) : (
         <span />
       )}
-      <Button variant="link" onClick={onRefazer}>
-        {exemplo ? "Fazer com os meus números" : "Mudar minhas respostas"}
+      <Button variant="link" onClick={() => irParaAjuste()}>
+        {exemplo ? "Testar com os meus números" : "Mudar minhas respostas"}
       </Button>
     </div>
   );
@@ -64,16 +65,21 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
       renda: ["Hoje não sobra espaço pra parcela.", `O banco aceita no máximo ${PARAMS.comp}% da renda pra todas as parcelas somadas, e suas outras dívidas já ocupam esse espaço. Quitar ou reduzir uma delas é o primeiro passo.`],
       valor: ["Faltou o preço do imóvel.", "Informe o valor pedido pelo vendedor pra ver se ele cabe no seu bolso."],
     }[r.blocked];
+    // Mesma estrutura do resultado normal (topo, cabeça, painel): assim, se um ajuste cai num bloqueio
+    // (ex.: apagou a renda pra redigitar), o painel não é remontado e o campo não perde o foco.
     return (
-      <section className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10 sm:px-6">
+      <section className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-10 sm:px-6">
         {topo}
-        <h1 className="font-display text-[clamp(32px,5vw,48px)] font-light leading-tight">{m[0]}</h1>
-        <Card variant="bad">{m[1]}</Card>
-        {r.blocked === "valor" && (
-          <Button className="self-start" onClick={onInformarPreco}>
-            Informar o preço
-          </Button>
-        )}
+        <div className="flex flex-col gap-4">
+          <h1 className="font-display text-[clamp(32px,5vw,48px)] font-light leading-tight">{m[0]}</h1>
+          <Card variant="bad">{m[1]}</Card>
+          {r.blocked === "valor" && (
+            <Button className="self-start" onClick={() => irParaAjuste("ajuste-preco")}>
+              Informar o preço
+            </Button>
+          )}
+        </div>
+        <Ajustar perfil={perfil} r={r} mudar={mudar} onRefazer={onRefazer} />
         <ProximoPasso tarefas={tarefas} />
       </section>
     );
@@ -116,12 +122,15 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
         {semFolga && <Eyebrow>Depois de quitar as parcelas de hoje</Eyebrow>}
         <h1 className="font-display text-[clamp(32px,5.4vw,52px)] font-light leading-[1.05] [&_mark]:marca-texto [&_mark]:bg-transparent [&_mark]:font-semibold">{titulo}</h1>
         <p className="text-lg text-ink-2 [&_strong]:text-ink">{sub}</p>
-        {rendaTravaOEmprestimo(r) && <PorQueAEntrada r={r} perfil={perfil} onRefazer={onRefazer} />}
+        {rendaTravaOEmprestimo(r) && <PorQueAEntrada r={r} perfil={perfil} />}
       </div>
+
+      <Ajustar perfil={perfil} r={r} mudar={mudar} onRefazer={onRefazer} quitando={semFolga} />
 
       <ProximoPasso tarefas={tarefas} />
       {!exemplo && <PerguntarAoJoao perfil={perfil} />}
-      {z && <Segredo z={z} r={r} poup={poup} />}
+      {/* A chave reinicia o "teste você mesmo" quando o painel de ajuste muda o imóvel de base. */}
+      {z && <Segredo key={Math.round(z.V / 5000)} z={z} r={r} poup={poup} />}
 
       <Eyebrow className="mt-4">Quer entender esse número?</Eyebrow>
       <div className="flex flex-col gap-3">
@@ -164,7 +173,7 @@ export function Resultado({ perfil, exemplo, onRefazer, onInformarPreco }: Props
       {!exemplo && <ConvidarAoVer origem="simulador:resultado" tipo="simulador" fase={faseDoSimulador(perfil)} perfil={perfilDoSimulador(perfil)} />}
 
       <p className="text-sm text-muted">
-        Simulação educativa, não é aprovação de crédito. Não inclui a correção pela TR. Usa regras médias de mercado (referência {"out/2026"}) e não
+        Simulação educativa, não é aprovação de crédito. Não inclui a correção pela TR. Usa as regras da Caixa e médias de mercado (referência {"out/2026"}), que podem mudar a qualquer momento, e não
         substitui a análise do banco, que considera seu histórico, os documentos e a avaliação do imóvel. Seguros e taxas são estimados.
       </p>
       <Relatar contexto="simulador:resultado" />
@@ -224,7 +233,7 @@ function resposta(r: R, z: SemEntrada | null, quitando = false): { titulo: React
 }
 
 /** Entrada alta porque a renda trava o empréstimo: diz o motivo e as duas saídas. */
-function PorQueAEntrada({ r, perfil, onRefazer }: { r: R; perfil: Perfil; onRefazer: () => void }) {
+function PorQueAEntrada({ r, perfil }: { r: R; perfil: Perfil }) {
   const teto = precoQueARendaAguenta(perfil, r);
   const parcela = r.C;
   const junto = perfil.quem === "junto";
@@ -247,7 +256,7 @@ function PorQueAEntrada({ r, perfil, onRefazer }: { r: R; perfil: Perfil; onRefa
           {junto
             ? "Entra a renda de todos que vão assinar, e também as rendas extras que vocês conseguem comprovar."
             : "Cônjuge, parceiro ou parente pode somar a renda. Rendas extras que você comprova também entram."}{" "}
-          <button type="button" onClick={onRefazer} className="font-semibold text-ink underline underline-offset-4">
+          <button type="button" onClick={() => irParaAjuste("ajuste-renda")} className="font-semibold text-ink underline underline-offset-4">
             Mudar a renda
           </button>
         </li>

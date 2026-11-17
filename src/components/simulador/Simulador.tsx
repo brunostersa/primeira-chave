@@ -14,6 +14,7 @@ import {
 import { BotaoOpcao, CampoDinheiro, LinhaComAcao } from "./campos";
 import { perguntasVisiveis, respondida, type Pergunta } from "./perguntas";
 import { Resultado } from "./Resultado";
+import { evento } from "@/lib/evento";
 
 type Tela = "inicio" | "pergunta" | "resultado";
 
@@ -38,8 +39,11 @@ export function Simulador({ titulo }: { titulo?: string }) {
     const lista = perguntasVisiveis(p);
     const q = lista[passo];
     if (!q || !respondida(q, p)) return;
-    if (passo >= lista.length - 1) irPara("resultado");
-    else {
+    evento("sim_pergunta", { passo: passo + 1, pergunta: q.chave });
+    if (passo >= lista.length - 1) {
+      evento("sim_resultado", { origem: "perguntas" });
+      irPara("resultado");
+    } else {
       setPasso(passo + 1);
       window.scrollTo({ top: 0 });
     }
@@ -87,6 +91,7 @@ export function Simulador({ titulo }: { titulo?: string }) {
               setPerfil(PERFIL_VAZIO);
               setExemplo(false);
               setPasso(0);
+              evento("sim_inicio");
               irPara("pergunta");
             }}
           >
@@ -97,6 +102,7 @@ export function Simulador({ titulo }: { titulo?: string }) {
             onClick={() => {
               setPerfil(PERFIL_EXEMPLO);
               setExemplo(true);
+              evento("sim_resultado", { origem: "exemplo" });
               irPara("resultado");
             }}
           >
@@ -113,18 +119,16 @@ export function Simulador({ titulo }: { titulo?: string }) {
       <Resultado
         perfil={perfil}
         exemplo={exemplo}
+        mudar={(patch) => {
+          // Mexeu no exemplo: a partir daí os números são os da pessoa.
+          setExemplo(false);
+          mudar(patch);
+        }}
         onRefazer={() => {
+          evento("sim_refazer");
           setPasso(0);
           setExemplo(false);
           if (exemplo) setPerfil(PERFIL_VAZIO);
-          irPara("pergunta");
-        }}
-        onInformarPreco={() => {
-          setPasso(
-            perguntasVisiveis(perfil).findIndex(
-              (q) => q.chave === "imovelDados",
-            ),
-          );
           irPara("pergunta");
         }}
       />
