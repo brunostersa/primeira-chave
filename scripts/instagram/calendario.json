@@ -178,7 +178,7 @@
     "titulo": "Parcela de 300",
     "data": "2026-11-17",
     "hora": "12:00",
-    "status": "aprovado",
+    "status": "publicado",
     "imagens": [
       "https://primeirachave.com.br/ig/13-1.jpg",
       "https://primeirachave.com.br/ig/13-2.jpg",
@@ -189,7 +189,8 @@
       "https://primeirachave.com.br/ig/13-7.jpg"
     ],
     "legenda": "Essa parcela de R$ 300 está te custando R$ 40 mil.\n\nA parcela da casa precisa caber em 30% da renda bruta, já descontadas as que você paga: carro, empréstimo, cartão parcelado.\n\nCom R$ 6.000 de renda:\n sem outras parcelas: imóvel de até R$ 299.715\n com uma de R$ 300: imóvel de até R$ 249.059\n\nSão R$ 40.525 a menos de crédito. Em 35 anos, cada R$ 100 de parcela vira uns R$ 13,5 mil de financiamento.\n\nAntes de pedir o crédito: liste o que você deve (o Registrato, do Banco Central, mostra de graça), veja se vale quitar as pequenas e não faça parcela nova até assinar.\n\nPõe as suas parcelas no simulador e veja quanto elas custam. Link na bio.\n\nMarca aquela pessoa que vive parcelando tudo.\n\n#primeiroimovel #financiamentoimobiliario #minhacasaminhavida #casapropria #comprarimovel #educacaofinanceira #dividas",
-    "comentario": "Estimativa educativa: renda bruta de R$ 6.000, 30 anos de idade, MCMV Faixa 3, 35 anos, Tabela Price. Regras da Caixa conferidas em out/2026."
+    "comentario": "Estimativa educativa: renda bruta de R$ 6.000, 30 anos de idade, MCMV Faixa 3, 35 anos, Tabela Price. Regras da Caixa conferidas em out/2026.",
+    "media_id": "18117584330580910"
   },
   {
     "n": 14,
