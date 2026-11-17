@@ -3,7 +3,6 @@
 import { useState, type ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/components/ui/utils";
 import { Eyebrow } from "@/components/ui/badge";
 import { JoaoDeBarro } from "@/components/brand/JoaoDeBarro";
 import {
@@ -12,7 +11,7 @@ import {
   type Perfil,
 } from "@/lib/financiamento/engine";
 import { BotaoOpcao, CampoDinheiro, LinhaComAcao } from "./campos";
-import { perguntasVisiveis, respondida, type Pergunta } from "./perguntas";
+import { fecharResposta, PERGUNTAS, respondida, type Pergunta } from "./perguntas";
 import { Resultado } from "./Resultado";
 import { evento } from "@/lib/evento";
 
@@ -25,7 +24,7 @@ export function Simulador({ titulo }: { titulo?: string }) {
   const [passo, setPasso] = useState(0);
   const [exemplo, setExemplo] = useState(false);
 
-  const visiveis = perguntasVisiveis(perfil);
+  const visiveis = PERGUNTAS;
   const atual = visiveis[passo];
 
   const irPara = (t: Tela) => {
@@ -33,12 +32,12 @@ export function Simulador({ titulo }: { titulo?: string }) {
     window.scrollTo({ top: 0 });
   };
 
-  // A resposta pode abrir ou fechar perguntas (ex.: "Já achei" abre a do imóvel),
-  // então o "próximo" é calculado com o perfil já atualizado.
+  // Recebe o perfil já atualizado quando quem chama acabou de mudar a resposta (clique numa opção).
   const avancar = (p: Perfil = perfil) => {
-    const lista = perguntasVisiveis(p);
+    const lista = PERGUNTAS;
     const q = lista[passo];
     if (!q || !respondida(q, p)) return;
+    setPerfil(fecharResposta(q, p));
     evento("sim_pergunta", { passo: passo + 1, pergunta: q.chave });
     if (passo >= lista.length - 1) {
       evento("sim_resultado", { origem: "perguntas" });
@@ -69,11 +68,11 @@ export function Simulador({ titulo }: { titulo?: string }) {
           </span>
         </p>
         <p className="max-w-xl text-lg text-ink-2">
-          Umas 10 perguntas simples. No fim você recebe um número, o que ele
-          significa e o seu próximo passo.
+          4 perguntas rápidas e você já vê o número, o que ele significa e o
+          seu próximo passo. Depois, se quiser, completa o resto ali mesmo.
         </p>
         <ul className="flex flex-wrap gap-2 font-mono text-[13px]">
-          {["2 minutos", "Sem cadastro", "“Não sei” vale como resposta"].map(
+          {["1 minuto", "Sem cadastro", "“Não sei” vale como resposta"].map(
             (t) => (
               <li
                 key={t}
@@ -231,22 +230,11 @@ function CorpoPergunta({
               onClick={() => {
                 const novo = { ...perfil, [q.campo]: o.valor } as Perfil;
                 mudar({ [q.campo]: o.valor } as Partial<Perfil>);
-                if (!(q.valor && o.valor === q.valor.abreCom))
-                  setTimeout(() => avancar(novo), 160);
+                setTimeout(() => avancar(novo), 160);
               }}
             />
           ))}
         </div>
-        {q.valor && escolhido === q.valor.abreCom && (
-          <CampoDinheiro
-            id={`campo-${q.chave}`}
-            rotulo={q.valor.rotulo}
-            valor={perfil[q.valor.campo] as number}
-            onChange={(v) => mudar({ [q.valor!.campo]: v } as Partial<Perfil>)}
-            onEnter={() => avancar()}
-            autoFocus
-          />
-        )}
       </div>
     );
   }
@@ -288,89 +276,61 @@ function CorpoPergunta({
       />
     );
   }
+  // "guardado": dinheiro guardado e FGTS na mesma tela; zero vale.
+  return <CorpoGuardado perfil={perfil} mudar={mudar} avancar={avancar} />;
+}
+
+function CorpoGuardado({ perfil, mudar, avancar }: { perfil: Perfil; mudar: (p: Partial<Perfil>) => void; avancar: () => void }) {
+  const naoSei = perfil.fgtsOpt === "naosei";
   return (
-    <div className="flex flex-col gap-5">
-      {/* Preço e tipo na mesma linha: são as duas coisas que todo mundo sabe de cara. */}
-      <div className="flex flex-wrap items-end gap-x-4 gap-y-5">
-        <div className="min-w-0 flex-1 basis-60">
-          <CampoDinheiro
-            id="campo-preco"
-            rotulo="Preço pedido pelo vendedor"
-            valor={perfil.valor}
-            onChange={(v) => mudar({ valor: v })}
-            onEnter={() => avancar()}
-            autoFocus
+    <div className="flex flex-col gap-6">
+      <CampoDinheiro
+        id="campo-reserva"
+        rotulo="Dinheiro guardado"
+        ajuda="Poupança e investimentos que você usaria na entrada. Deixe em branco se for zero."
+        valor={perfil.reserva}
+        onChange={(v) => mudar({ reserva: v })}
+        onEnter={() => avancar()}
+        autoFocus
+      />
+      <div className="flex flex-col gap-2">
+        <CampoDinheiro
+          id="campo-fgts"
+          rotulo="Saldo do FGTS"
+          ajuda="Aparece no app FGTS. Deixe em branco se não tiver."
+          valor={perfil.fgts}
+          onChange={(v) => mudar({ fgts: v, fgtsOpt: v > 0 ? "sim" : null })}
+          onEnter={() => avancar()}
+        />
+        <label className="flex min-h-11 cursor-pointer items-center gap-2.5 text-[15px]">
+          <input
+            type="checkbox"
+            checked={naoSei}
+            onChange={(e) => mudar({ fgtsOpt: e.target.checked ? "naosei" : null, fgts: 0 })}
+            className="size-5 accent-[var(--ink)]"
           />
-        </div>
-        <div className="flex flex-col gap-2">
-          <span id="tipo-imovel" className="text-[15px] font-semibold">
-            Ele é
+          Tenho FGTS, mas não sei o saldo
+        </label>
+      </div>
+      {(perfil.fgts > 0 || naoSei) && (
+        <div role="group" aria-labelledby="fgts3-rotulo" className="flex flex-col gap-2">
+          <span id="fgts3-rotulo" className="text-[15px] font-semibold">
+            Somando todos os empregos, tem 3 anos ou mais de carteira assinada?
           </span>
-          <div role="group" aria-labelledby="tipo-imovel" className="flex h-[62px] rounded-xl border-[1.5px] border-ink bg-surface p-1">
-            {(["usado", "novo"] as const).map((t) => (
-              <button
-                key={t}
-                type="button"
-                aria-pressed={perfil.tipo === t}
-                onClick={() => mudar({ tipo: t })}
-                className={cn(
-                  "min-w-24 rounded-lg px-4 text-base font-semibold transition-colors",
-                  perfil.tipo === t ? "bg-mark" : "text-ink-2 hover:bg-ink/5",
-                )}
-              >
-                {t === "usado" ? "Usado" : "Novo"}
-              </button>
+          <span className="-mt-1 text-sm text-ink-2">É a regra pra usar o FGTS na compra.</span>
+          <div className="flex flex-wrap gap-2">
+            {(
+              [
+                ["sim", "Sim"],
+                ["nao", "Não"],
+                ["naosei", "Não sei"],
+              ] as const
+            ).map(([v, t]) => (
+              <BotaoOpcao key={v} rotulo={t} selecionado={perfil.fgts3 === v} onClick={() => mudar({ fgts3: v })} className="min-h-11 py-2" />
             ))}
           </div>
         </div>
-      </div>
-
-      {/* O laudo: um cartão que abre o campo e já diz o que a avaliação muda na entrada. */}
-      <div className={cn("flex flex-col gap-4 rounded-xl border-[1.5px] p-4 transition-colors", perfil.avaliou ? "border-ink bg-surface" : "border-line")}>
-        <label className="flex cursor-pointer items-center gap-3">
-          <input type="checkbox" checked={perfil.avaliou} onChange={(e) => mudar({ avaliou: e.target.checked })} className="peer sr-only" />
-          <span
-            aria-hidden
-            className="relative h-7 w-12 shrink-0 rounded-full border-[1.5px] border-ink bg-paper transition-colors peer-checked:bg-mark peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-ink after:transition-transform peer-checked:after:translate-x-5"
-          />
-          <span className="flex flex-col">
-            <span className="font-semibold">O banco já avaliou esse imóvel</span>
-            <span className="text-sm text-ink-2">Se tem o laudo, a conta fica no valor que o banco aceita.</span>
-          </span>
-        </label>
-        {perfil.avaliou && (
-          <>
-            <CampoDinheiro
-              id="campo-laudo"
-              rotulo="Valor da avaliação (está no laudo)"
-              valor={perfil.avalReal}
-              onChange={(v) => mudar({ avalReal: v })}
-              onEnter={() => avancar()}
-              autoFocus
-            />
-            <DicaAvaliacao preco={perfil.valor} avaliacao={perfil.avalReal} />
-          </>
-        )}
-      </div>
+      )}
     </div>
-  );
-}
-
-/** O que a avaliação muda, em uma frase (o banco empresta sobre o laudo, nunca acima do preço). */
-function DicaAvaliacao({ preco, avaliacao }: { preco: number; avaliacao: number }) {
-  if (!preco || !avaliacao) return null;
-  const dif = Math.round((avaliacao / preco - 1) * 100);
-  const [cor, texto] =
-    dif >= 25
-      ? ["bg-mark", <>Avaliado <b>{dif}% acima</b> do preço: o banco pode financiar o preço inteiro. Sobram só ITBI e cartório.</>]
-      : dif > 0
-        ? ["bg-mark-soft", <>Avaliado <b>{dif}% acima</b> do preço: a sua entrada diminui. A partir de 25% acima, ela pode zerar.</>]
-        : dif < 0
-          ? ["bg-bad-soft", <>Avaliado <b>{-dif}% abaixo</b> do preço: o banco calcula sobre o laudo, e a entrada sobe.</>]
-          : ["bg-paper", <>Avaliado pelo mesmo valor do preço: a conta segue a regra de sempre.</>];
-  return (
-    <p role="status" className={cn("rounded-lg px-3 py-2.5 text-[15px] [&_b]:font-semibold", cor)}>
-      {texto}
-    </p>
   );
 }

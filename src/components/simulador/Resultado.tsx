@@ -101,13 +101,15 @@ export function Resultado({ perfil, exemplo, mudar, onRefazer }: Props) {
   const sinais: { tom: "ok" | "warn" | "bad"; texto: string }[] = [
     semFolga
       ? { tom: "bad", texto: "Parcela: dívidas ocupam o limite" }
+      : perfil.dividasOpt === null
+        ? { tom: "warn", texto: "Parcela: falta dizer suas dívidas" }
       : r.dividas > perfil.renda * 0.1
         ? { tom: "warn", texto: "Parcela: dívidas pesando" }
         : rendaTravaOEmprestimo(r)
           ? { tom: "warn", texto: "Renda: limita o empréstimo" }
         : { tom: "ok", texto: "Parcela: cabe na renda" },
     r.gap === 0 ? { tom: "ok", texto: "Entrada: coberta" } : r.gap <= poup * 12 ? { tom: "warn", texto: "Entrada: falta pouco" } : { tom: "bad", texto: "Entrada: falta bastante" },
-    perfil.nome === "sim" ? { tom: "ok", texto: "Nome: limpo" } : perfil.nome === "naosei" ? { tom: "warn", texto: "Nome: conferir" } : { tom: "bad", texto: "Nome: regularizar" },
+    perfil.nome === "sim" ? { tom: "ok", texto: "Nome: limpo" } : perfil.nome !== "nao" ? { tom: "warn", texto: "Nome: conferir" } : { tom: "bad", texto: "Nome: regularizar" },
   ];
 
   return (

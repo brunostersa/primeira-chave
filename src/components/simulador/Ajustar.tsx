@@ -17,16 +17,16 @@ type Props = {
 };
 
 /**
- * O painel de ajuste do resultado: muda uma resposta e o número recalcula na hora,
- * sem refazer as perguntas. O resumo no topo fica preso na tela enquanto o painel
- * está à vista, então o número acompanha o dedo no deslizador.
+ * O painel do resultado. A entrada tem só 4 perguntas; aqui a pessoa mexe nos números,
+ * conta do imóvel em vista (preço e avaliação) e completa o que ficou de fora. Tudo
+ * recalcula na hora. O resumo no topo fica preso na tela enquanto o painel está à vista.
  */
 export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Props) {
   const [aberto, setAberto] = useState(false);
   const avisoFaixa = useAvisoFaixa(r);
   const ajustados = useRef(new Set<string>());
 
-  // Quem chega pelo "Mudar a renda" ou "Mudar minhas respostas" abre tudo.
+  // Quem chega pelo "Mudar minhas respostas" vê também as respostas já dadas.
   useEffect(() => {
     const abrir = () => setAberto(true);
     window.addEventListener("ajustar:abrir", abrir);
@@ -42,17 +42,31 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Pr
   };
 
   const junto = perfil.quem === "junto";
-  const fgtsValor = perfil.fgtsOpt === "sim" ? perfil.fgts : 0;
+  const extras = respostasExtras(perfil, junto);
+  const pendentes = extras.filter((e) => e.valor === null && e.mostrar);
+  const dadas = extras.filter((e) => e.valor !== null && e.mostrar);
+
+  // Por que o FGTS informado não entrou na conta (a regra pede os 3 anos e nenhum imóvel no nome).
+  const fgtsFora =
+    perfil.fgtsOpt === "sim" && perfil.fgts > 0
+      ? perfil.fgts3 === null
+        ? "Ainda fora da conta: confirme os 3 anos de carteira abaixo."
+        : perfil.fgts3 !== "sim"
+          ? "Fora da conta: o FGTS só entra na compra com 3 anos de carteira, somando os empregos."
+          : perfil.imovel === "sim"
+            ? "Fora da conta: quem já tem imóvel no nome, em geral, não usa o FGTS."
+            : null
+      : null;
 
   return (
     <section id="ajustar" aria-labelledby="ajustar-titulo" className={cn("scroll-mt-20 rounded-[var(--radius-card)] border-[1.5px] border-ink bg-surface", className)}>
-      <Resumo r={r} quitando={quitando} />
+      <Resumo r={r} quitando={quitando} faltam={pendentes.length} />
 
       <div className="flex flex-col gap-1 px-5 pt-4 sm:px-6">
         <h2 id="ajustar-titulo" className="font-display text-2xl font-semibold">
           Ajuste e veja na hora
         </h2>
-        <p className="text-[15px] text-ink-2">Errou alguma resposta ou quer testar outro cenário? Mude aqui, sem refazer as perguntas.</p>
+        <p className="text-[15px] text-ink-2">Mude qualquer resposta aqui, sem refazer as perguntas.</p>
       </div>
 
       {avisoFaixa && (
@@ -61,7 +75,30 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Pr
         </p>
       )}
 
-      <div className="flex flex-col gap-5 px-5 py-4 sm:px-6">
+      {pendentes.length > 0 && (
+        <div id="completar" className="mx-5 mt-4 flex scroll-mt-24 flex-col gap-4 rounded-xl bg-mark-soft p-4 sm:mx-6">
+          <div>
+            <p className="font-semibold">Deixe o número mais preciso</p>
+            <p className="text-sm text-ink-2">
+              {pendentes.length === 1 ? "Falta 1 resposta." : `Faltam ${pendentes.length} respostas.`} Um toque em cada.
+            </p>
+          </div>
+          {pendentes.map((e) => (
+            <Escolha key={e.chave} rotulo={e.rotulo} ajuda={e.ajuda} valor={e.valor} opcoes={e.opcoes} onChange={(v) => ajustar(e.chave, e.patch(v))} />
+          ))}
+        </div>
+      )}
+
+      <Bloco titulo="Seus números">
+        <Escolha
+          rotulo="Vai comprar"
+          valor={perfil.quem}
+          opcoes={[
+            ["sozinho", "Sozinho"],
+            ["junto", "Com outra pessoa"],
+          ]}
+          onChange={(v) => ajustar("quem", { quem: v })}
+        />
         <AjusteDinheiro
           id="ajuste-renda"
           rotulo={junto ? "Renda somada por mês" : "Renda por mês"}
@@ -83,120 +120,70 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Pr
         <AjusteDinheiro
           id="ajuste-fgts"
           rotulo="Saldo do FGTS"
-          ajuda={perfil.fgtsOpt === "naosei" ? "Você não sabia o saldo: teste um valor." : undefined}
-          valor={fgtsValor}
+          ajuda={fgtsFora ?? (perfil.fgtsOpt === "naosei" ? "Você não sabe o saldo: teste um valor." : undefined)}
+          valor={perfil.fgtsOpt === "sim" ? perfil.fgts : 0}
           min={0}
           max={150000}
           passo={1000}
           onChange={(v) =>
             ajustar("fgts", {
               fgts: v,
-              // Zerar não apaga o "não sei": só quem respondeu "sim" volta para "não tem".
+              // Zerar não apaga o "não sei": só quem informou um saldo volta para "não tem".
               fgtsOpt: v > 0 ? "sim" : perfil.fgtsOpt === "sim" ? "nao" : perfil.fgtsOpt,
             })
           }
         />
-        {perfil.achou === "sim" && (
-          <AjusteDinheiro
-            id="ajuste-preco"
-            rotulo="Preço do imóvel"
-            valor={perfil.valor}
-            min={30000}
-            max={1500000}
-            passo={5000}
-            onChange={(v) => ajustar("preco", { valor: v })}
-          />
-        )}
-      </div>
-
-      <details
-        open={aberto}
-        onToggle={(e) => setAberto((e.currentTarget as HTMLDetailsElement).open)}
-        className="group mx-5 mb-2 border-t border-line sm:mx-6"
-      >
-        <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between py-3 font-semibold [&::-webkit-details-marker]:hidden">
-          Mais respostas pra mudar
-          <span aria-hidden className="font-mono text-lg transition-transform group-open:rotate-45">
-            +
-          </span>
-        </summary>
-        <div className="flex flex-col gap-5 pb-4">
-          <Escolha
-            rotulo="Vai comprar"
-            valor={perfil.quem}
-            opcoes={[
-              ["sozinho", "Sozinho"],
-              ["junto", "Com outra pessoa"],
-            ]}
-            onChange={(v) => ajustar("quem", { quem: v })}
-          />
-          <AjusteNumero
-            id="ajuste-idade"
-            rotulo={junto ? "Idade de quem é mais velho" : "Sua idade"}
-            valor={perfil.idade ?? 30}
-            min={18}
-            max={80}
-            onChange={(v) => ajustar("idade", { idade: v })}
-          />
+        <AjusteNumero
+          id="ajuste-idade"
+          rotulo={junto ? "Idade de quem é mais velho" : "Sua idade"}
+          valor={perfil.idade ?? 30}
+          min={18}
+          max={80}
+          onChange={(v) => ajustar("idade", { idade: v })}
+        />
+        {perfil.dividasOpt === "sim" && (
           <AjusteDinheiro
             id="ajuste-dividas"
             rotulo="Parcelas que já paga por mês"
             ajuda="Carro, empréstimo, consignado, cartão parcelado."
-            valor={perfil.dividasOpt === "sim" ? perfil.dividas : 0}
+            valor={perfil.dividas}
             min={0}
             max={Math.max(1000, Math.round((perfil.renda * 0.5) / 100) * 100)}
             passo={50}
-            onChange={(v) => ajustar("dividas", { dividas: v, dividasOpt: v > 0 ? "sim" : "nao" })}
+            onChange={(v) => ajustar("dividas", { dividas: v })}
           />
-          {perfil.fgtsOpt !== "nao" && (
-            <Escolha
-              rotulo="3 anos ou mais de carteira assinada, somando os empregos"
-              valor={perfil.fgts3}
-              opcoes={[
-                ["sim", "Sim"],
-                ["nao", "Não"],
-                ["naosei", "Não sei"],
-              ]}
-              onChange={(v) => ajustar("fgts3", { fgts3: v })}
+        )}
+      </Bloco>
+
+      <Bloco titulo="O imóvel">
+        <Escolha
+          rotulo="Já tem um imóvel em vista?"
+          valor={perfil.achou ?? "nao"}
+          opcoes={[
+            ["nao", "Ainda procurando"],
+            ["sim", "Sim, já achei"],
+          ]}
+          onChange={(v) =>
+            ajustar("achou", {
+              achou: v,
+              // Começa num preço que a renda aguenta, pra não abrir em branco.
+              ...(v === "sim" && !perfil.valor ? { valor: !r.blocked && r.Vbank ? Math.round(r.Vbank / 5000) * 5000 : 200000 } : {}),
+            })
+          }
+        />
+        {perfil.achou === "sim" ? (
+          <>
+            <AjusteDinheiro
+              id="ajuste-preco"
+              rotulo="Preço pedido pelo vendedor"
+              valor={perfil.valor}
+              min={30000}
+              max={1500000}
+              passo={5000}
+              onChange={(v) => ajustar("preco", { valor: v })}
             />
-          )}
-          <Escolha
-            rotulo={junto ? "Algum de vocês já tem imóvel no nome" : "Já tem imóvel no seu nome"}
-            valor={perfil.imovel}
-            opcoes={[
-              ["nao", "Não"],
-              ["sim", "Sim"],
-            ]}
-            onChange={(v) => ajustar("imovel", { imovel: v })}
-          />
-          <Escolha
-            rotulo="Nome limpo"
-            valor={perfil.nome}
-            opcoes={[
-              ["sim", "Sim"],
-              ["nao", "Tenho restrição"],
-              ["naosei", "Não sei"],
-            ]}
-            onChange={(v) => ajustar("nome", { nome: v })}
-          />
-          <Escolha
-            rotulo="Já achou o imóvel"
-            valor={perfil.achou}
-            opcoes={[
-              ["nao", "Ainda procurando"],
-              ["sim", "Já achei"],
-            ]}
-            onChange={(v) =>
-              ajustar("achou", {
-                achou: v,
-                // Ao dizer "já achei" aqui, começa num preço que a renda aguenta, pra não abrir em branco.
-                ...(v === "sim" && !perfil.valor && !r.blocked && r.Vbank ? { valor: Math.round(r.Vbank / 5000) * 5000 } : {}),
-              })
-            }
-          />
-          {perfil.achou === "sim" && (
             <Escolha
-              rotulo="O imóvel é"
+              rotulo="Ele é"
               valor={perfil.tipo}
               opcoes={[
                 ["usado", "Usado"],
@@ -204,7 +191,51 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Pr
               ]}
               onChange={(v) => ajustar("tipo", { tipo: v })}
             />
-          )}
+            <Escolha
+              rotulo="O banco já avaliou esse imóvel?"
+              ajuda="Ele financia sobre o valor da avaliação, sem passar do preço."
+              valor={perfil.avaliou ? "sim" : "nao"}
+              opcoes={[
+                ["nao", "Ainda não"],
+                ["sim", "Sim, tenho o laudo"],
+              ]}
+              onChange={(v) => ajustar("avaliou", { avaliou: v === "sim", ...(v === "sim" && !perfil.avalReal ? { avalReal: perfil.valor } : {}) })}
+            />
+            {perfil.avaliou && (
+              <>
+                <AjusteDinheiro
+                  id="ajuste-avaliacao"
+                  rotulo="Valor da avaliação"
+                  valor={perfil.avalReal}
+                  min={Math.round((perfil.valor * 0.5) / 1000) * 1000}
+                  max={Math.max(60000, Math.round((perfil.valor * 1.5) / 1000) * 1000)}
+                  passo={1000}
+                  onChange={(v) => ajustar("avaliacao", { avalReal: v })}
+                />
+                <DicaAvaliacao preco={perfil.valor} avaliacao={perfil.avalReal} />
+              </>
+            )}
+          </>
+        ) : (
+          <p className="text-[15px] text-ink-2">A conta mostra até quanto você pode buscar. Achou um? Marque &ldquo;Sim&rdquo; e veja a conta dele.</p>
+        )}
+      </Bloco>
+
+      <details
+        open={aberto}
+        onToggle={(e) => setAberto((e.currentTarget as HTMLDetailsElement).open)}
+        className="group mx-5 border-t border-line sm:mx-6"
+      >
+        <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between py-3 font-semibold [&::-webkit-details-marker]:hidden">
+          {dadas.length ? "Mudar outras respostas" : "Refazer as perguntas"}
+          <span aria-hidden className="font-mono text-lg transition-transform group-open:rotate-45">
+            +
+          </span>
+        </summary>
+        <div className="flex flex-col gap-5 pb-4">
+          {dadas.map((e) => (
+            <Escolha key={e.chave} rotulo={e.rotulo} valor={e.valor} opcoes={e.opcoes} onChange={(v) => ajustar(e.chave, e.patch(v))} />
+          ))}
           <button type="button" onClick={onRefazer} className="self-start text-[15px] font-semibold underline underline-offset-4">
             Prefiro refazer as perguntas do começo
           </button>
@@ -218,8 +249,107 @@ export function Ajustar({ perfil, r, mudar, onRefazer, quitando, className }: Pr
   );
 }
 
+function Bloco({ titulo, children }: { titulo: string; children: ReactNode }) {
+  return (
+    <div className="mx-5 mt-5 flex flex-col gap-5 border-t border-line pt-4 sm:mx-6">
+      <p className="font-mono text-xs uppercase tracking-[0.07em] text-ink-2">{titulo}</p>
+      {children}
+    </div>
+  );
+}
+
+type Extra = {
+  chave: string;
+  rotulo: string;
+  ajuda?: string;
+  valor: string | null;
+  mostrar: boolean;
+  opcoes: [string, string][];
+  patch: (v: string) => Partial<Perfil>;
+};
+
+/** As respostas que ficaram fora da entrada curta. `valor === null`: ainda não respondida. */
+function respostasExtras(p: Perfil, junto: boolean): Extra[] {
+  const temFgts = p.fgtsOpt === "sim" || p.fgtsOpt === "naosei";
+  return [
+    {
+      chave: "dividasOpt",
+      rotulo: junto ? "Vocês pagam alguma parcela hoje?" : "Você paga alguma parcela hoje?",
+      ajuda: "Carro, empréstimo, consignado, cartão parcelado. O banco desconta do espaço da parcela.",
+      valor: p.dividasOpt,
+      mostrar: true,
+      opcoes: [
+        ["nao", "Não pago"],
+        ["sim", "Sim, pago"],
+      ],
+      patch: (v) => {
+        // "Sim" abre o campo do valor em "Seus números": leva a pessoa até ele.
+        if (v === "sim") setTimeout(() => irParaAjuste("ajuste-dividas"), 60);
+        return { dividasOpt: v as Perfil["dividasOpt"], ...(v === "nao" ? { dividas: 0 } : {}) };
+      },
+    },
+    {
+      chave: "fgts3",
+      rotulo: "Somando os empregos, tem 3 anos ou mais de carteira assinada?",
+      ajuda: "É a regra pra usar o FGTS na compra.",
+      valor: p.fgts3,
+      mostrar: temFgts,
+      opcoes: [
+        ["sim", "Sim"],
+        ["nao", "Não"],
+        ["naosei", "Não sei"],
+      ],
+      patch: (v) => ({ fgts3: v as Perfil["fgts3"] }),
+    },
+    {
+      chave: "imovel",
+      rotulo: junto ? "Algum de vocês já tem imóvel no nome?" : "Você já tem algum imóvel no seu nome?",
+      ajuda: "Quem já tem não entra no Minha Casa Minha Vida.",
+      valor: p.imovel,
+      mostrar: true,
+      opcoes: [
+        ["nao", "Não"],
+        ["sim", "Sim"],
+      ],
+      patch: (v) => ({ imovel: v as Perfil["imovel"] }),
+    },
+    {
+      chave: "nome",
+      rotulo: "Seu nome está limpo?",
+      ajuda: "Com o nome negativado, o banco recusa o crédito.",
+      valor: p.nome,
+      mostrar: true,
+      opcoes: [
+        ["sim", "Sim"],
+        ["nao", "Tenho restrição"],
+        ["naosei", "Não sei"],
+      ],
+      patch: (v) => ({ nome: v as Perfil["nome"] }),
+    },
+  ];
+}
+
+/** O que a avaliação muda, em uma frase (o banco empresta sobre o laudo, nunca acima do preço). */
+function DicaAvaliacao({ preco, avaliacao }: { preco: number; avaliacao: number }) {
+  if (!preco || !avaliacao) return null;
+  const dif = Math.round((avaliacao / preco - 1) * 100);
+  const [cor, texto] =
+    dif >= 25
+      ? ["bg-mark", <>Avaliado <b>{dif}% acima</b> do preço: o banco pode financiar o preço inteiro. Sobram só ITBI e cartório.</>]
+      : dif > 0
+        ? ["bg-mark-soft", <>Avaliado <b>{dif}% acima</b> do preço: a sua entrada diminui. A partir de 25% acima, ela pode zerar.</>]
+        : dif < 0
+          ? ["bg-bad-soft", <>Avaliado <b>{-dif}% abaixo</b> do preço: o banco calcula sobre o laudo, e a entrada sobe.</>]
+          : ["bg-paper", <>Avaliado pelo mesmo valor do preço: a conta segue a regra de sempre.</>];
+  return (
+    <p role="status" className={cn("-mt-2 rounded-lg px-3 py-2.5 text-[15px] [&_b]:font-semibold", cor)}>
+      {texto}
+    </p>
+  );
+}
+
 /** O número principal, preso no alto da tela enquanto o painel está à vista. */
-function Resumo({ r, quitando }: { r: R | Bloqueio; quitando?: boolean }) {
+function Resumo({ r, quitando, faltam }: { r: R | Bloqueio; quitando?: boolean; faltam: number }) {
   let rotulo: string;
   let numero: string;
   let fatos: string[] = [];
@@ -249,6 +379,11 @@ function Resumo({ r, quitando }: { r: R | Bloqueio; quitando?: boolean }) {
             <span key={f}>{f}</span>
           ))}
         </span>
+      )}
+      {faltam > 0 && (
+        <a href="#completar" className="mt-1.5 self-start text-[13px] font-semibold underline underline-offset-2">
+          Estimativa inicial: {faltam === 1 ? "falta 1 resposta" : `faltam ${faltam} respostas`} ↓
+        </a>
       )}
     </div>
   );
@@ -384,18 +519,23 @@ function Linha({
 
 function Escolha<T extends string>({
   rotulo,
+  ajuda,
   valor,
   opcoes,
   onChange,
 }: {
   rotulo: string;
+  ajuda?: string;
   valor: T | null;
   opcoes: [T, string][];
   onChange: (v: T) => void;
 }) {
   return (
     <div role="group" aria-label={rotulo} className="flex flex-col gap-2">
-      <span className="text-[15px] font-semibold">{rotulo}</span>
+      <span className="flex flex-col text-[15px] font-semibold">
+        {rotulo}
+        {ajuda && <span className="text-sm font-normal text-ink-2">{ajuda}</span>}
+      </span>
       <div className="flex flex-wrap gap-2">
         {opcoes.map(([v, t]) => (
           <button

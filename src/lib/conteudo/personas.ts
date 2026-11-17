@@ -48,7 +48,7 @@ export const PERSONAS: Persona[] = [
       "Explicar SAC, faixa e entrada para cada cliente toma o dia.",
     ],
     ajuda: [
-      { titulo: "Simulador para o atendimento", texto: "As regras da Caixa em 10 perguntas, com o próximo passo do cliente.", href: SIMULADOR },
+      { titulo: "Simulador para o atendimento", texto: "As regras da Caixa em 4 perguntas rápidas, com o próximo passo do cliente.", href: SIMULADOR },
       { titulo: "Posts prontos", texto: "Cards 1080×1350 com legenda para copiar.", href: "/duvide/corretor/" },
       { titulo: "Guias para mandar no WhatsApp", texto: "Cada dúvida do cliente tem uma página com resposta curta.", href: "/guias/" },
       { titulo: "Preço do m² real", texto: "Mapa de preço pago por distrito, para conversar com dados.", href: "/metro-quadrado-sao-paulo/" },

@@ -123,7 +123,7 @@ export const TEXTOS_FERRAMENTAS: Record<string, Texto> = {
       { q: "Serve para o Minha Casa Minha Vida?", a: "Sim. O simulador descobre sua faixa pela renda e já usa os juros e o teto de imóvel dela." },
       { q: "A simulação é aprovação?", a: "Não. É uma estimativa educativa; a aprovação depende da análise do banco." },
       { q: "Qual o prazo máximo do financiamento na Caixa?", a: "Até 420 meses (35 anos), desde que a sua idade mais o prazo não passem de 80 anos e 6 meses." },
-      { q: "Precisa de cadastro para simular?", a: "Aqui, não: são umas 10 perguntas, sem CPF e sem cadastro. No banco, a simulação oficial e a análise de crédito pedem os seus dados." },
+      { q: "Precisa de cadastro para simular?", a: "Aqui, não: são 4 perguntas rápidas, sem CPF e sem cadastro. No banco, a simulação oficial e a análise de crédito pedem os seus dados." },
       { q: "Dá para simular financiamento sem entrada?", a: "Dá: informe o preço e a avaliação esperada. Se o banco avaliar o imóvel 25% ou mais acima do preço, ele financia o valor inteiro, e você paga só ITBI e cartório." },
       { q: "O simulador considera o FGTS?", a: "Sim. Com 3 anos de carteira assinada, o saldo pode entrar na entrada, e quem tem esse tempo de FGTS ganha juros um pouco menores nas faixas 1 a 3 do Minha Casa Minha Vida." },
     ],

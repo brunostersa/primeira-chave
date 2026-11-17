@@ -388,7 +388,8 @@ export function precoQueARendaAguenta(s: Perfil, r: Resultado): number | null {
 export function proximosPassos(s: Perfil, r: Resultado | Bloqueio, poupancaMensal: number, fmt: (v: number) => string): Tarefa[] {
   const t: Tarefa[] = [];
   if (s.nome === "nao") t.push({ titulo: "Regularize seu CPF antes de tudo", texto: "Com restrição, o banco recusa. Negocie as dívidas em aberto. É o passo que destrava o resto." });
-  if (s.nome === "naosei") t.push({ titulo: "Consulte seu CPF, de graça", texto: "No app da Serasa ou no Registrato, do Banco Central. Leva 5 minutos." });
+  // Sem resposta (a entrada curta não pergunta), vale o mesmo conselho do "não sei".
+  if (s.nome === "naosei" || s.nome === null) t.push({ titulo: "Consulte seu CPF, de graça", texto: "No app da Serasa ou no Registrato, do Banco Central. Leva 5 minutos." });
   if (s.fgtsOpt === "naosei") t.push({ titulo: "Veja o saldo do seu FGTS", texto: "No app FGTS. Esse dinheiro pode entrar na entrada e mudar seu resultado." });
   if (s.fgts3 === "naosei") t.push({ titulo: "Confira seu tempo de carteira", texto: "Na Carteira de Trabalho Digital. Com 3 anos somados, você usa o FGTS e paga menos juros." });
   if (!r.blocked && r.dividas > s.renda * 0.05) {

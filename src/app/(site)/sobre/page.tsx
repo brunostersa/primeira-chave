@@ -154,7 +154,7 @@ export default function SobrePage() {
           <Card variant="mark" className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-1">
               <b className="font-display text-2xl leading-tight">Comece pelo seu número.</b>
-              <span>Umas 10 perguntas, sem cadastro.</span>
+              <span>4 perguntas rápidas, sem cadastro.</span>
             </div>
             <Button asChild>
               <Link href={simulador.slug}>Abrir o simulador</Link>

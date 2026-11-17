@@ -89,7 +89,7 @@ const TEXTOS = [
   {
     titulo: "Para mandar ao cliente",
     texto:
-      "Oi! Antes da gente conversar sobre o financiamento, faz essa simulação rapidinho: são umas 10 perguntas, sem cadastro, e mostra quanto você pode comprar, a entrada e o próximo passo. Depois me manda o resultado que eu te ajudo com o resto.",
+      "Oi! Antes da gente conversar sobre o financiamento, faz essa simulação rapidinho: são 4 perguntas rápidas, sem cadastro, e mostra quanto você pode comprar, a entrada e o próximo passo. Depois me manda o resultado que eu te ajudo com o resto.",
   },
   {
     titulo: "Para o story",
