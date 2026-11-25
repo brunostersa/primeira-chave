@@ -246,7 +246,7 @@
     "titulo": "SAC ou PRICE",
     "data": "2026-11-24",
     "hora": "12:00",
-    "status": "aprovado",
+    "status": "publicado",
     "imagens": [
       "https://primeirachave.com.br/ig/17-1.jpg",
       "https://primeirachave.com.br/ig/17-2.jpg",
@@ -257,7 +257,8 @@
       "https://primeirachave.com.br/ig/17-7.jpg"
     ],
     "legenda": "O banco perguntou: “SAC ou PRICE?” É uma escolha de R$ 146 mil.\n\nPRICE = a parcela fica igual. No começo, quase tudo é juro.\nSAC = você abate a mesma parte da dívida todo mês. A parcela começa alta e vai caindo.\n\nPra R$ 240 mil financiados em 35 anos:\n- PRICE: R$ 1.800 do começo ao fim. Total: R$ 753 mil\n- SAC: começa em R$ 2.270 e termina em R$ 621. Total: R$ 607 mil\n\nEntão SAC sempre? Calma. O banco olha a PRIMEIRA parcela, e no SAC ela é a mais alta. Pra esse valor, a PRICE pede R$ 6.000 de renda; o SAC, uns R$ 7.570.\n\nA regra do João: se a 1ª parcela do SAC cabe com folga, ele costuma valer mais. Se não cabe, PRICE agora e amortiza com FGTS ou extra quando der.\n\nVeja a sua primeira parcela no simulador antes de escolher. Link na bio.\n\n#primeiroimovel #financiamentoimobiliario #minhacasaminhavida #casapropria #comprarimovel #sacouprice #tabelaprice #amortizacao",
-    "comentario": "Exemplo: R$ 239.772 financiados, MCMV Faixa 3 (8,16% a.a.), 420 meses, idade 30. Totais com seguros MIP e DFI e taxa de administração, sem TR. Regras conferidas no simulador da Caixa em out/2026."
+    "comentario": "Exemplo: R$ 239.772 financiados, MCMV Faixa 3 (8,16% a.a.), 420 meses, idade 30. Totais com seguros MIP e DFI e taxa de administração, sem TR. Regras conferidas no simulador da Caixa em out/2026.",
+    "media_id": "17901759762398796"
   },
   {
     "n": 18,
