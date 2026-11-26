@@ -1,0 +1,50 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Carrossel de frases</title>
+<style>
+@font-face{font-family:Outfit;src:url(../../../infoproduto/fontes/outfit-latin.woff2);font-weight:100 900}
+@font-face{font-family:Figtree;src:url(../../../infoproduto/fontes/figtree-latin.woff2);font-weight:300 900}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-500.woff2);font-weight:500}
+:root{--paper:#f2f3f1;--ink:#121418;--grid:#e3e9ee;--mark:#f4d23f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:#121418}
+.foto{position:absolute;inset:0;background-size:cover}
+.veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,20,24,.15) 0%,rgba(18,20,24,.1) 35%,rgba(18,20,24,.82) 72%,rgba(18,20,24,.94) 100%)}
+.eb{position:absolute;left:80px;top:80px;font:500 26px/1 "IBM Plex Mono";letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(18,20,24,.55);padding:12px 16px;border-radius:10px}
+.num{position:absolute;right:80px;top:80px;font:500 26px/1 "IBM Plex Mono";color:#fff;background:rgba(18,20,24,.55);padding:12px 16px;border-radius:10px}
+.frase{position:absolute;left:80px;right:80px;bottom:190px;font:300 78px/1.08 Outfit;letter-spacing:-.02em;color:#fff}
+.frase b{font-weight:600}
+.g{background:linear-gradient(transparent 60%,var(--mark) 60%,var(--mark) 92%,transparent 92%);padding:0 6px;margin:0 -6px}
+.frase .g{color:var(--ink);background:var(--mark);padding:0 10px;margin:0 -4px;border-radius:8px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.assina{position:absolute;left:80px;bottom:90px;font:500 26px/1 "IBM Plex Mono";color:rgba(255,255,255,.85)}
+.capa .frase{font-size:104px;bottom:230px}
+.cta{background-color:var(--paper);background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:70px 70px}
+.cta .frase{color:var(--ink);top:300px;bottom:auto}
+.cta .assina{color:var(--ink)}
+.cta .botao{position:absolute;left:80px;right:80px;top:760px;background:var(--mark);border:3px solid var(--ink);border-radius:22px;padding:40px 44px;font:400 60px/1.1 Outfit;color:var(--ink)}
+.cta .botao span{display:block;margin-top:18px;font:500 36px/1 Figtree}
+.cta .nota{position:absolute;left:80px;right:80px;top:1080px;font:400 28px/1.35 Figtree;color:#5a6069}
+.seta{position:absolute;right:80px;bottom:84px;font:500 26px/1 "IBM Plex Mono";color:#fff}
+</style></head><body><script>
+const F="../../../public/fotos/";
+const C={
+ 1:{titulo:"Antes do primeiro imóvel",capa:'Antes do primeiro imóvel, <b class="g">lembre</b>:',fc:["telhado-e-ceu","50% 30%"],
+  s:[['O banco empresta sobre a <b class="g">avaliação</b>, não sobre o preço.',"fachada-amarela","30% 50%"],
+     ['Simulação <b class="g">não é aprovação</b>.',"casa-isolada","50% 40%"],
+     ['A entrada não é o único dinheiro: separe <b class="g">uns 5%</b> para imposto e cartório.',"varandas-amarelas","70% 50%"],
+     ['A parcela pode ir até 30% da renda. <b class="g">O resto da sua vida</b> também precisa caber.',"grade-de-janelas","50% 50%"],
+     ['Pagar o sinal sem cláusula de crédito negado é <b class="g">apostar o sinal</b>.',"beiral-laranja","50% 40%"],
+     ['Amortizar <b class="g">reduzindo o prazo</b> é o que mais economiza juros.',"volumes-em-degrau","50% 50%"]]},
+ 2:{titulo:"Antes de assinar",capa:'Antes de <b class="g">assinar</b>, lembre:',fc:["duas-faces","50% 50%"],
+  s:[['Quem diz quanto vale o imóvel é o <b class="g">engenheiro do banco</b>.',"varandas-amarelas","20% 50%"],
+     ['Reforma fora da matrícula <b class="g">trava a avaliação</b>.',"beiral-laranja","30% 70%"],
+     ['Dívida nova durante a análise pode <b class="g">derrubar o financiamento</b>.',"grade-de-janelas","20% 30%"],
+     ['Nome limpo vem <b class="g">antes da visita</b>.',"telhado-e-ceu","50% 80%"],
+     ['No primeiro imóvel, o registro sai <b class="g">pela metade</b>. Confira na guia.',"fachada-amarela","80% 50%"],
+     ['O ITBI muda de cidade para cidade. <b class="g">Pergunte na sua prefeitura</b>.',"casa-isolada","50% 70%"]]}};
+const q=new URLSearchParams(location.search),c=C[q.get("c")||1],s=+(q.get("s")||1),N=c.s.length+2;
+const foto=(n,p)=>`<div class="foto" style="background-image:url(${F}${n}.webp);background-position:${p}"></div><div class="veu"></div>`;
+let h="";
+if(s===1)h=`<div class="capa">${foto(...c.fc)}<div class="frase">${c.capa}</div><div class="assina">primeirachave.com.br</div><div class="seta">arraste →</div></div>`;
+else if(s<N){const x=c.s[s-2];h=`${foto(x[1],x[2])}<div class="eb">${c.titulo}</div><div class="num">${s-1}/6</div><div class="frase">${x[0]}</div><div class="assina">primeirachave.com.br</div>`}
+else h=`<div class="cta" style="position:absolute;inset:0"><div class="frase" style="font-size:96px">E no <b class="g">seu</b> caso?</div><div class="botao"><b>Descubra o seu número</b><span>Link na bio.</span></div><div class="nota">Conteúdo educativo. Não é aprovação de crédito.</div><div class="assina">primeirachave.com.br</div></div>`;
+document.body.innerHTML=h;
+</script></body></html>

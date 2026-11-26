@@ -1,0 +1,295 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Reels rápidos: motion Planta</title>
+<style>
+@font-face{font-family:Outfit;src:url(../../../infoproduto/fontes/outfit-latin.woff2);font-weight:100 900}
+@font-face{font-family:Figtree;src:url(../../../infoproduto/fontes/figtree-latin.woff2);font-weight:300 900}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-400.woff2);font-weight:400}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-500.woff2);font-weight:500}
+:root{--paper:#f2f3f1;--surface:#fff;--ink:#121418;--ink-2:#3a3f47;--muted:#5a6069;--grid:#e3e9ee;--mark:#f4d23f;--mark-soft:#fbefb4;--planta:#c6d6e3;--planta-deep:#6f8ca5;--barro:#eeb194;--line:#c9cdc7;--bad:#c2410c;--ok:#2f7d4f;
+ --f-display:Outfit,sans-serif;--f-sans:Figtree,sans-serif;--f-mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background-color:var(--paper);color:var(--ink);
+ background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:70px 70px}
+.abs{position:absolute}
+.eyebrow{font:500 26px/1 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.h{font:300 92px/1.02 var(--f-display);letter-spacing:-.02em}.h b{font-weight:600}
+.grifo{background:linear-gradient(transparent 58%,var(--mark) 58%,var(--mark) 92%,transparent 92%);padding:0 6px;margin:0 -6px}
+.t{font:400 40px/1.25 var(--f-sans)}.t b{font-weight:600}
+.mono{font-family:var(--f-mono);font-weight:500}
+.card{background:var(--surface);border:3px solid var(--ink);border-radius:22px}
+.cardp{background:var(--planta);border:3px solid var(--ink);border-radius:22px}
+.hachura{background-color:var(--mark-soft);background-image:repeating-linear-gradient(-45deg,var(--ink) 0 2.5px,transparent 2.5px 16px)}
+.ic svg{width:100%;height:100%;display:block}
+.cta{left:64px;right:64px;background:var(--mark);border:3px solid var(--ink);border-radius:20px;padding:34px 38px;font:400 54px/1.1 var(--f-display);letter-spacing:-.01em}.cta b{font-weight:600}.cta span{display:block;margin-top:16px;font:500 34px/1 var(--f-sans)}
+.assina{right:64px;bottom:120px;display:flex;align-items:center;gap:14px;font:500 26px/1 var(--f-mono)}
+.assina .jo{width:96px}.assina .jo svg{width:100%;height:auto}
+.cota{height:3px;background:var(--ink)}.cota::before,.cota::after{content:"";position:absolute;top:-14px;width:3px;height:31px;background:var(--ink)}.cota::before{left:0}.cota::after{right:0}
+.lbl{font:500 30px/1 var(--f-mono);background:var(--paper);padding:0 12px}
+.item{left:64px;right:64px;display:flex;gap:26px;align-items:center;font:400 42px/1.22 var(--f-sans)}.item b{font-weight:600}
+.item .ic{width:78px;height:78px;flex:none;border:3px solid var(--ink);border-radius:18px;padding:12px;background:var(--surface)}
+</style></head><body>
+<div id="palco"></div>
+<script src="../07-rapidos/icones.js"></script>
+<script src="../05-salario-imovel-canteiro/artes.js"></script>
+<script>
+const R0=new URLSearchParams(location.search).get("r")||"docs";const DUR={"b-sem-entrada":28,"b-nome-sujo":23.5,"b-autonomo":27,"b-cartorio":24,"b-itbi":28.5,"b-usado":24.3,"b-planta":25.8,"b-aluguel":26.5}[R0]||15;window.DUR=DUR;window.GOLPES=[];
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>cl((t-a)/(b-a)),eo=x=>1-Math.pow(1-x,3),eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const P=document.getElementById("palco");
+const el=(html,css="",cls="abs")=>{const d=document.createElement("div");d.className=cls;d.style.cssText=css;d.innerHTML=html;P.appendChild(d);return d};
+const entra=(e,t,a,d=.5,dy=40)=>{const p=eo(seg(t,a,a+d));e.style.opacity=p;e.style.transform=`translateY(${(1-p)*dy}px)`};
+const pop=(e,t,a,d=.45)=>{const p=seg(t,a,a+d);e.style.opacity=cl(p*3);e.style.transform=`scale(${p?back(p):0})`};
+const carimbar=(e,t,a,rot=-7)=>{const s=seg(t,a,a+.45);e.style.opacity=cl(s*4);e.style.transform=`rotate(${rot*s}deg) scale(${s?1.6-.6*eo(s):1.6})`};
+const R=new URLSearchParams(location.search).get("r")||"docs";
+const assina=el(`<div class="jo">${ARTE["joao-frente-curioso"]}</div>primeirachave.com.br`,"","abs assina");
+const cta=(html,a)=>{const c=el(html,"bottom:330px","abs cta");return t=>entra(c,t,a,.6,60)};
+const golpe=(...s)=>window.GOLPES.push(...s);
+const fmtN=n=>Math.round(n).toLocaleString("pt-BR");
+const ICB=n=>`<div class="ic" style="width:64px;height:64px;flex:none;padding:10px;border:3px solid var(--ink);border-radius:16px;background:var(--surface)">${ICONE[n]}</div>`;
+let cena;
+
+// L1: a pasta do financiamento, com caixas que vão sendo marcadas
+if(R==="docs"){
+ const h=el('Vai financiar? Separe <b class="grifo">estes documentos</b>.',"left:64px;top:190px;width:950px","abs h");
+ const pasta=el(`<div class="abs" style="left:50%;top:-30px;transform:translateX(-50%);width:260px;height:56px;background:var(--ink);border-radius:14px"></div>
+  <div class="mono" style="font-size:26px;letter-spacing:.07em;color:var(--ink-2);margin-top:20px">PASTA DO FINANCIAMENTO</div>`,
+  "left:64px;right:64px;top:560px;height:800px;padding:36px 44px","abs card");
+ const linhas=[["RG, CPF e <b>certidão de estado civil</b>","nascimento ou casamento"],["<b>Comprovante de renda</b>","holerites, ou 6 meses de extrato + IR"],["<b>Comprovante de residência</b>","atual"],["<b>Extrato do FGTS</b>","se for usar"]]
+  .map((x,i)=>el(`<div class="box" style="width:62px;height:62px;flex:none;border:3px solid var(--ink);border-radius:12px;background:var(--paper);position:relative"><div class="ic ok abs" style="left:4px;top:4px;width:48px;height:48px">${ICONE.ok}</div></div>
+   <div><div style="font:400 40px/1.2 var(--f-sans)">${x[0]}</div><div style="font:400 29px/1.2 var(--f-sans);color:var(--muted);margin-top:6px">${x[1]}</div></div>`,
+   `left:108px;right:108px;top:${680+i*150}px;display:flex;gap:28px;align-items:center`,"abs"));
+ const nota=el("Cada banco pode pedir algo a mais.","left:108px;top:1290px;font:400 28px/1.2 var(--f-sans);color:var(--muted)","abs");
+ const selo=el("pasta<br>pronta","right:110px;top:1120px;border:5px solid var(--ink);border-radius:14px;padding:14px 22px;font:600 44px/1.02 var(--f-display);text-transform:uppercase;background:rgba(251,239,180,.95);transform-origin:center","abs");
+ const T=[1.8,3.2,4.6,6.0],K=T.map(v=>v+.7);
+ const c=cta("<b>Salve</b> para não esquecer nenhum.<span>Link na bio.</span>",11.4);
+ golpe(...K,8.4,11.4);
+ cena=t=>{entra(h,t,.1,.6);entra(pasta,t,.9,.6,60);
+  linhas.forEach((e,i)=>{entra(e,t,T[i]);const k=e.querySelector(".ok");const p=seg(t,K[i],K[i]+.3);k.style.opacity=p;k.style.transform=`scale(${p?back(p):0})`;
+   e.querySelector(".box").style.background=t>K[i]?"var(--mark)":"var(--paper)"});
+  entra(nota,t,7.2);carimbar(selo,t,8.4);c(t)}
+}
+
+// L2: o recibo que vai sendo impresso
+if(R==="custos"){
+ const eb=el("Imóvel de R$ 200 mil · São Paulo","left:64px;top:190px","abs eyebrow");
+ const h=el('Além da entrada, <b class="grifo">quanto sai</b> do bolso?',"left:64px;top:240px;width:950px","abs h");
+ const itens=[["Imposto da prefeitura (ITBI)","3% · varia por cidade","6.000"],["Registro no cartório","já com o desconto de 1º imóvel","2.200"],["Avaliação do banco","taxa da vistoria","1.000"]];
+ const rec=el(`<div style="text-align:center" class="mono"><div style="font-size:26px;letter-spacing:.1em">CUSTOS DA COMPRA</div><div style="font-size:22px;color:var(--muted);margin-top:8px">além da entrada</div></div>
+  <div style="border-top:3px dashed var(--ink);margin:30px 0 10px"></div>
+  ${itens.map(x=>`<div class="lin" style="display:flex;justify-content:space-between;align-items:flex-end;padding:22px 0;border-bottom:2px dashed var(--line)"><div><div style="font:500 36px/1.15 var(--f-sans)">${x[0]}</div><div style="font:400 26px/1.2 var(--f-sans);color:var(--muted);margin-top:6px">${x[1]}</div></div><div class="mono" style="font-size:40px;white-space:nowrap">≈ ${x[2]}</div></div>`).join("")}
+  <div class="tot" style="display:flex;justify-content:space-between;align-items:center;margin-top:30px"><div class="mono" style="font-size:34px;letter-spacing:.06em">TOTAL</div><div class="mono" style="font-size:64px;background:var(--mark);padding:2px 16px;border-radius:10px">≈ R$ <span id="tot">0</span> mil</div></div>
+  <div class="mono fora" style="margin-top:26px;font-size:24px;color:var(--ink-2);text-align:center">NADA DISSO ENTRA NO FINANCIAMENTO</div>`,
+  "left:100px;right:100px;top:560px;padding:40px 46px 44px;background:var(--surface);border:3px solid var(--ink);border-radius:8px 8px 0 0;clip-path:inset(0 0 100% 0)","abs");
+ const nota=el("Estimativa do simulador: financiando R$ 160 mil, ITBI de 3%.","left:64px;right:64px;top:1340px;font:400 24px/1.3 var(--f-sans);color:var(--muted)","abs");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",11.6);
+ const L=[2.6,4.0,5.4];golpe(...L,7.2,9.0,11.6);
+ cena=t=>{entra(eb,t,.1);entra(h,t,.3,.6);
+  // o recibo sai da impressora de cima para baixo
+  const imp=eio(seg(t,1.4,7.4));rec.style.clipPath=`inset(0 0 ${100-100*imp}% 0)`;
+  rec.querySelectorAll(".lin").forEach((e,i)=>{const p=eo(seg(t,L[i],L[i]+.4));e.style.opacity=p});
+  const tp=eo(seg(t,7.2,8.2));rec.querySelector(".tot").style.opacity=cl(seg(t,7.2,7.5));document.getElementById("tot").textContent=Math.round(9*tp);
+  rec.querySelector(".fora").style.opacity=cl(seg(t,9,9.4));entra(nota,t,9.6);c(t);nota.style.opacity=Math.min(nota.style.opacity,1-seg(t,11.2,11.6))}
+}
+
+// L3: medidor "pronto para visitar" que enche a cada passo
+if(R==="visita"){
+ const h=el('<b class="grifo">Antes de visitar</b> o primeiro imóvel:',"left:64px;top:190px;width:950px","abs h");
+ const med=el(`<div class="eyebrow" style="margin-bottom:18px">Pronto para visitar</div>
+  <div style="position:relative;height:70px;border:3px solid var(--ink);border-radius:14px;background:var(--surface);overflow:hidden"><div id="enche" class="hachura abs" style="left:0;top:0;bottom:0;width:0"></div>
+  ${[1,2,3].map(k=>`<div class="abs" style="left:${k*25}%;top:0;bottom:0;width:3px;background:var(--ink)"></div>`).join("")}</div>
+  <div class="mono abs" id="pct" style="right:0;top:-6px;font-size:34px;padding:4px 12px;border-radius:8px">0%</div>`,
+  "left:64px;right:64px;top:520px","abs");
+ const li=[["calculadora","Saiba <b>quanto o banco te empresta</b>"],["cpf","Veja o seu nome no <b>Registrato</b>"],["cofre","Separe <b>uns 5%</b> para imposto e cartório"],["documento","Junte os <b>documentos de renda</b>"]]
+  .map((x,i)=>el(`<div class="ic">${ICONE[x[0]]}</div><div>${x[1]}</div><div class="ic ok" style="width:56px;height:56px;border:none;padding:0;background:none;margin-left:auto">${ICONE.ok}</div>`,`top:${720+i*150}px`,"abs item"));
+ const casa=el(`${ICB("casa")}<div style="font:600 38px/1.15 var(--f-display)">Agora sim: visite com o seu número na mão.</div>`,"left:64px;right:64px;top:1330px;display:flex;gap:22px;align-items:center;background:var(--mark-soft);border:3px solid var(--ink);border-radius:18px;padding:20px 26px","abs");
+ const T=[1.8,3.4,5.0,6.6];golpe(...T.map(v=>v+.6),8.4,11.8);
+ const c=cta("<b>Salve</b> antes da primeira visita.<span>Descubra o seu número no link da bio.</span>",11.8);
+ cena=t=>{entra(h,t,.1,.6);entra(med,t,.8);
+  let f=0;T.forEach((a,i)=>{f+=.25*eio(seg(t,a+.6,a+1.1))});document.getElementById("enche").style.width=f*100+"%";
+  const pc=document.getElementById("pct");pc.textContent=Math.round(f*100)+"%";pc.style.background=f>.99?"var(--mark)":"transparent";
+  li.forEach((e,i)=>{entra(e,t,T[i]);const k=e.querySelector(".ok");k.style.opacity=seg(t,T[i]+.6,T[i]+.9)});
+  entra(casa,t,8.4,.6);casa.style.opacity=Math.min(casa.style.opacity,1-seg(t,11.3,11.8));c(t)}
+}
+
+// L4: a conversa com o vendedor, em balões
+if(R==="perguntas"){
+ const h=el('<b class="grifo">4 perguntas</b> antes de fechar o imóvel.',"left:64px;top:190px;width:950px","abs h");
+ const pares=[["A matrícula está no nome de quem vende?","confira no cartório antes do sinal"],["Tem IPTU ou condomínio atrasado?","a dívida pode passar para você"],["A reforma está na matrícula?","se não estiver, a avaliação pode travar"],["Aceita esperar o banco aprovar?","combine isso no contrato"]];
+ const Y=[480,690,900,1110];
+ const bal=pares.map((x,i)=>[
+  el(`<div style="font:500 38px/1.2 var(--f-sans)">${x[0]}</div>`,`right:64px;top:${Y[i]}px;max-width:820px;background:var(--mark);border:3px solid var(--ink);border-radius:26px 26px 6px 26px;padding:22px 28px;transform-origin:right bottom`,"abs"),
+  el(`<span class="mono" style="font-size:24px;color:var(--muted);margin-right:10px">POR QUÊ</span>${x[1]}`,`left:64px;top:${Y[i]+108}px;max-width:820px;background:var(--surface);border:3px solid var(--ink);border-radius:26px 26px 26px 6px;padding:16px 24px;font:400 30px/1.2 var(--f-sans);transform-origin:left top`,"abs")]);
+ const T=[1.6,3.8,6.0,8.2];golpe(...T,...T.map(v=>v+.9),11.6);
+ const c=cta("<b>Salve</b> para a próxima visita.<span>Mais no link da bio.</span>",11.6);
+ cena=t=>{entra(h,t,.1,.6);bal.forEach((b,i)=>{pop(b[0],t,T[i],.4);pop(b[1],t,T[i]+.9,.4);
+  if(i===3){const s=seg(t,11.1,11.6);b[1].style.opacity=Math.min(b[1].style.opacity,1-s)}});c(t)}
+}
+
+// L5: as 4 chaves que precisam estar ligadas para usar o FGTS
+if(R==="fgts"){
+ const h=el('Quer usar o <b class="grifo">FGTS</b> no imóvel?',"left:64px;top:190px;width:950px","abs h");
+ const sub=el("Confira as 4 regras:","left:64px;top:420px;font:600 40px/1 var(--f-sans)","abs");
+ const regras=[["3 anos de carteira assinada","pode somar empregos"],["Sem imóvel na sua cidade","onde mora ou trabalha"],["Sem outro financiamento","da casa própria, ativo"],["Imóvel para você morar","residencial"]];
+ const sw=regras.map((x,i)=>el(`<div><div style="font:600 38px/1.15 var(--f-sans)">${x[0]}</div><div style="font:400 28px/1.2 var(--f-sans);color:var(--muted);margin-top:6px">${x[1]}</div></div>
+  <div class="trilho" style="margin-left:auto;flex:none;width:132px;height:68px;border:3px solid var(--ink);border-radius:40px;background:var(--paper);position:relative"><div class="bola abs" style="left:6px;top:6px;width:50px;height:50px;border-radius:50%;background:var(--surface);border:3px solid var(--ink)"></div></div>`,
+  `left:64px;right:64px;top:${510+i*170}px;height:148px;display:flex;align-items:center;gap:24px;padding:0 30px`,"abs card"));
+ const fim=el(`${ICB("cofre")}<div style="font:600 38px/1.15 var(--f-display)">Cumpriu as 4? O FGTS pode entrar na entrada.</div>`,"left:64px;right:64px;top:1220px;display:flex;gap:22px;align-items:center;background:var(--mark-soft);border:3px solid var(--ink);border-radius:18px;padding:20px 26px","abs");
+ const T=[1.6,3.2,4.8,6.4],L=T.map(v=>v+.8);golpe(...L,8.6,11.8);
+ const c=cta("<b>Salve</b> para conferir depois.<span>Mais no link da bio.</span>",11.8);
+ cena=t=>{entra(h,t,.1,.6);entra(sub,t,.8);
+  sw.forEach((e,i)=>{entra(e,t,T[i]);const p=eio(seg(t,L[i],L[i]+.3));e.querySelector(".bola").style.left=(6+64*p)+"px";e.querySelector(".trilho").style.background=p>.5?"var(--mark)":"var(--paper)"});
+  entra(fim,t,8.6,.6);fim.style.opacity=Math.min(fim.style.opacity,1-seg(t,11.3,11.8));c(t)}
+}
+// Busca #2, narrado: preço x avaliação
+if(R==="b-sem-entrada"){
+ const h=el('Dá pra comprar casa <b class="grifo">sem entrada</b>?',"left:64px;top:190px;width:950px","abs h");
+ const selo=el("Dá, num caso.","right:64px;top:420px;border:5px solid var(--ink);border-radius:14px;padding:12px 22px;font:600 46px/1 var(--f-display);text-transform:uppercase;background:var(--mark);transform-origin:center","abs");
+ const regra=el('O banco empresta até <b>80% da avaliação</b>,<br>não do preço.',"left:64px;top:540px;font:400 44px/1.25 var(--f-sans)","abs");
+ const W=952;
+ const barra=(rot,val,top,frac,id)=>el(`<div style="display:flex;justify-content:space-between;align-items:baseline"><div class="eyebrow">${rot}</div><div class="mono" style="font-size:44px">R$ ${val} mil</div></div>
+  <div style="position:relative;margin-top:14px;height:84px"><div id="${id}" class="abs" style="left:0;top:0;bottom:0;width:0;border:3px solid var(--ink);border-radius:14px;background:var(--planta)"></div></div>`,`left:64px;top:${top}px;width:${W*frac}px`,"abs");
+ const bp=barra("Preço do imóvel","200",720,.8,"bp"),ba=barra("Avaliação do banco","250",900,1,"ba");
+ const oit=el(`<div class="hachura" style="position:absolute;inset:0;border-radius:11px"></div>`,`left:67px;top:${900+58+14+3}px;height:78px;width:0;border-radius:11px;overflow:hidden`,"abs");
+ const cota=el(`<div class="abs cota" style="left:0;right:0;top:18px"></div><div class="abs lbl" style="top:2px;left:50%;transform:translateX(-50%);white-space:nowrap">80% = R$ 200 mil</div>`,`left:64px;top:1080px;width:${W*.8}px;height:40px`,"abs");
+ const ent=el(`<div class="eyebrow">Entrada</div><div class="mono" style="font-size:96px;margin-top:6px"><span style="background:var(--mark);padding:0 16px;border-radius:12px;margin-left:-4px">R$ 0</span></div>`,"left:64px;top:1150px","abs");
+ const al=el(`<div class="ic">${ICONE.alerta}</div><div>Cartório e imposto: <b>por sua conta</b>.</div>`,"top:1180px;left:470px;right:64px;font-size:38px","abs item");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",24.5);
+ golpe(2.6,10.3,13.1,15.2,19.06,20.9,24.5);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,2.6,-5);entra(regra,t,4.85,.6);
+  entra(bp,t,10.1);document.getElementById("bp").style.width=100*eo(seg(t,10.3,11.2))+"%";
+  entra(ba,t,12.9);document.getElementById("ba").style.width=100*eo(seg(t,13.1,14.2))+"%";
+  oit.style.width=W*.8*eio(seg(t,15.2,16.6))-6+"px";oit.style.opacity=t>15.2?1:0;
+  entra(cota,t,16.6,.4,20);pop(ent,t,19.06,.45);entra(al,t,20.9,.5);
+  const s=seg(t,24.1,24.5);[ent,al].forEach(e=>e.style.opacity=Math.min(e.style.opacity,1-s));c(t)}
+}
+// helpers dos Reels narrados
+const SELO=(txt,css)=>el(txt,`${css};border:5px solid var(--ink);border-radius:14px;padding:12px 22px;font:600 46px/1 var(--f-display);text-transform:uppercase;background:var(--mark);transform-origin:center`,"abs");
+const LINHA=(icone,html,top,css="")=>el(`<div class="ic">${ICONE[icone]}</div><div>${html}</div>`,`top:${top}px;${css}`,"abs item");
+const PILL=(txt,cor)=>`<span class="mono" style="font-size:26px;padding:8px 14px;border-radius:10px;border:3px solid var(--ink);background:${cor};color:${cor==="var(--bad)"||cor==="var(--ok)"?"#fff":"var(--ink)"}">${txt}</span>`;
+const some=(lista,t,a)=>{const s=seg(t,a-.4,a);lista.forEach(e=>e.style.opacity=Math.min(e.style.opacity===""?1:+e.style.opacity,1-s))};
+
+// Busca #1: nome sujo
+if(R==="b-nome-sujo"){
+ const h=el('Dá pra financiar casa com <b class="grifo">nome sujo</b>?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Na prática, não.","right:64px;top:420px");
+ const cpf=el(`${ICB("cpf")}<div><div class="eyebrow">Seu CPF</div><div style="font:500 36px/1.2 var(--f-sans);margin-top:6px">o banco consulta antes de tudo</div></div><div id="st" style="margin-left:auto">${PILL("NEGATIVADO","var(--bad)")}</div>`,"left:64px;right:64px;top:540px;display:flex;gap:22px;align-items:center;padding:26px 30px","abs card");
+ const passos=[["moeda","Negocia"],["ok","Paga ou parcela"],["documento","Guarda o comprovante"]].map((x,i)=>el(`<div class="ic" style="width:64px;height:64px;margin:0 auto">${ICONE[x[0]]}</div><div style="font:600 32px/1.15 var(--f-sans);margin-top:14px">${x[1]}</div>`,`left:${64+i*324}px;top:760px;width:304px;height:200px;padding:24px 18px;text-align:center`,"abs card"));
+ const cal=el(`<div style="font:400 38px/1.2 var(--f-sans)">Depois de pagar, quem negativou tem <b>5 dias úteis</b> pra tirar o seu nome.</div><div style="display:flex;gap:16px;margin-top:22px">${[1,2,3,4,5].map(k=>`<div class="d" style="flex:1;height:70px;border:3px solid var(--ink);border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center" class="mono"><span class="mono" style="font-size:30px">${k}</span></div>`).join("")}</div>`,"left:64px;right:64px;top:1010px","abs");
+ const fim=el(`${ICB("chave")}<div style="font:600 38px/1.15 var(--f-display)">Aí sim: pede o financiamento.</div>`,"left:64px;right:64px;top:1250px;display:flex;gap:22px;align-items:center;background:var(--mark-soft);border:3px solid var(--ink);border-radius:18px;padding:18px 26px","abs");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",20.1);
+ golpe(2.5,3.8,7.7,9.3,10.7,15.3,16.9,17.5,20.1);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,2.5,-5);entra(cpf,t,3.8);
+  document.getElementById("st").innerHTML=t>16.9?PILL("NOME LIMPO","var(--ok)"):PILL("NEGATIVADO","var(--bad)");
+  [7.7,9.3,10.7].forEach((a,i)=>pop(passos[i],t,a));entra(cal,t,12.7);
+  cal.querySelectorAll(".d").forEach((d,i)=>d.style.background=t>15.3+i*.3?"var(--mark)":"var(--surface)");
+  entra(fim,t,17.5);some([fim],t,20.1);c(t)}
+}
+
+// Busca #3: autônomo
+if(R==="b-autonomo"){
+ const h=el('<b class="grifo">Autônomo</b> consegue financiar?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Consegue.","right:64px;top:330px");
+ const hol=el(`<span style="text-decoration:line-through;text-decoration-thickness:5px">Holerite</span> <span style="font-weight:600">→ prova</span>`,"left:64px;top:440px;font:400 46px/1 var(--f-display)","abs");
+ const meses=el(`<div class="eyebrow" style="margin-bottom:14px">Extratos do banco</div><div style="display:flex;gap:12px">${["1","2","3","4","5","6"].map(m=>`<div class="m" style="flex:1;height:120px;border:3px solid var(--ink);border-radius:12px;background:var(--surface);position:relative;overflow:hidden"><div class="hachura abs" style="left:0;right:0;bottom:0;height:${40+((+m*37)%45)}%"></div><div class="mono abs" style="left:10px;top:8px;font-size:24px">mês ${m}</div></div>`).join("")}</div>`,"left:64px;right:64px;top:540px","abs");
+ const ir=LINHA("documento","Declaração do <b>imposto de renda</b>",740);
+ const mei=LINHA("cpf","MEI: comprovantes do <b>imposto mensal</b> (DAS)",850);
+ const fora=el(`<div class="ic" style="width:60px;height:60px;flex:none">${ICONE.alerta}</div><div style="font:400 36px/1.2 var(--f-sans)">Dinheiro que <b>não passa pela conta</b>: pro banco, não existe.</div>`,"left:64px;right:64px;top:970px;display:flex;gap:20px;align-items:center;padding:22px 26px;background:var(--surface);border:3px solid var(--ink);border-radius:18px","abs");
+ const calc=el(`<div class="eyebrow">Comprova R$ 3.000 por mês</div><div style="position:relative;margin-top:16px;height:70px;border:3px solid var(--ink);border-radius:14px;background:var(--surface);overflow:hidden"><div id="p30" class="hachura abs" style="left:0;top:0;bottom:0;width:0"></div></div><div class="mono" style="font-size:44px;margin-top:16px">parcela até <span style="background:var(--mark);padding:0 12px;border-radius:10px">R$ <span id="v900">0</span></span> <span style="font-size:28px;color:var(--muted)">(30%)</span></div>`,"left:64px;right:64px;top:1160px","abs");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",23.85);
+ golpe(2.26,3.36,6.1,8.36,10.64,14.08,19.68,22.55,23.85);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,2.26,-5);entra(hol,t,3.36);entra(meses,t,5.8);
+  meses.querySelectorAll(".m").forEach((m,i)=>m.style.opacity=seg(t,6.1+i*.28,6.3+i*.28));
+  entra(ir,t,8.36);entra(mei,t,10.64);entra(fora,t,14.08);
+  // a renda e a parcela entram no lugar dos documentos
+  const tr=seg(t,19.2,19.68);[meses,ir,mei,hol].forEach(e=>e.style.opacity=Math.min(e.style.opacity,1-tr));
+  fora.style.top=(970-430*eo(tr))+"px";calc.style.top=(1160-330*eo(tr))+"px";
+  entra(calc,t,19.68);document.getElementById("p30").style.width=30*eio(seg(t,20.6,21.8))+"%";
+  document.getElementById("v900").textContent=fmtN(900*eo(seg(t,21.4,22.6)));c(t)}
+}
+
+// Busca #4: desconto no cartório
+if(R==="b-cartorio"){
+ const h=el('Primeiro imóvel tem desconto no <b class="grifo">cartório</b>?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Tem!","right:64px;top:430px");
+ const cond=[["casa","Primeiro imóvel, <b>pra morar</b>"],["banco","Comprado <b>financiado</b>"]].map((x,i)=>el(`<div class="ic">${ICONE[x[0]]}</div><div>${x[1]}</div><div class="ic ok" style="width:56px;height:56px;border:none;padding:0;background:none;margin-left:auto">${ICONE.ok}</div>`,`top:${540+i*120}px`,"abs item"));
+ const meio=el('= registro <b class="grifo">pela metade</b>',"left:64px;top:800px;font:400 56px/1 var(--f-display)","abs");
+ const conta=el(`<div class="eyebrow">Imóvel de R$ 200 mil em São Paulo</div><div style="display:flex;align-items:center;gap:30px;margin-top:20px"><div class="mono" id="cheio" style="font-size:72px;position:relative">R$ 4.400<div id="risco" class="abs" style="left:-6px;top:50%;height:7px;width:0;background:var(--bad)"></div></div><div id="seta" class="mono" style="font-size:52px">→</div><div id="meta" class="mono" style="font-size:84px;background:var(--mark);padding:0 16px;border-radius:12px">R$ 2.200</div></div><div style="font:400 24px/1.3 var(--f-sans);color:var(--muted);margin-top:14px">Valores aproximados do registro, financiando R$ 160 mil. Estimativa.</div>`,"left:64px;right:64px;top:930px","abs");
+ const guia=LINHA("lupa","Confira na guia se <b>veio pela metade</b>.",1210);
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",20.6);
+ golpe(2.74,3.48,5.33,7.0,12.08,14.09,18.24,20.6);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,2.74,-5);cond.forEach((e,i)=>{const a=[3.48,5.33][i];entra(e,t,a);e.querySelector(".ok").style.opacity=seg(t,a+.5,a+.8)});
+  entra(meio,t,7.0);entra(conta,t,9.04);const cheio=document.getElementById("cheio");cheio.style.opacity=seg(t,12.0,12.3);document.getElementById("seta").style.opacity=seg(t,12.0,12.3);
+  document.getElementById("risco").style.width=(108*eo(seg(t,13.6,14.1)))+"%";pop(document.getElementById("meta"),t,14.09);
+  entra(guia,t,18.24);some([guia],t,20.6);c(t)}
+}
+
+// Busca #5: ITBI
+if(R==="b-itbi"){
+ const h=el('Primeiro imóvel paga <b class="grifo">ITBI</b>?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Paga.","right:64px;top:330px");
+ const col=(tit,sub,pill,left)=>el(`<div class="eyebrow">${tit}</div><div style="font:600 40px/1.15 var(--f-display);margin-top:12px">${sub}</div><div style="margin-top:18px">${pill}</div>`,`left:${left}px;top:450px;width:460px;height:250px;padding:28px 30px`,"abs card");
+ const c1=col("Cartório","Desconto de 1º imóvel",PILL("TEM","var(--ok)"),64),c2=col("Imposto (ITBI)","Sem esse desconto",PILL("NÃO TEM","var(--bad)"),556);
+ const pref=LINHA("local","É da <b>prefeitura</b>: cada cidade tem a sua regra.",750);
+ const calc=el(`<div class="eyebrow">Numa cidade que cobra 3%</div><div class="mono" style="font-size:52px;margin-top:16px">3% × R$ 200 mil =</div><div class="mono" style="font-size:96px;margin-top:10px"><span style="background:var(--mark);padding:0 16px;border-radius:12px">R$ <span id="v6">0</span> mil</span></div>`,"left:64px;right:64px;top:880px","abs");
+ const a1=LINHA("moeda","Algumas cobram <b>menos de quem financia</b>.",1170,"font-size:38px");
+ const a2=LINHA("lupa","Pergunte na sua <b>antes de fechar</b>.",1270,"font-size:38px");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",25.17);
+ golpe(2.0,3.6,7.06,8.16,13.12,17.64,19.0,22.33,25.17);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,2.0,-5);pop(c1,t,3.6);pop(c2,t,7.06);entra(pref,t,8.3);
+  entra(calc,t,13.12);document.getElementById("v6").textContent=Math.round(6*eo(seg(t,16.2,17.7)));
+  entra(a1,t,19.0);entra(a2,t,22.33);some([a1,a2],t,25.17);c(t)}
+}
+
+// Busca #6: MCMV usado
+if(R==="b-usado"){
+ const h=el('Minha Casa Minha Vida vale pra <b class="grifo">imóvel usado</b>?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Vale.","right:64px;top:430px");
+ const tags=el(`${PILL("NOVO ✓","var(--surface)")}&nbsp;&nbsp;${PILL("USADO ✓","var(--mark)")}`,"left:64px;top:450px","abs");
+ const txt=el('Desde que o preço caiba no <b>limite da sua faixa</b>:',"left:64px;top:560px;font:400 40px/1.2 var(--f-sans)","abs");
+ const rows=[["Renda até R$ 5.000","até R$ 210 mil*"],["Renda até R$ 9.600","até R$ 400 mil"],["Renda até R$ 13.000","até R$ 600 mil"]]
+  .map((x,i)=>el(`<div style="font:500 38px/1 var(--f-sans)">${x[0]}</div><div class="mono" style="font-size:42px">${x[1]}</div>`,`left:64px;right:64px;top:${650+i*120}px;height:100px;display:flex;justify-content:space-between;align-items:center;padding:0 30px`,"abs card"));
+ const nota=el("*em algumas cidades o limite é maior.","left:64px;top:1020px;font:400 24px/1.2 var(--f-sans);color:var(--muted)","abs");
+ const aval=LINHA("lupa","O banco avalia o usado <b>do mesmo jeito</b> que um novo.",1110);
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",20.82);
+ golpe(3.32,4.18,6.45,8.0,8.4,8.8,10.42,16.0,20.82);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,3.32,-5);entra(tags,t,4.18);selo.style.top="440px";entra(txt,t,6.45);
+  rows.forEach((e,i)=>{entra(e,t,8.0+i*.4);e.style.background=(i===1&&t>10.42)?"var(--mark)":"var(--surface)"});entra(nota,t,9.4);
+  entra(aval,t,16.0);some([aval],t,20.82);c(t)}
+}
+
+// Busca #7: na planta
+if(R==="b-planta"){
+ const h=el('Comprar <b class="grifo">na planta</b> vale a pena?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Pode valer.","right:64px;top:330px");
+ const cab=(t,left,cor)=>el(t,`left:${left}px;top:450px;width:460px;font:500 28px/1 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;padding:14px 18px;border:3px solid var(--ink);border-radius:12px;background:${cor}`,"abs");
+ const k1=cab("A favor",64,"var(--mark)"),k2=cab("Atenção",556,"var(--surface)");
+ const item=(html,left,top)=>el(html,`left:${left}px;top:${top}px;width:460px;padding:22px 24px;font:400 34px/1.2 var(--f-sans)`,"abs card");
+ const f1=item("Preço <b>costuma ser menor</b>.",64,540),f2=item("Entrada <b>parcelada</b> com a construtora durante a obra.",64,690);
+ const t1=item("As parcelas <b>sobem</b> com a correção da obra.",556,540),t2=item("O banco <b>analisa de novo</b> na entrega.",556,690);
+ const doc=el(`${ICB("carimbo")}<div style="font:400 36px/1.2 var(--f-sans)">Antes de assinar, peça a <b>matrícula com o registro da incorporação</b>.</div>`,"left:64px;right:64px;top:930px;display:flex;gap:22px;align-items:center;background:var(--mark-soft);border:3px solid var(--ink);border-radius:18px;padding:22px 26px","abs");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",22.56);
+ golpe(2.32,3.3,5.4,9.86,13.36,17.34,22.56);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,2.32,-5);entra(k1,t,3.0);entra(k2,t,3.0);
+  pop(f1,t,3.3);pop(f2,t,5.4);pop(t1,t,9.86);pop(t2,t,13.36);entra(doc,t,17.34,.6);c(t)}
+}
+
+// Busca #8: financiar ou alugar
+if(R==="b-aluguel"){
+ const h=el('Financiar ou continuar no <b class="grifo">aluguel</b>?',"left:64px;top:190px;width:950px","abs h");
+ const selo=SELO("Faz uma conta.","right:64px;top:420px");
+ const card=(tit,val,sub,left,id)=>el(`<div class="eyebrow">${tit}</div><div class="mono" style="font-size:72px;margin-top:14px" id="${id}">${val}</div><div style="font:400 26px/1.25 var(--f-sans);color:var(--muted);margin-top:10px">${sub}</div>`,`left:${left}px;top:540px;width:460px;height:290px;padding:28px 30px`,"abs card");
+ const parc=card("Parcela","R$ 0","imóvel de R$ 200 mil, Minha Casa Minha Vida, 35 anos",64,"vp");
+ const alu=card("O seu aluguel","R$ ???","compare com o que você paga hoje",556,"va");
+ const ver=LINHA("ok","Parecido e vai ficar anos? <b>Financiar costuma fazer sentido.</b>",880,"font-size:38px");
+ const antes=el(`<div class="eyebrow">Mas antes você precisa ter</div><div style="display:flex;margin-top:16px;height:84px;border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--surface)"><div id="e40" style="width:0;background:var(--planta);display:flex;align-items:center;padding-left:18px;white-space:nowrap" class="mono"><span style="font-size:30px">entrada ~R$ 40 mil</span></div><div id="c10" class="hachura" style="width:0"></div></div><div style="display:flex;justify-content:space-between;margin-top:12px"><div class="mono" style="font-size:26px;color:var(--muted)">+ ITBI e cartório ~R$ 10 mil</div><div class="mono" style="font-size:44px;background:var(--mark);padding:0 12px;border-radius:10px">≈ R$ 50 mil</div></div>`,"left:64px;right:64px;top:1030px","abs");
+ const nota=el("Estimativa do simulador: renda de R$ 2.880, tabela Price.","left:64px;top:1290px;font:400 24px/1.3 var(--f-sans);color:var(--muted)","abs");
+ const c=cta("E no <b>seu</b> caso?<span>Descubra no link da bio.</span>",23.0);
+ golpe(4.0,5.5,11.02,13.0,17.08,18.5,20.19,23.0);
+ cena=t=>{entra(h,t,0,.5);carimbar(selo,t,4.0,-5);entra(parc,t,5.5);document.getElementById("vp").textContent="R$ "+fmtN(860*eo(seg(t,9.8,11.2)));
+  entra(alu,t,13.0);document.getElementById("va").style.opacity=t>13?(.55+.45*Math.abs(Math.sin(t*3))):0;
+  entra(ver,t,17.08);entra(antes,t,18.5);document.getElementById("e40").style.width=80*eo(seg(t,19.0,20.2))+"%";document.getElementById("c10").style.width=20*eo(seg(t,20.6,21.6))+"%";
+  entra(nota,t,19.5);some([ver,nota],t,23.0);c(t)}
+}
+function render(t){cena(t);entra(assina,t,.4)}
+window.render=render;render(new URLSearchParams(location.search).has("t")?+new URLSearchParams(location.search).get("t"):9);
+</script>
+</body></html>
