@@ -1,0 +1,27 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Reel fixo: texto</title>
+<style>
+@font-face{font-family:Outfit;src:url(../../../infoproduto/fontes/outfit-latin.woff2);font-weight:100 900}
+@font-face{font-family:Figtree;src:url(../../../infoproduto/fontes/figtree-latin.woff2);font-weight:300 900}
+@font-face{font-family:"IBM Plex Mono";src:url(../../../infoproduto/fontes/plex-mono-500.woff2);font-weight:500}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:transparent;overflow:hidden}
+.veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.25) 0%,rgba(10,12,16,.55) 22%,rgba(10,12,16,.62) 70%,rgba(10,12,16,.3) 100%)}
+.bloco{position:absolute;left:84px;right:84px;top:330px;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.t{font:700 84px/1.04 Outfit;letter-spacing:-.02em}
+.t .g{color:#121418;background:#f4d23f;padding:0 12px;border-radius:10px;text-shadow:none;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+ol{list-style:none;margin-top:54px}
+li{display:flex;gap:22px;align-items:flex-start;font:500 44px/1.22 Figtree;margin-top:30px}
+li .n{flex:none;width:58px;height:58px;border-radius:50%;background:#f4d23f;color:#121418;font:700 32px/58px Outfit;text-align:center;text-shadow:none;margin-top:-4px}
+li b{font-weight:800}
+.rod{position:absolute;left:84px;right:84px;bottom:250px;color:#fff;font:500 30px/1.3 Figtree;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.rod .m{font:500 26px/1 "IBM Plex Mono";letter-spacing:.06em;opacity:.85;margin-top:14px}
+</style></head><body><div class="veu"></div><div id="c"></div><script>
+const R={
+ visita:{t:'Antes de visitar um imóvel, <span class="g">faça isso</span> 👇',l:["Saiba <b>quanto o banco te empresta</b>","Veja o seu nome no <b>Registrato</b>","Separe <b>uns 5%</b> para ITBI e cartório","Visite o bairro <b>de dia e à noite</b>"],r:"Salve para a próxima visita."},
+ namao:{t:'Imóvel de R$ 200 mil. <span class="g">Quanto você precisa ter na mão?</span>',l:["Entrada: <b>~R$ 40 mil</b>","ITBI (cidade que cobra 3%): <b>~R$ 6 mil</b>","Cartório, com o desconto de 1º imóvel: <b>~R$ 2.200</b>","Avaliação do banco: <b>~R$ 1 mil</b>"],r:"Estimativa do simulador, financiando pelo Minha Casa Minha Vida. Não é aprovação de crédito."},
+ sinal:{t:'<span class="g">NÃO pague o sinal</span> antes de escrever isto no contrato:',l:["O que acontece <b>se o banco negar</b>","O <b>prazo</b> para a aprovação","Como o sinal <b>é devolvido</b>","Quem paga o <b>ITBI</b> e o cartório"],r:"Salve antes de assinar."},
+ depois:{t:'O banco aprovou. <span class="g">Ainda falta:</span>',l:["<b>Avaliação</b> do imóvel pelo banco","<b>Assinatura</b> do contrato","Pagar o <b>ITBI</b>","<b>Registro</b> no cartório","Só então: <b>a chave</b> 🔑"],r:"Salve para saber em que etapa você está."},
+ descontos:{t:'Primeiro imóvel: <span class="g">3 descontos</span> que você pode ter',l:["<b>Metade do registro</b> no cartório, se for financiado","<b>FGTS</b> na entrada, se cumprir as regras","<b>Subsídio do MCMV</b>, conforme a renda e a cidade"],r:"Cada um tem as suas regras. Confira o seu caso antes de fechar."}};
+const r=R[new URLSearchParams(location.search).get("r")||"visita"];
+document.getElementById("c").innerHTML=`<div class="bloco"><div class="t">${r.t}</div><ol>${r.l.map((x,i)=>`<li><span class="n">${i+1}</span><span>${x}</span></li>`).join("")}</ol></div><div class="rod">${r.r}<div class="m">primeirachave.com.br · link na bio</div></div>`;
+</script></body></html>
